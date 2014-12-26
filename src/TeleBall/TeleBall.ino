@@ -1069,6 +1069,8 @@ void manageEEPROM()
         drawPatternBits(eeprom_defaults, 8);
     else
         drawPatternBits(eeprom_store, 8);
+        
+    Paddle_Old = Paddle;
 }
 
 /*
@@ -1118,7 +1120,7 @@ void restoreGameState()
 
     switch (RadioMode)
     {
-        //send the final speed to the slave and tell the it leave the SpeedSet mode
+        //send the final speed to the slave and tell the it to leave the SpeedSet mode
         //then return to tennis in master mode
         case rmMaster_speedset_by_Master:
             Radio.flush_tx();
@@ -1131,18 +1133,19 @@ void restoreGameState()
             }                
             break;
             
-        //return to tennis in master mode
+        //return to tennis in master mode when slave was in SpeedSet mode
         case rmMaster_speedset_by_Slave:
-            game_mode = gmTennis;
             RadioMode = rmMaster_run;
+            pauseGame(2* respawn_duration);
             break;            
             
-        //return to tennis in slave mode
+        //return to tennis in slave run mode when master was in SpeedSet mode
         case rmSlave_speedset_by_Master:
-            game_mode = gmTennis;
             RadioMode = rmSlave_run;
             break;
             
+        //send the final speed to the master via the receive's ACK signal and tell it to leave the SpeedSet mode
+        //then return to tennis in slave run mode
         case rmSlave_speedset_by_Slave:
             sendspeed = Speed | Flag_Leave;
             radioEmptyReadFIFO();
@@ -1155,15 +1158,7 @@ void restoreGameState()
     //as also in Tennis (see rmMaster_speedset_by_Master above):
     //do the same in BreakOut and give the player the chance to get into the game again
     if (game_mode == gmBreakOut)
-    {
-        //use the pauseGame function in situations, where no "_tbs-process" is already running
-        if (!BallDX_tbs)
-            pauseGame(2 * respawn_duration);
-        
-        //else prolong the already running "_tbs-process"
-        else
-            respawn_timer = millis() + 2 * respawn_duration;
-    }        
+        pauseGame(2 * respawn_duration);
 }
 
 //read universal button, distinguish between short and long
@@ -1402,10 +1397,14 @@ void playMelody(const unsigned int melody[2][12], byte melody_len)
 }
 
 void pauseGame(unsigned int duration)
-{
-    //remember old movement vector
-    BallDX_tbs = BallDX;
-    BallDY_tbs = BallDY;
+{        
+    //only if no "_tbs-process" is already running: overwrite the _tbs variables
+    if (!BallDX_tbs)
+    {
+        //remember old movement vector
+        BallDX_tbs = BallDX;
+        BallDY_tbs = BallDY;
+    }
 
     //stop ball movement
     BallDX = 0;
@@ -1570,8 +1569,7 @@ void checkCollisionAndWon()
                 wy++;
             }
                         
-            //end screen and "applause"
-            //endless loop: game can be restarted only by a reset
+            //handle a won round of BreakOut
             if (won)
             {
                 //advance to next level                
@@ -1597,7 +1595,7 @@ void checkCollisionAndWon()
                     {
                         noise(300, 500, 5);
                         readUniversalButton(); 
-                    }
+                    }                    
                 }
             }
         }
@@ -1630,7 +1628,7 @@ void checkLost()
             {
                 readUniversalButton();
                 delay(5);
-            }
+            }            
         }
     }    
 }
@@ -1702,6 +1700,14 @@ void tennisHandleMultiplayerQuestion()
     //otherwise strange effect will occur, i.e. not being able to control the ? vs. !
     Paddle_Old = Paddle;
     
+    //there are cases, where the other device is not yet in this mode, so it
+    //makes sense to continue polling the slave or answering the master's polls
+    unsigned long payload;
+    if (RadioMode == rmMaster_init)
+        radioSend(&RadioMasterToken, &payload);
+    else
+        radioReceive(&payload, &RadioSlaveToken);
+
     //user anwers the question: switch to new game mode
     if (MultiplayerQuestionButton)
     {
@@ -1731,10 +1737,7 @@ void tennisHandleMultiplayerQuestion()
             if (RadioMode == rmMaster_init)
                 RadioMode = rmMaster_wait;
             else
-                RadioMode = rmSlave_wait;
-            
-            //after entering tennis: wait a bit longer until the game starts
-            tennisRespawn(2 * respawn_duration);
+                RadioMode = rmSlave_wait;            
         }
     }        
 }
@@ -1764,7 +1767,10 @@ void tennisWaitForOtherPartyToJoin()
         if (radioSend(&RadioMasterWaitQ, &payload) && payload == RadioSlaveWaitA)
         {
             Matrix.clearDisplay(0);
-            RadioMode = rmMaster_run;                
+            RadioMode = rmMaster_run;
+            
+            //after entering tennis: wait a bit longer until the game starts
+            tennisRespawn(2 * respawn_duration);            
         }              
     }
     
@@ -1839,6 +1845,7 @@ void tennisPlayMaster()
             RadioGameDataFromMaster.SpeedSet_Ack = 1;
             if (radioSend(&RadioGameDataFromMaster, &RadioGameDataFromSlave))
             {
+                backupGameState(); //remember game state to avoid random states after leaving the menu
                 RadioMode = rmMaster_speedset_by_Slave;
                 game_mode = gmSpeed;
                 delay(300); //give slave the chance to digest the ACK
@@ -1941,6 +1948,7 @@ void tennisPlaySlave()
         //speed set on master's side
         if (RadioGameDataFromMaster.SpeedSet)
         {
+            backupGameState();
             game_mode = gmSpeed;
             RadioMode = rmSlave_speedset_by_Master;
             return;
