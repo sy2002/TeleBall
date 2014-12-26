@@ -1,0 +1,33 @@
+TeleBall Version 1.2 12/xx/14
+
+TODO * Bugfix: The "X" in the EEPROM menu was not always accessible.
+
+
+
+TeleBall Version 1.1 12/24/14
+
+* Bugfix: When solving the game, i.e. when the third level is successfully
+  mastered, the applause sound is played and the smiley face is shown.
+
+* EEPROM: The device is now able to permanently store user preferences. For
+  doing so, enter the advanced config menu by pressing the button 4 seconds
+  while being in the standard menu. After configuring the paddle, you can now
+  choose "square" for saving your preferences or "X" to revert back to the
+  factory default values.
+
+
+
+TeleBall Version 1.0 12/21/14
+
+* First release on final TeleBall hardware
+
+
+
+TeleBall Version 0.1 8/3/14
+
+* The very first version of TeleBall was developed on the Arduino experimentor
+  platform DuinoKit: http://duinokit.com/ShowAndTell/viewtopic.php?f=4&t=14
+
+
+
+Last modified by sy2002 on 26th of December 2014
