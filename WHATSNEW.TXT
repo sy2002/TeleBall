@@ -1,13 +1,31 @@
 TeleBall Version 1.2 12/xx/14
 
-TODO * Bugfix: The "X" in the EEPROM menu was not always accessible.
+* Bugfix: The "X" in the EEPROM menu was not always accessible.
+
+* Bugfix: The pairing of two devices did not work, when one was in the won or
+  lost state of BreakOut, while the other one was powered on. There were also
+  some other states that prevented pairing, so this should be rock solid now.
+
+* Bugfix: Tennis: If the game speed was set on the slave device, then when
+  leaving the configuration menu, there was no short game pause and the balls
+  position and direction was random, which sometimes lead to weird results
+  like left/right bouncing balls.
+
+* Bugfix: Tennis: When the slave device was the last to acknowledge to play
+  tennis, then there was no delay, before the game started.
+
+* Bugfix: Tennis: When the configuration menu was entered while the ball was
+  still in pause mode (e.g. directly after a lost ball), then when leaving
+  the configuration menu lead to a freezing ball, i.e. it did not start moving
+  again at all; you needed to reset the match.
 
 
 
 TeleBall Version 1.1 12/24/14
 
-* Bugfix: When solving the game, i.e. when the third level is successfully
-  mastered, the applause sound is played and the smiley face is shown.
+* Bugfix: BreakOut: When solving the game, i.e. when the third level is
+  successfully mastered, the applause sound is played and the smiley face
+  is shown.
 
 * EEPROM: The device is now able to permanently store user preferences. For
   doing so, enter the advanced config menu by pressing the button 4 seconds
