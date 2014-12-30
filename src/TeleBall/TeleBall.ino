@@ -457,21 +457,26 @@ unsigned long RadioMasterSCA    = 2312;        //master's ACK when slave ends sp
 //changing this from 4 to another size leads to multiple code pieces that need adjustments
 const byte RadioPayloadSize    = 4;           
 
-const byte RadioPipe           = 1;           //we only need one pipe, hard code it to 1
+const byte RadioPipe           = 1;            //we only need one pipe, hard code it to 1
 
-//milliseconds, until next Radio command
-const int RadioCycle           = 300;
+//milliseconds, until next Radio command, needs to be timed together with RadioWait_Max
+const int RadioCycle           = 200;
 unsigned long Last_RadioCycle  = 0;
+
+//wait and listen randomly between RadioWaitMin and
+//RadioWaitMax, before 
+const int RadioWait_Min        = 500;
+const int RadioWait_Max        = 1500;  //this needs to be carefully timed due to RadioTimeOutVal
+unsigned long RadioWait        = 0;
+
+//mechanism for handling cases, where the transmission is not working any more,
+//e.g. the other player switches-off his device, walks out of range, etc.
+unsigned long RadioTimedOut          = 0;
+const unsigned long RadioTimeOutVal  = 3000;  //after 3 seconds of "nothing", the radio is considered as timed-out
 
 //save battery: time in milliseconds after which the device powers down
 //the radio and ignores further tennis request
 const unsigned long RadioPowerSaveTime = 120000;
-
-//wait and listen randomly between RadioWaitMin and
-//RadioWaitMax, before 
-const int RadioWait_Min        = 1000;
-const int RadioWait_Max        = 2000;
-unsigned long RadioWait        = 0;
 
 //avoid jamming the ACK FIFO (TX FIFO) by keeping track of uploaded ACK payloads
 boolean RadioACKuploaded      = false;
@@ -574,7 +579,11 @@ boolean radioSend(void* sendbuffer, void* ackpayloadbuffer)
             }
             
             //success only if the sending worked AND the ACK payload could be retrieved
-            return success;
+            if (success)
+            {
+                RadioTimedOut = millis() + RadioTimeOutVal; //success, so reset the timeout timer            
+                return true;
+            }
         }
     }
     
@@ -604,7 +613,7 @@ boolean radioReceive(void* receivebuffer, void* ackpayloadbuffer)
             Radio.read(receivebuffer, RadioPayloadSize);
         
         RadioACKuploaded = false;
-        
+        RadioTimedOut = millis() + RadioTimeOutVal; //success, so reset the timeout timer
         return true;
     }
     
@@ -908,6 +917,10 @@ void adjustBrightness()
 {
     drawPatternBits_from_PROGMEM(select_brightness, 8);
     Intensity = map(analogRead(potPaddle), 0, 1023, 0, 15);
+
+    //tennis only: take care that the other device does not time out by sending the speed
+    if (RadioMode > rmNone)
+        tennisHandleAdjustSpeed();
 }
 
 void adjustPaddle()
@@ -924,6 +937,10 @@ void adjustPaddle()
         drawPatternBits_from_PROGMEM(arrow_right, 8);
         PotiRightmost = poti;
     }
+    
+    //tennis only: take care that the other device does not time out by sending the speed
+    if (RadioMode > rmNone)
+        tennisHandleAdjustSpeed();    
 }
 
 
@@ -1009,6 +1026,10 @@ void manageEEPROM()
         drawPatternBits_from_PROGMEM(eeprom_store, 8);
         
     Paddle_Old = Paddle;
+    
+    //tennis only: take care that the other device does not time out by sending the speed
+    if (RadioMode > rmNone)
+        tennisHandleAdjustSpeed();    
 }
 
 /*
@@ -1693,7 +1714,7 @@ void tennisHandleMultiplayerQuestion()
         
         //deny multiplayer mode: back to BreakOut and ignore further tennis game requests
         if (Paddle <= 3)
-            tennisSwitchToBreakOutPermanently();
+            tennisSwitchToBreakOut(true);
         
         //enter multiplayer mode and play tennis
         else
@@ -1724,7 +1745,8 @@ void tennisWaitForOtherPartyToJoin()
     //timeout
     else
     {
-        tennisSwitchToBreakOutPermanently();
+        //back to BreakOut, ignore further tennis requests
+        tennisSwitchToBreakOut(true);
         return;
     }
             
@@ -1735,7 +1757,7 @@ void tennisWaitForOtherPartyToJoin()
         {
             Matrix.clearDisplay(0);
             RadioMode = rmMaster_run;
-            
+                        
             //after entering tennis: wait a bit longer until the game starts
             tennisRespawn(2 * respawn_duration);            
         }              
@@ -1928,7 +1950,7 @@ void tennisPlaySlave()
             RadioMode = rmSlave_speedset_by_Master;
             return;
         }
-    }    
+    }
 }
 
 void tennisResetMaster()
@@ -2052,7 +2074,7 @@ boolean tennisHandleAdjustSpeed()
             }
             return true;
     }    
-}    
+}
 
 //set a random x/y position and a random dx/dy movement
 void tennisRespawn(int duration)
@@ -2087,11 +2109,16 @@ void tennisHandleWonOrLost()
         drawPatternBits_from_PROGMEM(smiley_lost, 8);            
 }
 
-void tennisSwitchToBreakOutPermanently()
+void tennisSwitchToBreakOut(boolean permanently)
 {
-    //ignore further tennis game requests and power down radio to save battery life
-    RadioMode = rmIgnore;    
-    Radio.powerDown();
+    if (permanently)
+    {
+        //ignore further tennis game requests and power down radio to save battery life
+        RadioMode = rmIgnore;    
+        Radio.powerDown();
+    }
+    else
+        RadioMode = rmNone;
     
     //return to BreakOut
     game_mode = gmBreakOut;
@@ -2161,5 +2188,16 @@ void loop()
             break;
 
         case gmEEPROM:      manageEEPROM();        break;            
+    }
+    
+    //if radio is active (aka if tennis), time out, e.g. because the other
+    //device was switched off or it was moved out of transmission range, etc.
+    if (RadioMode > rmNone && millis() > RadioTimedOut)
+    {
+        Radio.flush_tx();
+        radioEmptyReadFIFO();
+        game_mode = gmTennis;           //make sure, that tennis is reset, when calling reset() ...
+        reset();                        //... game_mode could be config modes like gmSpeed, etc.
+        tennisSwitchToBreakOut(false);  //switch to BreakOut but continue to try to find another device for tennis
     }    
 }

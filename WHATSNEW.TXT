@@ -1,4 +1,4 @@
-TeleBall Version 1.2 12/xx/14
+TeleBall Version 1.2 12/31/14
 
 * Change: The brightness adjustment has been moved to the advanced
   configuration mode, as usage tests showed that it is far less often used
@@ -14,15 +14,12 @@ TeleBall Version 1.2 12/xx/14
 
 * Bugfix: The "X" in the EEPROM menu was not always accessible.
 
-* Bugfix: The pairing of two devices did not work, when one was in the won or
-  lost state of BreakOut, while the other one was powered on. There were also
-  some other states that prevented pairing, so this should be rock solid now.
-
 * Bugfix: Sometimes when adjusting the speed and the controller wheel was at
   the very left position, you saw no pixels illuminated while exactly one
   should have.
 
-* Bugfix: The EEPROM fingerprint was not written on new devices.
+* Bugfix: The EEPROM fingerprint was not written on new devices, which means
+  that new devices did not remember any settings.
 
 * Bugfix: You were not able to catch a ball that was already one line above
   the paddle and THEN you moved the paddle below it - even if you were fast
@@ -30,6 +27,15 @@ TeleBall Version 1.2 12/xx/14
 
 * Bugfix: With a speedy paddle movement you could influence the ball even if
   the ball was far away from the paddle.
+
+* Bugfix: Tennis: The pairing of two devices did not work, when one was in the
+  won or lost state of BreakOut, while the other one was powered on. There
+  were also some other states that prevented pairing, so this should be rock
+  solid now.
+
+* Bugfix: Tennis: When one of the players suddenly switched off his device or
+  walked out of the radio range (or similar events), then the other device was
+  left in an undefined state. Now it goes back to BreakOut.
 
 * Bugfix: Tennis: Sometimes the won or lost smiley stayed visible, on the
   slave's screen when the master device was resetting the match.
