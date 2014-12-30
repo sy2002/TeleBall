@@ -23,21 +23,23 @@
 /* ******************************************
     Libraries
    ****************************************** */
-   
+      
 //Arduino default EEPROM library for persistent storage
 #include <EEPROM.h>
+
+//Arduino default library for accessing the PROGMEM
+#include <avr/pgmspace.h>
    
 //MAX7221 LED control library
 //information: http://playground.arduino.cc/Main/LedControl
 //download:    https://github.com/wayoda/LedControl
-#include "LedControl.h"
+#include <LedControl.h>
 
 //NRF24L01+ radio driver class
 //information & dl: http://tmrh20.github.io/RF24/
 #include <SPI.h>
-#include "nRF24L01.h"
-#include "RF24.h"
-
+#include <nRF24L01.h>
+#include <RF24.h>
 
 /* ******************************************
     Factory default values
@@ -79,10 +81,10 @@ enum GameSounds
 
 //defaults that are set, when "back to factory default" is selected in the extended menu
 const GameMode        game_mode_default = gmBreakOut;    //first game to be started
-const int             speed_default = 300;               //speed of the game in "milliseconds between moving the ball one pixel"
+const unsigned int    speed_default = 300;               //speed of the game in "milliseconds between moving the ball one pixel"
 const byte            intensity_default = 0;             //brightness of the 8x8 matrix
-const int             poti_leftmost_default = 200;       //restrict poti range to the left for a more natural feeling
-const int             poti_rightmost_default = 823;      //... dito to the right
+const unsigned int    poti_leftmost_default = 200;       //restrict poti range to the left for a more natural feeling
+const unsigned int    poti_rightmost_default = 823;      //... dito to the right
 const GameOrientation orientation_default = goRegular;   //game orientation
 const unsigned long   respawn_duration = 1500;           //milliseconds to wait after a ball got lost
 const byte            Balls_max = 3;                     //maximum amount of balls in BreakOut
@@ -91,7 +93,7 @@ const byte            Tennis_win = 3;                    //amount of points need
 //button press duration in milliseconds
 const unsigned int    UniversalButtonPressedShort = 100;     //reset game / select menu item
 const unsigned int    UniversalButtonPressedLong = 750;      //enter regular menu
-const unsigned int    UniversalButtonPressedVeryLong = 4000; //enter advanced menu
+const unsigned int    UniversalButtonPressedVeryLong = 3500; //enter advanced menu
 
 //enter multiplayer mode
 const unsigned long   MultiplayerQuestionMax = 2000;         //how long is the question mark shown, before the user can choose
@@ -100,8 +102,8 @@ boolean               MultiplayerQuestionButton = false;     //universal button 
 //the speed defines how many milliseconds are between two ball movements
 //the movement of the paddle is decoupled from the movement speed of the ball
 //the maximum speed heavily depends on the processor type and speed
-const int             speed_max = 75;                       //amount of screen refresh cycles in milliseconds that are wasted...
-const int             speed_min = 600;                      //...until the ball moves on one pixel
+const unsigned int    speed_max = 75;                       //amount of screen refresh cycles in milliseconds that are wasted...
+const unsigned int    speed_min = 600;                      //...until the ball moves on one pixel
 
 //amount of LEDs installed in the device, should be 3
 //changing this leads to multiple code parts that need adjustments
@@ -149,21 +151,23 @@ GameOrientation Orientation = orientation_default;
 unsigned long Speed = speed_default;
 unsigned long Speed_Old = Speed;
 
-int Paddle = 0;                                //current x-position of paddle
-int Paddle_Old = Paddle;
-int Paddle_Remote = 0;
-int Paddle_Remote_Old = Paddle_Remote;
+unsigned int Paddle = 0;                                //current x-position of paddle
+unsigned int Paddle_Old = Paddle;
+unsigned int Paddle_Remote = 0;
+unsigned int Paddle_Remote_Old = Paddle_Remote;
 
 byte Intensity = intensity_default;            //brightness of the display
 byte Intensity_Old = Intensity;                
 
 //poti range restriction for a more natural game feeling
-int PotiLeftmost = poti_leftmost_default;
-int PotiRightmost = poti_rightmost_default;
+unsigned int PotiLeftmost = poti_leftmost_default;
+unsigned int PotiRightmost = poti_rightmost_default;
+unsigned int PotiLeftmost_Old = PotiLeftmost;
+unsigned int PotiRightmost_Old = PotiRightmost;
 
 //current ball position
-char BallX;                                 
-char BallY;
+char BallX;                //a signed variable is used intensionally to...                     
+char BallY;                //...cater for off-screen situations
 char BallX_Old = BallX;
 char BallY_Old = BallY;
 
@@ -210,8 +214,8 @@ unsigned long respawn_timer = 0;
 //used for measuring a quick paddle movement right before the ball hits the paddle
 //to give the ball an extra spin; this is needed in situations, where you otherwise
 //would not be able to clear all "bricks".
-int LastPaddlePos = 0;
-int LastPaddlePos_Remote = 0;
+unsigned int LastPaddlePos = 0;
+unsigned int LastPaddlePos_Remote = 0;
 const byte PaddleSpeedThreshold = 1;
 
 //universal button incl. debouncing
@@ -272,7 +276,7 @@ const byte UniversalButton   = 8;  //D8: "Button+"
 //this is the level pattern of the "bricks"
 //modify to create tougher or easier levels
 const byte bricks_levelheight[Levels] = {3, 4, 4};
-const byte bricks_reset[Levels][4][8] =
+const byte bricks_reset[Levels][4][8] PROGMEM =
 {
     {
         {1, 1, 1, 1, 1, 1, 1, 1},
@@ -297,7 +301,7 @@ const byte bricks_reset[Levels][4][8] =
 };
 
 // :-) smiley shown, if you win the game
-const byte smiley_won[8] = 
+const byte smiley_won[8] PROGMEM = 
 {
     0b00111100,
     0b01000010,
@@ -310,7 +314,7 @@ const byte smiley_won[8] =
 };
 
 // :-| smiley shown, if you loose the game
-const byte smiley_lost[8] = 
+const byte smiley_lost[8] PROGMEM = 
 {
     0b00111100,
     0b01000010,
@@ -323,7 +327,7 @@ const byte smiley_lost[8] =
 };
 
 // checkerboard pattern for selecting brightness
-const byte select_brightness[8] = 
+const byte select_brightness[8] PROGMEM = 
 {
     0b10101010,
     0b01010101,
@@ -336,7 +340,7 @@ const byte select_brightness[8] =
 };
 
 //left arrow: select leftmost paddle position
-const byte arrow_left[8] = 
+const byte arrow_left[8] PROGMEM = 
 {
     0b00000000,
     0b00010000,
@@ -349,7 +353,7 @@ const byte arrow_left[8] =
 };
 
 //right arrow: select rightmost paddle position
-const byte arrow_right[8] = 
+const byte arrow_right[8] PROGMEM = 
 {
     0b00000000,
     0b00001000,
@@ -362,7 +366,7 @@ const byte arrow_right[8] =
 };
 
 //EEPROM: store current configuration
-const byte eeprom_store[8] =
+const byte eeprom_store[8] PROGMEM =
 {
     0b11111111,
     0b10000001,
@@ -375,7 +379,7 @@ const byte eeprom_store[8] =
 };
 
 //EEPROM: revert to factory default
-const byte eeprom_defaults[8] =
+const byte eeprom_defaults[8] PROGMEM =
 {
     0b10000001,
     0b01000010,
@@ -388,7 +392,7 @@ const byte eeprom_defaults[8] =
 };
 
 //question mark: enter multiplayer mode
-const byte question_multiplayer[8] = 
+const byte question_multiplayer[8] PROGMEM = 
 {
     0b00011000,
     0b00000100,
@@ -400,7 +404,7 @@ const byte question_multiplayer[8] =
     0b00000000
 };
 
-const byte yes_multiplayer[8] =
+const byte yes_multiplayer[8] PROGMEM =
 {
     0b00011000,
     0b00011000,
@@ -421,7 +425,7 @@ const byte melody_maxlen = 12;
 const float melody_speed = 2.5f;
 
 const byte melody_advance_level_len = 7;
-const unsigned int melody_advance_level[2][melody_maxlen] =
+const unsigned int melody_advance_level[2][melody_maxlen] PROGMEM =
 {
     { 392, 392, 392, 440,  392, 494,  523, 0, 0, 0, 0, 0},    //frequency
     { 500, 250, 250, 500, 1000, 500, 2000, 0, 0, 0, 0, 0}     //duration, 1000 = 1 full beat
@@ -696,7 +700,7 @@ void setup()
 {   
 //    Serial.begin(57600); //debug
 //    eepromReset(); //debug
-    
+  
     //EEPROM
     //if it has never been writen: fill with default
     if (!eepromCheckFingerprint())
@@ -755,7 +759,7 @@ void reset_BreakOut()
 {    
     //copy first level pattern to playfield
     Level = 0;
-    breakoutFillLevel();
+    breakoutFillLevel_from_PROGMEM();
             
     //reset ball counter
     Balls_Old = 0;
@@ -891,8 +895,8 @@ void adjustSpeed()
     {
         Speed_Old = Speed;
         Speed = map(analogRead(potPaddle), 0, 1023, speed_min, speed_max);
-        Speed = (Speed + Speed_Old) / 2;    
-        constrain(Speed, speed_min, speed_max);
+        Speed = (Speed + Speed_Old) / 2;
+        Speed = constrain(Speed, speed_max, speed_min); //reversed order, as speed_max is a low number (max means low delay)
         
         if (RadioMode == rmMaster_speedset_by_Master)
             radioSend(&Speed, &NullDevice);
@@ -937,12 +941,13 @@ void adjustSpeed()
         }        
     }
          
-    int ledamount = map(Speed, speed_min, speed_max, 0, 64);
-    constrain(ledamount, 0, 64);
+    //flicker-free mechanism of displaying the speed
+    //as in contrast to Matrix.clearDisplay(0) only the "necessary" pixels are cleared
+    int ledamount = map(Speed, speed_min, speed_max, 1, 64);
     int the_rest = 64 - ledamount;
     byte x = 0;
     byte y = 0;
-        
+    
     while (ledamount--)
     {
         putPixel(x, y, true);
@@ -956,34 +961,34 @@ void adjustSpeed()
     
     while (the_rest--)
     {
+        putPixel(x, y, false);
         y++;
         if (y == 8)
         {
             x++;
             y = 0;
         }
-        putPixel(x, y, false);
     }    
 }
 
 void adjustBrightness()
 {
-    drawPatternBits(select_brightness, 8);
+    drawPatternBits_from_PROGMEM(select_brightness, 8);
     Intensity = map(analogRead(potPaddle), 0, 1023, 0, 15);
 }
 
 void adjustPaddle()
 {
     int poti = analogRead(potPaddle);
-    
+        
     if (game_mode == gmPaddleLeft)
     {
-        drawPatternBits(arrow_left, 8);
+        drawPatternBits_from_PROGMEM(arrow_left, 8);
         PotiLeftmost = poti;
     }
     else
     {
-        drawPatternBits(arrow_right, 8);
+        drawPatternBits_from_PROGMEM(arrow_right, 8);
         PotiRightmost = poti;
     }
 }
@@ -1029,8 +1034,8 @@ void eepromWriteFingerprintAndDefaults()
     //write fingerprint
     for (int i = 0; i < EEPROM_Fingerprint_len; i++)
     {
-        Serial.print("wfp: i = "); Serial.print(i); Serial.print(" value = "); Serial.println(EEPROM_Fingerprint[i]);
-//        EEPROM.write(locFingerprint + i, EEPROM_Fingerprint[i]);
+//        Serial.print("wfp: i = "); Serial.print(i); Serial.print(" value = "); Serial.println(EEPROM_Fingerprint[i]);
+        EEPROM.write(locFingerprint + i, EEPROM_Fingerprint[i]);
     }
     
     //set variables to factory default and write them to EEPROM
@@ -1066,9 +1071,9 @@ void manageEEPROM()
     //reset to factory default shall be a concious decision, so we
     //check for < 2 instead of < 4: the paddle needs to be very far left
     if (Paddle < 2)
-        drawPatternBits(eeprom_defaults, 8);
+        drawPatternBits_from_PROGMEM(eeprom_defaults, 8);
     else
-        drawPatternBits(eeprom_store, 8);
+        drawPatternBits_from_PROGMEM(eeprom_store, 8);
         
     Paddle_Old = Paddle;
 }
@@ -1213,11 +1218,15 @@ void readUniversalButton()
                         break;
                         
                     case gmSpeed:
-                    case gmBrightness:
                         //enter the advanced configuration mode by pressing the button
                         //very long while being in the standard configuration mode
-                        if (UniversalButtonPressedVeryLong)
-                            game_mode = gmPaddleLeft;
+                        if (interval >= UniversalButtonPressedVeryLong)
+                        {
+                            //remember paddle maxima for restoring in case of the "skip mode" introduced in V1.2
+                            PotiLeftmost_Old = PotiLeftmost;
+                            PotiRightmost_Old = PotiRightmost;
+                            game_mode = gmBrightness;
+                        }
                         else
                             restoreGameState();
                         break;
@@ -1243,12 +1252,12 @@ void readUniversalButton()
                         
                     case gmSpeed:
                         Matrix.clearDisplay(0);
-                        game_mode = gmBrightness;
+                        restoreGameState();
                         break;
                         
-                    case gmBrightness:
+                    case gmBrightness:                    
                         Matrix.clearDisplay(0);               
-                        restoreGameState();
+                        game_mode = gmPaddleLeft;
                         break;
                         
                     case gmPaddleLeft:
@@ -1257,6 +1266,14 @@ void readUniversalButton()
                         break;
                         
                     case gmPaddleRight:
+                        //"skip mode" introduced in V1.2: if The leftmost and rightmost position
+                        //are nearly identical or identical, then ignore the whole new paddle setting
+                        if (abs(PotiRightmost - PotiLeftmost) < 5)
+                        {
+                            PotiLeftmost = PotiLeftmost_Old;
+                            PotiRightmost = PotiRightmost_Old;
+                        }
+                    
                         Matrix.clearDisplay(0);
                         game_mode = gmEEPROM;
                         break;
@@ -1302,7 +1319,7 @@ void manageLEDs(byte how_many_on)
 
    
 //draw paddle and handle paddle position
-void handlePaddle(int& paddle, int& paddle_old, byte paddle_pos = 7)
+void handlePaddle(unsigned int& paddle, unsigned int& paddle_old, byte paddle_pos = 7)
 {
     if (paddle != paddle_old)
     {
@@ -1332,11 +1349,11 @@ void drawPattern(byte pattern[8][8], byte y_count)
 }
 
 //draw a pattern from a bit array (smileys, icons, etc.)
-void drawPatternBits(const byte pattern[], byte y_count)
+void drawPatternBits_from_PROGMEM(const byte pattern[], byte y_count)
 {
     for (byte y = 0; y < y_count; y++)
     {
-        byte pixel = pattern[y];
+        byte pixel =  pgm_read_byte(&(pattern[y]));
         byte mask = 0b10000000;
         for (byte x = 0; x < 8; x++)
         {
@@ -1385,12 +1402,12 @@ void noise(int freq1, int freq2, int duration)
     }
 }
 
-void playMelody(const unsigned int melody[2][12], byte melody_len)
+void playMelody_from_PROGMEM(const unsigned int melody[2][12], byte melody_len)
 {
     for (byte i = 0; i < melody_len; i++)
     {
-        tone(PWM_Audio, melody[0][i]);
-        delay((float) melody[1][i] / melody_speed);
+        tone(PWM_Audio, pgm_read_word(&(melody[0][i])));
+        delay((float) pgm_read_word(&(melody[1][i])) / melody_speed);
         noTone(PWM_Audio);
         delay(50); //otherwise the tones sound too legato
     }
@@ -1461,17 +1478,36 @@ void calculateBallMovement(GameMode nowplaying)
     }
 }    
  
-void calculatePaddleImpact(int paddle, int& last_paddle_pos, byte scanline_of_impact)
+void calculatePaddleImpact(unsigned int paddle, unsigned int& last_paddle_pos, byte scanline_of_impact)
 {
     //RelativePaddleSpeed is important, if you need to give the ball a special
     //"spin" either to left or to right in cases it moves to uniformly and you
     //cannot reach certain bricks
     int relative_paddle_speed = paddle - last_paddle_pos;
     last_paddle_pos = paddle;
-                
+    
+    //if the user very quickly moves the paddle under the ball, while it was not
+    //under the ball in the previous calculateBallMovement/calculatePaddleImpact cycle
+    //then the ball should be treated correctly and not get lost
+    if (BallY == (scanline_of_impact == PaddleHit_Bottom ? scanline_of_impact + 1 : scanline_of_impact - 1))
+    {
+        int tstX = BallX - BallDX; //"undo" the latest movement to check, if the ball would have hit the paddle
+        
+        //use the same logic as below in the "ball hits the paddle" section to determine a paddle hit
+        if (paddle == tstX || paddle == tstX - 1 || ((BallDX > 0) ? paddle == tstX + 1 : paddle == tstX - 2))
+        {
+            //undo the last movement for the sake of the following "ball hits the paddle" calculations
+            BallY -= BallDY;            
+            BallX = constrain(BallX - BallDX, 0, 7); //due to wall reflections done in calculateBallMovement,
+                                                     //this could be -1 or +8, so we need to constrain
+        }
+    }
+    
     //ball hits the paddle
     if (BallY == scanline_of_impact)
     {
+        boolean PaddleWasHit = false;
+        
         //if the ball is coming from the left (and moving to the right)...
         if (BallDX > 0)
         {
@@ -1487,6 +1523,7 @@ void calculatePaddleImpact(int paddle, int& last_paddle_pos, byte scanline_of_im
                     
                 //make a short clicking noise when the paddle was hit
                 playSound(gsPaddle);
+                PaddleWasHit = true;
             }
         }
         
@@ -1499,12 +1536,13 @@ void calculatePaddleImpact(int paddle, int& last_paddle_pos, byte scanline_of_im
                 if (BallX - 2 == paddle && BallX != 7)
                     BallDX = -BallDX;
                 playSound(gsPaddle);
+                PaddleWasHit = true;
             }
         }
         
         //possibility to influence the ball with a speedy paddle movement
         //you can give it a "spin" either to the left or to the right
-        if (abs(relative_paddle_speed) >= PaddleSpeedThreshold)
+        if (PaddleWasHit && abs(relative_paddle_speed) >= PaddleSpeedThreshold)
         {
             if (BallX < 6 && relative_paddle_speed > 0)
                 BallX++;
@@ -1519,11 +1557,11 @@ void calculatePaddleImpact(int paddle, int& last_paddle_pos, byte scanline_of_im
     BREAKOUT
    ****************************************** */
 
-void breakoutFillLevel()
+void breakoutFillLevel_from_PROGMEM()
 {
     for (byte y = 0; y < bricks_levelheight[Level]; y++)
         for (byte x = 0; x < 8; x++)
-            bricks[y][x] = bricks_reset[Level][y][x];    
+            bricks[y][x] = pgm_read_byte(&(bricks_reset[Level][y][x]));
 }
 
 //random ball position and random x-movement
@@ -1576,9 +1614,9 @@ void checkCollisionAndWon()
                 Level++;                                
                 if (Level < Levels)
                 {
-                    playMelody(melody_advance_level, melody_advance_level_len);
+                    playMelody_from_PROGMEM(melody_advance_level, melody_advance_level_len);
                     Matrix.clearDisplay(0);
-                    breakoutFillLevel();
+                    breakoutFillLevel_from_PROGMEM();
                     
                     //pause game for the player to be able to see the new level before it starts
                     BallDX = BallDY = 0;
@@ -1590,7 +1628,7 @@ void checkCollisionAndWon()
                 else
                 {
                     WonOrLostState = true;
-                    drawPatternBits(smiley_won, 8);
+                    drawPatternBits_from_PROGMEM(smiley_won, 8);
                     while (!perform_reset)
                     {
                         noise(300, 500, 5);
@@ -1623,7 +1661,7 @@ void checkLost()
         {
             manageLEDs(Balls);
             WonOrLostState = true;
-            drawPatternBits(smiley_lost, 8);            
+            drawPatternBits_from_PROGMEM(smiley_lost, 8);            
             while (!perform_reset)
             {
                 readUniversalButton();
@@ -1674,7 +1712,7 @@ void tennisHandleMultiplayerQuestion()
     //show the question mark independent from the paddle position     
     if (MultiplayerQuestionTime == 0)
     {
-        drawPatternBits(question_multiplayer, 8);
+        drawPatternBits_from_PROGMEM(question_multiplayer, 8);
         
 #ifdef SHOW_MASTER_SLAVE
         //debug-info: show if this device is master (x-pos = 0) or slave (x-pos = 1)
@@ -1689,10 +1727,10 @@ void tennisHandleMultiplayerQuestion()
     {
         //no
         if (Paddle <= 3)
-            drawPatternBits(question_multiplayer, 8);
+            drawPatternBits_from_PROGMEM(question_multiplayer, 8);
         //yes
         else
-            drawPatternBits(yes_multiplayer, 8);                
+            drawPatternBits_from_PROGMEM(yes_multiplayer, 8);                
     }
     
     //in regular operations, Paddle_Old is set by handlePaddle
@@ -2021,11 +2059,11 @@ void tennisHandleWonOrLost()
     
     //this device won
     if (TennisPoints == Tennis_win)
-        drawPatternBits(smiley_won, 8);
+        drawPatternBits_from_PROGMEM(smiley_won, 8);
     
     //the other device won
     else
-        drawPatternBits(smiley_lost, 8);            
+        drawPatternBits_from_PROGMEM(smiley_lost, 8);            
 }
 
 void playTennis()
@@ -2090,5 +2128,5 @@ void loop()
             break;
 
         case gmEEPROM:      manageEEPROM();        break;            
-    }            
+    }    
 }

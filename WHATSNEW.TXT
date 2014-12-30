@@ -1,13 +1,41 @@
 TeleBall Version 1.2 12/xx/14
 
+* Change: The brightness adjustment has been moved to the advanced
+  configuration mode, as usage tests showed that it is far less often used
+  than the speed adjustment, and therefore it started to annoy soon.
+
+* Change: Advanced menu: If you set the leftmost paddle position identically
+  to the rightmost paddle position, then no paddle change is assumed. The
+  idea is to be able to skip quickly through this menu setting without the
+  necessity to set the paddle position each time.
+
+* Bugfix: The advanced menu already opened after a ~1sec button press instead
+  after a ~4sec button press.
+
 * Bugfix: The "X" in the EEPROM menu was not always accessible.
 
 * Bugfix: The pairing of two devices did not work, when one was in the won or
   lost state of BreakOut, while the other one was powered on. There were also
   some other states that prevented pairing, so this should be rock solid now.
 
+* Bugfix: Sometimes when adjusting the speed and the controller wheel was at
+  the very left position, you saw no pixels illuminated while exactly one
+  should have.
+
+* Bugfix: The EEPROM fingerprint was not written on new devices.
+
+* Bugfix: You were not able to catch a ball that was already one line above
+  the paddle and THEN you moved the paddle below it - even if you were fast
+  enough that you should have catched this ball. 
+
+* Bugfix: With a speedy paddle movement you could influence the ball even if
+  the ball was far away from the paddle.
+
+TODO * Bugfix: Tennis: Sometimes the won or lost smiley stayed visible, on the
+  slave's screen when the master device was resetting the match.
+
 * Bugfix: Tennis: If the game speed was set on the slave device, then when
-  leaving the configuration menu, there was no short game pause and the balls
+  leaving the configuration menu, there was no short game pause and the ball's
   position and direction was random, which sometimes lead to weird results
   like left/right bouncing balls.
 
@@ -18,6 +46,8 @@ TeleBall Version 1.2 12/xx/14
   still in pause mode (e.g. directly after a lost ball), then when leaving
   the configuration menu lead to a freezing ball, i.e. it did not start moving
   again at all; you needed to reset the match.
+
+* Optimization: Saved SRAM by moving constant lookup-tables to PROGMEM.
 
 
 
@@ -48,4 +78,4 @@ TeleBall Version 0.1 8/3/14
 
 
 
-Last modified by sy2002 on 26th of December 2014
+Last modified by sy2002 on 30th of December 2014

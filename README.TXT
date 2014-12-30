@@ -23,6 +23,8 @@
   two TeleBall devices. It is delighting to see, how much fun playing on a
   8x8 dot matrix display using a poti-controller can be.
 
+* TeleBall is made using the Arduino Nano platform on a custom PCB.
+
 * Open index.html with a browser to get a much better project documentation,
   how-to play and how-to build guide and a bill of materials (BOM).
 
@@ -48,4 +50,4 @@
             Made with Arduino: http://arduino.cc/de/Main/Software
 
 
-Last modified by sy2002 on 26th of December 2014
+Last modified by sy2002 on 29th of December 2014
