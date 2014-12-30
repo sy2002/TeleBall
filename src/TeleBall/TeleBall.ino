@@ -482,7 +482,7 @@ RF24 Radio(RadioCE, RadioCS);
 //master/slave state machine
 enum
 {
-    //"<= rmNone" is used in certain cases, so do not change the negative signs
+    //some checks are done via "> rmNone", i.e. it is important that the modes are in order
     rmIgnore                    = -2,   //do not scan any more, but ignore other TeleBall devices
     rmNone                      = -1,   //no other TeleBall device found
     
@@ -537,12 +537,12 @@ struct  //also uses bit fields
 {
     unsigned int Paddle           : 3;
     unsigned int Reset            : 1;   //slave initiates reset
+    unsigned int Reset_Ack        : 1;   //slaves acknowledges a reset initiated by the master
     unsigned int SpeedSet         : 1;   //slave initiates a change in the game's speed
+    unsigned int SpeedSet_Ack     : 1;   //slave acknowledges a speedset initiated by the master
     
     //the padding cannot be arbitrarly done as "padding : <amount>" due to compiler specifics    
     unsigned int unused_padding1  : 1;
-    unsigned int unused_padding2  : 1;
-    unsigned int unused_padding3  : 1;
     unsigned int unused_paddingx  : 24;    
 } RadioGameDataFromSlave;
 
@@ -733,16 +733,10 @@ void setup()
     //setup the nRF23L01+
     Radio.begin();
     Radio.setAutoAck(1);                             //Ensure autoACK is enabled
-    Radio.enableAckPayload();                        //Allow optional ack payloads
-    
-//    Radio.setRetries(0, 10);                         //Smallest time between retries (shall be 0 == 250ms), max no. of retries (shall be 10)
-    Radio.setRetries(0, 4);
-    
+    Radio.enableAckPayload();                        //Allow optional ack payloads    
+    Radio.setRetries(0, 4);                          //Smallest time between retries (shall be 0 == 250ms), max no. of retries (shall be 4)    
     Radio.setPayloadSize(RadioPayloadSize);          //standard: 4-byte payload
-    
-//    Radio.setDataRate(RF24_2MBPS);                   //higher data rate means lower power consumption (but less robustness)
-    Radio.setDataRate(RF24_1MBPS);
-    
+    Radio.setDataRate(RF24_1MBPS);                   //lower data rate increases the robustness    
     Radio.setPALevel(RF24_PA_MAX);                   //high power consumption, high distance
     Radio.openReadingPipe(RadioPipe, RadioAddress);  //open read pipe on hard coded pipe no and address
     Radio.startListening();                          //Start listening
@@ -852,7 +846,7 @@ void putPixel(byte x, byte y, boolean on)
     CONFIGURATION
    ****************************************** */
 
-void changeBrightness()
+void handleBrightness()
 {
     //change the brightness of the LEDs
     if (Intensity != Intensity_Old)
@@ -864,83 +858,22 @@ void changeBrightness()
 
 void adjustSpeed()
 {
-    unsigned long payload;
-    unsigned long NullDevice = 0; //needs to be zero, otherwise the slave might send a reset signal during ACK
-    
-    if (RadioMode == rmMaster_run)
-    {
-        RadioGameDataFromMaster.SpeedSet = 1;
-        Radio.flush_tx();
-        if (radioSend(&RadioGameDataFromMaster, &NullDevice))
-        {
-            RadioMode = rmMaster_speedset_by_Master;
-            delay(300); //allow slave to digest this
-        }
-    }
-    
-    if (RadioMode == rmSlave_run)
-    {
-        RadioGameDataFromSlave.SpeedSet = 1;
-        RadioGameDataFromMaster.SpeedSet_Ack = 0;
-        while (!RadioGameDataFromMaster.SpeedSet_Ack)
-        {
-            if (radioReceive(&RadioGameDataFromMaster, &RadioGameDataFromSlave))
-            {
-                RadioMode = rmSlave_speedset_by_Slave;
-            }
-        }
-    }
-                    
+    //to avoid a flickering display: only set the local Speed variable if this device is in single player mode
+    //or this device is the device that initited the speedset mode (and therefore is managing the Speed variable)
     if (RadioMode <= rmNone || RadioMode == rmMaster_speedset_by_Master || RadioMode == rmSlave_speedset_by_Slave)
     {
         Speed_Old = Speed;
         Speed = map(analogRead(potPaddle), 0, 1023, speed_min, speed_max);
         Speed = (Speed + Speed_Old) / 2;
         Speed = constrain(Speed, speed_max, speed_min); //reversed order, as speed_max is a low number (max means low delay)
+    }
+    
+    //in tennis mode: send speed or receive speed from the device that initiated the speedset mode
+    //tennis is assumed when any radio mode is active
+    if (RadioMode > rmNone)
+        if (!tennisHandleAdjustSpeed())
+            return; //leave the speed set mode and prevent the screen from being scrambled
         
-        if (RadioMode == rmMaster_speedset_by_Master)
-            radioSend(&Speed, &NullDevice);
-
-        if (RadioMode == rmSlave_speedset_by_Slave)
-            radioReceive(&NullDevice, &Speed);
-    }
-    
-    if (RadioMode == rmMaster_speedset_by_Slave)
-    {
-        if (radioSend(&RadioMasterSCP, &payload))
-        {
-            //remove flags for getting the real speed
-            Speed = payload & Mask_Speed;            
-            
-            //check if slave asks for leaving the SpeedSet mode
-            if (payload & Flag_Leave)
-            {
-                delay(300); //let slave move to restoreGameState()                
-                radioSend(&RadioMasterSCA, &NullDevice);
-                Matrix.clearDisplay(0);
-                restoreGameState();
-                return;
-            }                        
-        }
-    }
-    
-    if (RadioMode == rmSlave_speedset_by_Master)
-    {
-        if (radioReceive(&payload, &NullDevice))
-        {            
-            //remove flags for getting the real speed
-            Speed = payload & Mask_Speed;            
-            
-            //check if master commands to leave the SpeedSet mode
-            if (payload & Flag_Leave)
-            {
-                Matrix.clearDisplay(0);
-                restoreGameState();
-                return;
-            }            
-        }        
-    }
-         
     //flicker-free mechanism of displaying the speed
     //as in contrast to Matrix.clearDisplay(0) only the "necessary" pixels are cleared
     int ledamount = map(Speed, speed_min, speed_max, 1, 64);
@@ -1166,7 +1099,7 @@ void restoreGameState()
         pauseGame(2 * respawn_duration);
 }
 
-//read universal button, distinguish between short and long
+//read universal button, distinguish between short, long and very long
 void readUniversalButton()
 {
     //the current Universal Button is using an inverse hardware
@@ -1187,7 +1120,9 @@ void readUniversalButton()
             UniversalButton_firstcontact = true;
             
             //ignore button in case the other device is in SpeedSet mode
-            if (RadioMode == rmMaster_speedset_by_Slave || RadioMode == rmSlave_speedset_by_Master)
+            //or if we are waiting for the other party to join tennis 
+            if (RadioMode == rmMaster_speedset_by_Slave || RadioMode == rmSlave_speedset_by_Master ||
+                RadioMode == rmMaster_wait || RadioMode == rmSlave_wait)
                 return;            
                         
             //configuration modes OR back to game
@@ -1758,20 +1693,16 @@ void tennisHandleMultiplayerQuestion()
         
         //deny multiplayer mode: back to BreakOut and ignore further tennis game requests
         if (Paddle <= 3)
-        {            
-            //ignore further tennis game requests and power down radio to save battery life
-            RadioMode = rmIgnore;    
-            Radio.powerDown();
-            
-            //return to BreakOut
-            game_mode = gmBreakOut;
-            Balls_Old = 0;  //take care that when returning, the right amount of balls is shown via the LEDs            
-            Matrix.clearDisplay(0);                
-        }
+            tennisSwitchToBreakOutPermanently();
         
         //enter multiplayer mode and play tennis
         else
         {
+            //if the player pressed the button during the MultiplayerQuestionMax interval,
+            //no "!" would be shown at all, this is why we paint it always, before
+            //switching into rmMaster_wait or rmSlave_wait
+            drawPatternBits_from_PROGMEM(yes_multiplayer, 8);                
+                        
             if (RadioMode == rmMaster_init)
                 RadioMode = rmMaster_wait;
             else
@@ -1793,9 +1724,7 @@ void tennisWaitForOtherPartyToJoin()
     //timeout
     else
     {
-        RadioMode = rmNone;
-        game_mode = gmBreakOut;
-        Matrix.clearDisplay(0);
+        tennisSwitchToBreakOutPermanently();
         return;
     }
             
@@ -1974,6 +1903,10 @@ void tennisPlaySlave()
         //game reset on master's side
         if (RadioGameDataFromMaster.Reset)
         {
+            RadioGameDataFromSlave.Reset_Ack = 1;
+            while (RadioGameDataFromMaster.Reset)
+                radioReceive(&RadioGameDataFromMaster, &RadioGameDataFromSlave);            
+            
             reset();                  //reset local stats
 #ifdef STAY_IN_TENNIS
             RadioMode = rmSlave_run;  //next tennis match
@@ -1986,6 +1919,10 @@ void tennisPlaySlave()
         //speed set on master's side
         if (RadioGameDataFromMaster.SpeedSet)
         {
+            RadioGameDataFromSlave.SpeedSet_Ack = 1;
+            while (RadioGameDataFromMaster.SpeedSet)
+                radioReceive(&RadioGameDataFromMaster, &RadioGameDataFromSlave);
+                
             backupGameState();
             game_mode = gmSpeed;
             RadioMode = rmSlave_speedset_by_Master;
@@ -1997,17 +1934,21 @@ void tennisPlaySlave()
 void tennisResetMaster()
 {
     RadioGameDataFromMaster.Reset = 1;
+    RadioGameDataFromSlave.Reset_Ack = 0;
     
-    //if sending the reset flag works...
-    if (radioSend(&RadioGameDataFromMaster, &RadioGameDataFromSlave))
+    while (!RadioGameDataFromSlave.Reset_Ack)
     {
+        //if sending the reset flag works...
+        if (radioSend(&RadioGameDataFromMaster, &RadioGameDataFromSlave))
+        {
 #ifdef STAY_IN_TENNIS
-        //ignore ACK and initiate next round of tennis
-        RadioMode = rmMaster_run;
+            //ignore ACK and initiate next round of tennis
+            RadioMode = rmMaster_run;
 #else
-        //ignore any ACK payload specifics and switch to question mode
-        RadioMode = rmMaster_init;
+            //ignore any ACK payload specifics and switch to question mode
+            RadioMode = rmMaster_init;
 #endif
+        }
     }
 }
 
@@ -2032,6 +1973,86 @@ void tennisResetSlave()
         }
     }
 }
+
+boolean tennisHandleAdjustSpeed()
+{
+    unsigned long payload;
+    unsigned long NullDevice = 0; //needs to be zero, otherwise the slave might send a reset signal during ACK
+    
+    switch (RadioMode)
+    {
+        //adjust speed is initiated by the master            
+        case rmMaster_run:
+            RadioGameDataFromMaster.SpeedSet = 1;
+            RadioGameDataFromSlave.SpeedSet_Ack = 0;
+            Radio.flush_tx();
+            while (!RadioGameDataFromSlave.SpeedSet_Ack)
+            {
+                if (radioSend(&RadioGameDataFromMaster, &RadioGameDataFromSlave))
+                    RadioMode = rmMaster_speedset_by_Master;
+            }
+            return true;
+            
+        //adjust speed is initiated by the slave
+        case rmSlave_run:
+            RadioGameDataFromSlave.SpeedSet = 1;
+            RadioGameDataFromMaster.SpeedSet_Ack = 0;
+            while (!RadioGameDataFromMaster.SpeedSet_Ack)
+            {
+                if (radioReceive(&RadioGameDataFromMaster, &RadioGameDataFromSlave))
+                    RadioMode = rmSlave_speedset_by_Slave;
+            }
+            return true;
+    
+        //master transmits speed to the slave        
+        case rmMaster_speedset_by_Master:
+            radioSend(&Speed, &NullDevice);
+            return true;
+
+        //slave transmit speed to the master via the ACK signal
+        case rmSlave_speedset_by_Slave:
+            radioReceive(&NullDevice, &Speed);
+            return true;
+            
+        //master polls speed from slave by sending the poll signal RadioMasterSCP and receiving the Speed via the ACK signal
+        case rmMaster_speedset_by_Slave:
+            if (radioSend(&RadioMasterSCP, &payload))
+            {
+                //remove flags for getting the real speed
+                Speed = payload & Mask_Speed;            
+                
+                //check if slave asks for leaving the SpeedSet mode
+                if (payload & Flag_Leave)
+                {
+                    delay(300); //let slave move to restoreGameState()                
+                    if (radioSend(&RadioMasterSCA, &NullDevice))
+                    {
+                        Matrix.clearDisplay(0);
+                        restoreGameState();
+                        return false;
+                    }
+                }                        
+            }
+            return true;
+    
+        //slave receives speed from master
+        case rmSlave_speedset_by_Master:
+            if (radioReceive(&payload, &NullDevice))
+            {            
+                //remove flags for getting the real speed
+                Speed = payload & Mask_Speed;            
+                
+                //check if master commands to leave the SpeedSet mode
+                if (payload & Flag_Leave)
+                {
+                    Matrix.clearDisplay(0);
+                    restoreGameState();
+                    return false;
+                }            
+            }
+            return true;
+    }    
+}    
 
 //set a random x/y position and a random dx/dy movement
 void tennisRespawn(int duration)
@@ -2064,6 +2085,18 @@ void tennisHandleWonOrLost()
     //the other device won
     else
         drawPatternBits_from_PROGMEM(smiley_lost, 8);            
+}
+
+void tennisSwitchToBreakOutPermanently()
+{
+    //ignore further tennis game requests and power down radio to save battery life
+    RadioMode = rmIgnore;    
+    Radio.powerDown();
+    
+    //return to BreakOut
+    game_mode = gmBreakOut;
+    Balls_Old = 0;  //take care that when returning, the right amount of balls is shown via the LEDs            
+    Matrix.clearDisplay(0);                
 }
 
 void playTennis()
@@ -2112,7 +2145,7 @@ void loop()
     //handle various input ports and the orientation
     handleInput();
     handleOrientation();
-    changeBrightness();
+    handleBrightness();
     
     switch (game_mode)
     {

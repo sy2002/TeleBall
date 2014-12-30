@@ -31,13 +31,20 @@ TeleBall Version 1.2 12/xx/14
 * Bugfix: With a speedy paddle movement you could influence the ball even if
   the ball was far away from the paddle.
 
-TODO * Bugfix: Tennis: Sometimes the won or lost smiley stayed visible, on the
+* Bugfix: Tennis: Sometimes the won or lost smiley stayed visible, on the
   slave's screen when the master device was resetting the match.
 
 * Bugfix: Tennis: If the game speed was set on the slave device, then when
   leaving the configuration menu, there was no short game pause and the ball's
   position and direction was random, which sometimes lead to weird results
   like left/right bouncing balls.
+
+* Bugfix: Tennis: If during pairing a player pressed the button while waiting
+  for the other player to join, the device went into an undefined state.
+
+* Bugfix: Tennis: If during pairing a player pressed the button immediatelly,
+  i.e. if he did not wait for the initial "?" to disappear, unwanted effects
+  could occur.
 
 * Bugfix: Tennis: When the slave device was the last to acknowledge to play
   tennis, then there was no delay, before the game started.
