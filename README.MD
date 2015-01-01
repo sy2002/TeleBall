@@ -1,5 +1,5 @@
-TeleBall - Your Retro Handheld Game Console
-===========================================
+TeleBall - Retro Handheld Game Console
+======================================
 
 TeleBall lets you play *BreakOut* in single-player mode using one device and
 *Tennis for Two* in multi-player mode using two devices communicating via
