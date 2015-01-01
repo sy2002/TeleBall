@@ -1,4 +1,4 @@
-TeleBall Version 1.2 12/31/14
+TeleBall Version 1.2 01/01/15
 
 * Change: The brightness adjustment has been moved to the advanced
   configuration mode, as usage tests showed that it is far less often used
@@ -9,17 +9,10 @@ TeleBall Version 1.2 12/31/14
   idea is to be able to skip quickly through this menu setting without the
   necessity to set the paddle position each time.
 
-* Bugfix: The advanced menu already opened after a ~1sec button press instead
-  after a ~4sec button press.
+* Change: The minimum speed is now faster (500ms instead of 600ms delay per
+  pixel) and the maximum speed is now also faster (50ms instead of 75ms).
 
 * Bugfix: The "X" in the EEPROM menu was not always accessible.
-
-* Bugfix: Sometimes when adjusting the speed and the controller wheel was at
-  the very left position, you saw no pixels illuminated while exactly one
-  should have.
-
-* Bugfix: The EEPROM fingerprint was not written on new devices, which means
-  that new devices did not remember any settings.
 
 * Bugfix: You were not able to catch a ball that was already one line above
   the paddle and THEN you moved the paddle below it - even if you were fast
@@ -27,6 +20,17 @@ TeleBall Version 1.2 12/31/14
 
 * Bugfix: With a speedy paddle movement you could influence the ball even if
   the ball was far away from the paddle.
+
+* Bugfix: Sometimes when adjusting the speed and the controller wheel was at
+  the very left position, you saw no pixels illuminated while exactly one
+  should have.
+
+* Bugfix: The EEPROM fingerprint was not written on new devices, which means
+  that new devices did not remember any settings, i.e. the EEPROM feature was
+  broken there.
+
+* Bugfix: The advanced menu already opened after a ~1sec button press instead
+  after a ~4sec button press.
 
 * Bugfix: Tennis: The pairing of two devices did not work, when one was in the
   won or lost state of BreakOut, while the other one was powered on. There
@@ -91,4 +95,4 @@ TeleBall Version 0.1 8/3/14
 
 
 
-Last modified by sy2002 on 30th of December 2014
+Last modified by sy2002 on 1st of January 2015

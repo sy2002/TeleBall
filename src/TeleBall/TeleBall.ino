@@ -3,7 +3,7 @@
     
     Retro Style BreakOut and Tennis Game
     
-    made in August .. December 2014
+    made in August 2014 .. January 2015
     
     * idea, code and original circurit design by sy2002
     * additional circurit design and board layout by doubleflash
@@ -102,8 +102,8 @@ boolean               MultiplayerQuestionButton = false;     //universal button 
 //the speed defines how many milliseconds are between two ball movements
 //the movement of the paddle is decoupled from the movement speed of the ball
 //the maximum speed heavily depends on the processor type and speed
-const unsigned int    speed_max = 75;                       //amount of screen refresh cycles in milliseconds that are wasted...
-const unsigned int    speed_min = 600;                      //...until the ball moves on one pixel
+const unsigned int    speed_max = 50;                       //amount of screen refresh cycles in milliseconds that are wasted...
+const unsigned int    speed_min = 500;                      //...until the ball moves on one pixel
 
 //amount of LEDs installed in the device, should be 3
 //changing this leads to multiple code parts that need adjustments
@@ -466,7 +466,7 @@ unsigned long Last_RadioCycle  = 0;
 //wait and listen randomly between RadioWaitMin and
 //RadioWaitMax, before 
 const int RadioWait_Min        = 500;
-const int RadioWait_Max        = 1500;  //this needs to be carefully timed due to RadioTimeOutVal
+const int RadioWait_Max        = 850;  //this needs to be carefully timed due to RadioTimeOutVal
 unsigned long RadioWait        = 0;
 
 //mechanism for handling cases, where the transmission is not working any more,
