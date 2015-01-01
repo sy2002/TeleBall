@@ -1,4 +1,23 @@
-==============================================================================
+TeleBall - Your Retro Handheld Game Console
+===========================================
+
+TeleBall lets you play *BreakOut* in single-player mode using one device and
+*Tennis for Two* in multi-player mode using two devices communicating via
+radio.
+
+This repository contains everything you need to build your own TeleBall
+device, including
+
+* CAD .stl and .cmb.gz data for your 3D printer or for any online 3D print
+  shop to 3D print the TeleBall case
+
+* Eagle PCB layout for any online PCB manufacturer to make the TeleBall PCB
+
+* Part lists and hints how to build the device
+
+* Arduino source code to flash the firmware
+
+![IntroImage](doc/intro.jpg)
 
     T E L E B A L L 
 
