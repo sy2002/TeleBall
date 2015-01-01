@@ -1,8 +1,10 @@
 TeleBall - Retro Handheld Game Console
 ======================================
 
-TeleBall lets you play *BreakOut* in single-player mode using one device and
-*Tennis for Two* in multi-player mode using two devices communicating via
+![IntroImage](doc/intro.jpg)
+
+TeleBall lets you play **BreakOut** in single-player mode using one device and
+**Tennis for Two** in multi-player mode using two devices communicating via
 radio.
 
 This repository contains everything you need to build your own TeleBall
@@ -17,7 +19,7 @@ device, including
 
 * Arduino source code to flash the firmware
 
-![IntroImage](doc/intro.jpg)
+
 
     T E L E B A L L 
 
