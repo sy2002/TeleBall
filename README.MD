@@ -73,3 +73,5 @@ TeleBall is brought to you by
 TeleBall is a project of 
 [MEGA - Museum of Electronic Games & Art](http://www.m-e-g-a.org).
 
+We are looking forward to hearing from you. Email to code at sy2002.de
+
