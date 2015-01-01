@@ -1,55 +1,46 @@
 TeleBall - Retro Handheld Game Console
 ======================================
 
-![IntroImage](doc/intro.jpg)
+![DeviceInHand](doc/intro.jpg)
 
-TeleBall lets you play **BreakOut** in single-player mode using one device and
-**Tennis for Two** in multi-player mode using two devices communicating via
-radio.
+What is TeleBall?
+-----------------
+
+TeleBall is a handheld game console. It lets you play **BreakOut** in
+single-player mode using one device and **Tennis for Two** in multi-player
+mode using two devices communicating via radio.
+
+TeleBall is pretty retro and very minimalistic: It features an
+8x8 pixel LED matrix display, a paddle as game controller and one button.
+Therefore, the range of possible games is limited but you will be surprised
+how much fun and even zenlike meditation this kind of gameplay can bring you,
+particularly when you play Tennis for Two with a friend.
+
+![TennisOnTwoDevices](doc/tennis.jpg)
+
+About this GIT Repository
+-------------------------
 
 This repository contains everything you need to build your own TeleBall
-device, including
+device:
 
 * CAD .stl and .cmb.gz data for your 3D printer or for any online 3D print
   shop to 3D print the TeleBall case
 
 * Eagle PCB layout for any online PCB manufacturer to make the TeleBall PCB
 
-* Part lists and hints how to build the device
+* Part lists and hints how to build the hardware
 
 * Arduino source code to flash the firmware
 
+TeleBall is made using the
+[Arduino Nano platform](http://arduino.cc/en/Main/ArduinoBoardNano) on a
+custom PCB.
 
+Browse TeleBall's project page for a much better documentation, including a
+how-to play and how-to build guide and a bill of materials (BOM).
 
-    T E L E B A L L 
-
-    
-    Retro style Arduino based BreakOut & Tennis game
-    made in August .. December 2014
-    
-    * idea, code and original circurit design by sy2002
-    * additional circurit design and board layout by doubleflash
-    * body housing/case by Miro
-    
-    License: You are free to share and adapt for any purpose,
-    even commercially as long as you attribute to
-    sy2002, doubleflash and Miro and link to http://www.sy2002.de
-    
-    http://creativecommons.org/licenses/by/4.0/    
-
-==============================================================================
-
-* TeleBall is fun to play! It offers two play modes: A 3-level BreakOut clone
-  as a single player game and a two player Tennis game using radio to connect
-  two TeleBall devices. It is delighting to see, how much fun playing on a
-  8x8 dot matrix display using a poti-controller can be.
-
-* TeleBall is made using the Arduino Nano platform on a custom PCB.
-
-* Open index.html with a browser to get a much better project documentation,
-  how-to play and how-to build guide and a bill of materials (BOM).
-
-* Folder structure:
+###Folder Structure
 
     cad:    CAD data for 3D printing the TeleBall case
             Use ".stl" to modify the design or to create a custom output file.
@@ -70,5 +61,15 @@ device, including
             able to compile. The "archive" folder contains historic versions.
             Made with Arduino: http://arduino.cc/de/Main/Software
 
+The Makers
+----------
 
-Last modified by sy2002 on 29th of December 2014
+TeleBall is brought to you by
+
+* [sy2002](http://www.sy2002.de): idea, code and original circurit design
+* doubleflash: additional circurit design and board layout
+* Miro: body housing/case
+
+TeleBall is a project of 
+[MEGA - Museum of Electronic Games & Art](http://www.m-e-g-a.org).
+
