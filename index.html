@@ -30,7 +30,8 @@
 
     <div class="container">
       <section id="main_content">
-        {%include index.md %}
+            {% capture my_content %}{% include index.md %}{% endcapture %}
+            {{ my_content | markdownify }}
       </section>
     </div>
 
