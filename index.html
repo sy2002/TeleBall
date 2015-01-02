@@ -21,7 +21,7 @@
         <h2>Arduino Retro Handheld Game Console</h2>
 
         <section id="downloads">
-          <a href="{{ site.github.zip_url }}" class="btn">TST Download as .zip</a>
+          <a href="https://github.com/sy2002/TeleBall/zipball/master" class="btn">Download as .zip</a>
           <a href="https://github.com/sy2002/TeleBall/tarball/master" class="btn">Download as .tar.gz</a>
           <a href="https://github.com/sy2002/TeleBall" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
         </section>
@@ -30,81 +30,7 @@
 
     <div class="container">
       <section id="main_content">
-        <h2>
-<a id="what-is-teleball" class="anchor" href="#what-is-teleball" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is TeleBall?</h2>
-
-<p>TeleBall is a handheld game console. You cannot buy it. You need to build it by yourself.
-It lets you play <strong>BreakOut</strong> in single-player mode using one device and
-<strong>Tennis for Two</strong> in multi-player mode using two devices communicating via radio.</p>
-
-<p><img src="https://github.com/sy2002/TeleBall/raw/master/doc/intro.jpg" alt="TeleBall Device in Hand"></p>
-
-<p>TeleBall is pretty retro and very minimalistic: It features an
-8x8 pixel LED matrix display, a paddle as game controller and one button.
-Therefore, the range of possible games is limited but you will be surprised
-how much fun and even zenlike meditation this kind of gameplay can bring you,
-particularly when you play Tennis for Two with a friend.</p>
-
-<p><img src="https://github.com/sy2002/TeleBall/raw/master/doc/tennis.jpg" alt="TennisOnTwoDevices"></p>
-
-<h2>
-<a id="about-this-git-repository" class="anchor" href="#about-this-git-repository" aria-hidden="true"><span class="octicon octicon-link"></span></a>About this GIT Repository</h2>
-
-<p>This repository contains everything you need to build your own TeleBall
-device:</p>
-
-<ul>
-<li><p>CAD .stl and .cmb.gz data for your 3D printer or for any online 3D print
-shop to 3D print the TeleBall case</p></li>
-<li><p>Eagle PCB layout for any online PCB manufacturer to make the TeleBall PCB</p></li>
-<li><p>Part lists and hints how to build the hardware</p></li>
-<li><p>Arduino source code to flash the firmware</p></li>
-</ul>
-
-<p>TeleBall is made using the
-<a href="http://arduino.cc/en/Main/ArduinoBoardNano">Arduino Nano platform</a> on a
-custom PCB.</p>
-
-<p>Browse TeleBall's project page for a much better documentation, including a
-how-to play and how-to build guide and a bill of materials (BOM).</p>
-
-<h3>
-<a id="folder-structure" class="anchor" href="#folder-structure" aria-hidden="true"><span class="octicon octicon-link"></span></a>Folder Structure</h3>
-
-<pre><code>cad:    CAD data for 3D printing the TeleBall case
-        Use ".stl" to modify the design or to create a custom output file.
-        Most online 3D print shops can use the ".cmb.gz" for production.
-        Made with FreeCad: http://www.freecadweb.org
-
-doc:    HTML documentation; use "index.html" in root folder to browse
-
-eagle:  Electronic schematic diagram including PCB layout.
-        The libraries.zip files are only needed, if you want to modify
-        anything; otherwise you can just send the ".brd" file to any
-        online PCB manufacturing company to receive a TeleBall PCB.
-        Made with the freeware version of Eagle: http://www.cadsoftusa.com
-
-src:    Arduino source code aka Sketch in the subfolder "TeleBall".
-        Compile and upload it to your device using Arduino's IDE. You need
-        to install the libraries from libraries.zip first, before being
-        able to compile. The "archive" folder contains historic versions.
-        Made with Arduino: http://arduino.cc/de/Main/Software
-</code></pre>
-
-<h2>
-<a id="the-makers" class="anchor" href="#the-makers" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Makers</h2>
-
-<p>TeleBall is brought to you by</p>
-
-<ul>
-<li>
-<a href="http://www.sy2002.de">sy2002</a>: idea, code and original circurit design</li>
-<li>doubleflash: additional circurit design and board layout</li>
-<li>Miro: body housing/case</li>
-</ul>
-
-<p>TeleBall is a project of 
-<a href="http://www.m-e-g-a.org">MEGA - Museum of Electronic Games &amp; Art</a>.</p>
+        {%include index.md %}
       </section>
     </div>
 
