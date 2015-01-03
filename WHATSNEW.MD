@@ -1,4 +1,5 @@
-TeleBall Version 1.2 01/01/15
+TeleBall - Version 1.2 - 01/01/15
+---------------------------------
 
 * Change: The brightness adjustment has been moved to the advanced
   configuration mode, as usage tests showed that it is far less often used
@@ -66,9 +67,7 @@ TeleBall Version 1.2 01/01/15
 
 * Optimization: Saved SRAM by moving constant lookup-tables to PROGMEM.
 
-
-
-TeleBall Version 1.1 12/24/14
+TeleBall - Version 1.1 - 12/24/14
 
 * Bugfix: BreakOut: When solving the game, i.e. when the third level is
   successfully mastered, the applause sound is played and the smiley face
@@ -80,19 +79,15 @@ TeleBall Version 1.1 12/24/14
   choose "square" for saving your preferences or "X" to revert back to the
   factory default values.
 
-
-
-TeleBall Version 1.0 12/21/14
+TeleBall - Version 1.0 - 12/21/14
 
 * First release on final TeleBall hardware
 
-
-
-TeleBall Version 0.1 8/3/14
+TeleBall - Version 0.1 - 8/3/14
 
 * The very first version of TeleBall was developed on the Arduino experimentor
   platform DuinoKit: http://duinokit.com/ShowAndTell/viewtopic.php?f=4&t=14
 
 
 
-Last modified by sy2002 on 1st of January 2015
+Last modified by sy2002 on 3rd of January 2015

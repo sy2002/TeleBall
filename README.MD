@@ -68,7 +68,7 @@ TeleBall is brought to you by
 
 * [sy2002](http://www.sy2002.de): idea, code and original circurit design
 * doubleflash: additional circurit design and board layout
-* Miro: body housing/case
+* lamags: body housing/case
 
 TeleBall is a project of 
 [MEGA - Museum of Electronic Games & Art](http://www.m-e-g-a.org).
