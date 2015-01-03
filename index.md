@@ -6,7 +6,7 @@ layout: default
 TeleBall - Retro Handheld Game Console
 ======================================
 
-{{ github.pages_hostname }}
+{{ site.github.pages_hostname }}
 
 What is TeleBall?
 -----------------
