@@ -85,3 +85,4 @@ TeleBall is a project of the [Museum of Electronic Games & Art](http://www.m-e-g
 * The great [DuinoKit](http://www.duinokit.com) was sy2002's original inspiration to
   create the [BreakOut Tutorial](http://duinokit.com/ShowAndTell/viewtopic.php?f=4&t=14),
   which itself turned into the origin of TeleBall.
+* The project's web page theme is [broccolini/dinky](https://github.com/broccolini/dinky).
