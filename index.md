@@ -6,8 +6,6 @@ layout: default
 TeleBall - Retro Handheld Game Console
 ======================================
 
-{{ site.github.pages_hostname }}
-
 What is TeleBall?
 -----------------
 
@@ -16,7 +14,10 @@ by yourself. It lets you play **BreakOut** in single-player mode using one
 device and **Tennis for Two** in multi-player mode using two devices
 communicating via radio.
 
+{% if site.github.pages_hostname == "github.io" %}
 <iframe width="640" height="360" src="http://www.youtube.com/embed/JpwP330C6q0" frameborder="0" allowfullscreen></iframe>
+{% else %}
+{% endif %}
 
 TeleBall is pretty retro and very minimalistic: It features an
 8x8 pixel LED matrix display, a paddle as game controller and one button.
