@@ -1,3 +1,8 @@
+---
+title: TeleBall - Play
+layout: default
+---
+
 This is the PLAY site
 =====================
 
