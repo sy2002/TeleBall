@@ -6,6 +6,8 @@ layout: default
 TeleBall - Retro Handheld Game Console
 ======================================
 
+{{ github.pages_hostname }}
+
 What is TeleBall?
 -----------------
 
@@ -51,6 +53,9 @@ In a nutshell, these are the five steps to build your own TeleBall:
 1. [Download](https://github.com/sy2002/TeleBall/zipball/master)
    the TeleBall package from GitHub or
    [Fork it on GitHub](https://github.com/sy2002/TeleBall/fork).
+   Important hint: Double-clicking index.html in the root folder of
+   the TeleBall package will show you the offline version of this
+   project page, i.e. you'll always have a convenient documentation handy.
 
 2. 3D print the case with your own 3D printer or using an online 3D printing service.
    Have a look at the [Case](doc/case.html) section to learn more.
