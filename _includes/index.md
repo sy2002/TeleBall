@@ -81,8 +81,8 @@ TeleBall is a project of the [Museum of Electronic Games & Art](http://www.m-e-g
 * The case is designed using [FreeCad](http://www.freecadweb.org).
 * The PCB is designed using the free version of [Eagle](http://www.cadsoftusa.com/).
 * The firmware uses [wayoda / LedControl](https://github.com/wayoda/LedControl) as a
-  MAX7221 driver and [TMRh20 /RF24](http://tmrh20.github.io/RF24/) as a nRF24L01+ driver.
+  MAX7221 driver and [TMRh20 / RF24](http://tmrh20.github.io/RF24/) as a nRF24L01+ driver.
 * The great [DuinoKit](http://www.duinokit.com) was sy2002's original inspiration to
   create the [BreakOut Tutorial](http://duinokit.com/ShowAndTell/viewtopic.php?f=4&t=14),
   which itself turned into the origin of TeleBall.
-* The project's web page theme is [broccolini/dinky](https://github.com/broccolini/dinky).
+* The project's web page theme is [broccolini / dinky](https://github.com/broccolini/dinky).
