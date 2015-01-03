@@ -7,9 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>TeleBall - Arduino Retro Handheld Game Console</title>
     
-    <link rel="stylesheet" href="doc/stylesheets/styles.css">
-    <link rel="stylesheet" href="doc/stylesheets/pygment_trac.css">
-    <script src="doc/javascripts/scale.fix.js"></script>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -22,11 +22,11 @@
         <h1 class="header">TeleBall</h1>
         <p class="header">Build your own Arduino retro handheld game console</p>
         <ul>
-            <li class="download"><a class="nrm_button" href="index.html">Home</a></li>            
-            <li class="download"><a class="nrm_button" href="doc/play.html">Play</a></li>
-            <li class="download"><a class="nrm_button" href="doc/case.html">Case</a></li>
-            <li class="download"><a class="nrm_button" href="doc/electronics.html">Electronics</a></li>
-            <li class="download"><a class="nrm_button" href="doc/software.html">Software</a></li>
+            <li class="download"><a class="nrm_button" href="../index.html">Home</a></li>            
+            <li class="download"><a class="nrm_button" href="play.html">Play</a></li>
+            <li class="download"><a class="nrm_button" href="case.html">Case</a></li>
+            <li class="download"><a class="nrm_button" href="electronics.html">Electronics</a></li>
+            <li class="download"><a class="nrm_button" href="software.html">Software</a></li>
         </ul>
         <ul>
           <li class="download"><a class="buttons" href="https://github.com/sy2002/TeleBall/zipball/master">Download ZIP</a></li>
@@ -36,7 +36,7 @@
         <p class="header">This project is maintained by <a class="header name" href="http://www.sy2002.de">sy2002</a></p>
       </header>
       <section>
-            {% capture my_content %}{% include index.md %}{% endcapture %}
+            {% capture my_content %}{% include play.md %}{% endcapture %}
             {{ my_content | markdownify }}        
       </section>
     </div>

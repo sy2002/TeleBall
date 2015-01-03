@@ -21,7 +21,7 @@ particularly when you play Tennis for Two with a friend.
 
 The videos shown here are both using the beginner-friendly slower game modes.
 When playing Tennis for Two, you might want to switch TeleBall to much
-faster modes. The [Play](play.html) section of this documentation is telling you how.
+faster modes. The [Play](doc/play.html) section of this documentation is telling you how.
 
 TeleBall runs on 4 AA batteries. It features a Mini USB port for software updates,
 that means, you can either run and update the build-in games on TeleBall or you can
@@ -48,12 +48,12 @@ In a nutshell, these are the five steps to build your own TeleBall:
    [Fork it on GitHub](https://github.com/sy2002/TeleBall/fork).
 
 2. 3D print the case with your own 3D printer or using an online 3D printing service.
-   Have a look at the [Case](case.html) section to learn more.
+   Have a look at the [Case](doc/case.html) section to learn more.
 
 3. Order a printed circuit board (PCB, there are plenty of online services that
    are offering this) and order all other hardware parts. Admittedly, this is the
    most cumbersome - and possibly lengthy - part of project, as you will need
-   to query more than one vendor to find all parts. The [Electronics](electronics.html)
+   to query more than one vendor to find all parts. The [Electronics](doc/electronics.html)
    section shares all the details, including a bill of material.
 
 4. Solder and wire everything. The case and PCB design guarantee, that no additional
@@ -61,7 +61,7 @@ In a nutshell, these are the five steps to build your own TeleBall:
    3D printed case and soldering the 8x8 LED display on the PCB will hold
    the PCB and the case together.
 
-5. Flash the TeleBall firmware as described in [Software](software.html).
+5. Flash the TeleBall firmware as described in [Software](doc/software.html).
 
 Authors
 -------
