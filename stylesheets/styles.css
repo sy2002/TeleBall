@@ -102,11 +102,13 @@ ul li {
   list-style: disc;
   padding-left: 25px;
 }
+}
 
 ol li {
-  list-style-position: inside;
+  list-style-position: outside;
   list-style: decimal;
   padding-left: 20px;
+  margin-left: 20px;
 }
 
 blockquote {
