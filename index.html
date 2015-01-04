@@ -1,0 +1,145 @@
+
+   
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>TeleBall - Arduino Retro Handheld Game Console</title>    
+    <link rel="stylesheet" href="doc/stylesheets/styles.css">
+    <link rel="stylesheet" href="doc/stylesheets/pygment_trac.css">
+    <script src="doc/javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->		
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">TeleBall</h1>
+        <p class="header">Build your own Arduino retro handheld game console</p>
+        <ul>
+            <li><a class="nrm_button" href="index.html">Home</a></li>            
+            <li><a class="nrm_button" href="doc/play.html">Play</a></li>
+            <li><a class="nrm_button" href="doc/case.html">Case</a></li>
+            <li><a class="nrm_button" href="doc/electronics.html">Electronics</a></li>
+            <li><a class="nrm_button" href="doc/software.html">Software</a></li>
+        </ul>
+        <ul>
+          <li class="git"><a class="buttons" href="https://github.com/sy2002/TeleBall/zipball/master">Download ZIP</a></li>
+          <li class="git"><a class="buttons" href="https://github.com/sy2002/TeleBall/tarball/master">Download TAR</a></li>
+          <li class="git"><a class="buttons github" href="https://github.com/sy2002/TeleBall">View On GitHub</a></li>
+        </ul>
+        <p class="header">This project is maintained by <a class="header name" href="http://www.sy2002.de">sy2002</a></p>
+      </header>
+      <section>
+        <h1 id="teleball---retro-handheld-game-console">TeleBall - Retro Handheld Game Console</h1>
+
+<h2 id="what-is-teleball">What is TeleBall?</h2>
+
+<p>TeleBall is a handheld game console. You cannot buy it. You need to build it
+by yourself. It lets you play <strong>BreakOut</strong> in single-player mode using one
+device and <strong>Tennis for Two</strong> in multi-player mode using two devices
+communicating via radio.</p>
+
+<p><img src="doc/images/intro_breakout.jpg" alt="BreakOut on TeleBall" /></p>
+
+<p>TeleBall is pretty retro and very minimalistic: It features an
+8x8 pixel LED matrix display, a paddle as game controller and one button.
+Therefore, the range of possible games is limited but you will be surprised
+how much fun and even zenlike meditation this kind of gameplay can bring you,
+particularly when you play Tennis for Two with a friend.</p>
+
+<p><img src="doc/images/intro_tennis.jpg" alt="Tennis on TeleBall" /></p>
+
+<p>The videos shown here are both using the beginner-friendly slower game modes.
+When playing Tennis for Two, you might want to switch TeleBall to much
+faster modes. The <a href="doc/play.html">Play</a> section of this documentation is telling you how.</p>
+
+<p>TeleBall runs on 4 AA batteries. It features a Mini USB port for software updates,
+that means, you can either run and update the build-in games on TeleBall or you can
+create your own games using the <a href="http://www.arduino.cc">Arduino platform</a>. The source
+code provided with the standard package is heavily documented, so it is a perfect
+starting point for learning how to develop for TeleBall.</p>
+
+<h2 id="how-to-build-your-own-teleball">How to Build Your Own TeleBall</h2>
+
+<p>Building your own TeleBall device is a multi-discipline DIY project that can be
+done during one weekend, given that you have all the hardware parts available
+and some basic soldering equipment and skills. Depending on your choices when
+it comes to 3D printing, the PCB and the actual electronics parts, one device
+will cost you something between $100 and $150.</p>
+
+<p>The <a href="https://github.com/sy2002/TeleBall">TeleBall GitHub Repository</a> contains
+all necessary files, schematics and source code. It also contains this documentation
+as an offline version, so just open <code>index.html</code> in the package’s root folder
+to have it always handy.</p>
+
+<p>In a nutshell, these are the five steps to build your own TeleBall:</p>
+
+<ol>
+  <li>
+    <p><a href="https://github.com/sy2002/TeleBall/zipball/master">Download</a>
+the TeleBall package from GitHub or
+<a href="https://github.com/sy2002/TeleBall/fork">Fork it on GitHub</a>.</p>
+  </li>
+  <li>
+    <p>3D print the case with your own 3D printer or using an online 3D printing service.
+Have a look at the <a href="doc/case.html">Case</a> section to learn more.</p>
+  </li>
+  <li>
+    <p>Order a printed circuit board (PCB, there are plenty of online services that
+are offering this) and order all other hardware parts. Admittedly, this is the
+most cumbersome - and possibly lengthy - part of project, as you will need
+to query more than one vendor to find all parts. The <a href="doc/electronics.html">Electronics</a>
+section shares all the details, including a bill of material.</p>
+  </li>
+  <li>
+    <p>Solder and wire everything. The case and PCB design guarantee, that no additional
+screws or fittings are needed: Everything fits together thanks to the custom
+3D printed case and soldering the 8x8 LED display on the PCB will hold
+the PCB and the case together.</p>
+  </li>
+  <li>
+    <p>Flash the TeleBall firmware as described in <a href="doc/software.html">Software</a>.</p>
+  </li>
+</ol>
+
+<h2 id="authors">Authors</h2>
+
+<h3 id="the-makers">The Makers</h3>
+
+<ul>
+  <li><a href="http://www.sy2002.de">sy2002</a>: idea, software/code and original circurit design</li>
+  <li>doubleflash: additional circurit design and board layout</li>
+  <li>lamags: body housing/case</li>
+</ul>
+
+<p>TeleBall was designed, built and released as an Open Source / Open Hardware project
+during August 2014 and January 2015.</p>
+
+<p>TeleBall is a project of the <a href="http://www.m-e-g-a.org">Museum of Electronic Games &amp; Art</a>.</p>
+
+<h3 id="acknowledgements">Acknowledgements</h3>
+
+<ul>
+  <li>TeleBall is built on the <a href="http://www.arduino.cc">Arduino platform</a>, i.e. the
+microcontroller core as well as the software are Arduino based.</li>
+  <li>The case is designed using <a href="http://www.freecadweb.org">FreeCad</a>.</li>
+  <li>The PCB is designed using the free version of <a href="http://www.cadsoftusa.com/">Eagle</a>.</li>
+  <li>The firmware uses <a href="https://github.com/wayoda/LedControl">wayoda / LedControl</a> as a
+MAX7221 driver and <a href="http://tmrh20.github.io/RF24/">TMRh20 / RF24</a> as a nRF24L01+ driver.</li>
+  <li>The great <a href="http://www.duinokit.com">DuinoKit</a> was sy2002’s original inspiration to
+create the <a href="http://duinokit.com/ShowAndTell/viewtopic.php?f=4&amp;t=14">BreakOut Tutorial</a>,
+which itself turned into the origin of TeleBall.</li>
+  <li>The project’s web page theme is based on <a href="https://github.com/broccolini/dinky">broccolini / dinky</a>.</li>
+</ul>
+
+      </section>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+  </body>
+</html>

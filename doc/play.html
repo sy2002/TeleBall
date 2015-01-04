@@ -1,0 +1,249 @@
+
+   
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>TeleBall - Play</title>    
+    <link rel="stylesheet" href="../doc/stylesheets/styles.css">
+    <link rel="stylesheet" href="../doc/stylesheets/pygment_trac.css">
+    <script src="../doc/javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->		
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">TeleBall</h1>
+        <p class="header">Build your own Arduino retro handheld game console</p>
+        <ul>
+            <li><a class="nrm_button" href="../index.html">Home</a></li>            
+            <li><a class="nrm_button" href="../doc/play.html">Play</a></li>
+            <li><a class="nrm_button" href="../doc/case.html">Case</a></li>
+            <li><a class="nrm_button" href="../doc/electronics.html">Electronics</a></li>
+            <li><a class="nrm_button" href="../doc/software.html">Software</a></li>
+        </ul>
+        <ul>
+          <li class="git"><a class="buttons" href="https://github.com/sy2002/TeleBall/zipball/master">Download ZIP</a></li>
+          <li class="git"><a class="buttons" href="https://github.com/sy2002/TeleBall/tarball/master">Download TAR</a></li>
+          <li class="git"><a class="buttons github" href="https://github.com/sy2002/TeleBall">View On GitHub</a></li>
+        </ul>
+        <p class="header">This project is maintained by <a class="header name" href="http://www.sy2002.de">sy2002</a></p>
+      </header>
+      <section>
+        <h1 id="playing-teleball">Playing TeleBall</h1>
+
+<h2 id="basics">Basics</h2>
+
+<p><img src="images/play_overview.jpg" alt="Overview Diagram" /></p>
+
+<p>When you start your TeleBall, you’re ready to play BreakOut. The factory
+default settings feature a rather slow ball speed and a big paddle swing,
+i.e. you need to rotate the knob heavily to move the paddle.</p>
+
+<h2 id="breakout">BreakOut</h2>
+
+<p><img src="images/play_breakout.jpg" alt="Play BreakOut" /></p>
+
+<p>BreakOut is an Arcade classic. Watch TeleBall in action on
+<a href="http://youtu.be/JpwP330C6q0">YouTube</a>
+to see how it works.</p>
+
+<ul>
+  <li>
+    <p>Clear all bricks to advance to the next level. There are three levels
+available. Enjoy the applause when you mastered all three levels.</p>
+  </li>
+  <li>
+    <p>You can twist/spin the ball by very quickly moving the paddle just in
+the right moment in time, when the ball hits your paddle. This enables
+you to “move” the ball to regions that it would not hit otherwise.</p>
+  </li>
+  <li>
+    <p>The challenge heavily depends on the ball’s speed, so be sure to
+use Speed Set mode to configure the game to fit your needs.</p>
+  </li>
+</ul>
+
+<p>BreakOut is TeleBall’s default mode, so it not only starts in BreakOut
+mode, but it also reverts back to BreakOut if something goes wrong
+while playing Tennis for Two.</p>
+
+<h2 id="tennis-for-two">Tennis for Two</h2>
+
+<p><img src="images/play_tennis.jpg" alt="Play Tennis" /></p>
+
+<p>As the name is suggesting, Tennis for Two is a multiplayer game, i.e.
+you need two TeleBall devices to play it. TeleBall is using radio on
+the 2.4 GHz frequency to communicate between the devices. Watch it
+in action on <a href="http://youtu.be/hnW40l3Gluc">YouTube</a>.</p>
+
+<ul>
+  <li>
+    <p>From your perspective (on your device), you are playing the lower
+paddle and your opponent the upper one. For your opponent’s perspective
+the game looks just the other way round.</p>
+  </li>
+  <li>
+    <p>Win three rounds to win the match. Press the reset button afterwards
+to start a new match.</p>
+  </li>
+  <li>
+    <p>The twist/spin move known from BreakOut is also very useful in Tennis.</p>
+  </li>
+  <li>
+    <p>Any player can reset the match any time using the reset button.</p>
+  </li>
+</ul>
+
+<h3 id="starting-a-match">Starting a Match</h3>
+
+<p>The first two minutes after being switched on, TeleBall is searching
+for another player. After two minutes, the scanner is turned off, i.e.
+you might want to restart your devices if you played BreakOut before
+and want to start a Tennis for Two match.</p>
+
+<p>To start a match, bring two devices into a very close physical proximity
+and perform the following steps:</p>
+
+<ol>
+  <li>
+    <p>Switch on both TeleBalls.</p>
+  </li>
+  <li>
+    <p>After a few seconds, both TeleBalls are displaying a question mark (?).</p>
+  </li>
+  <li>
+    <p>Both players now need to turn the knob to the right side until
+the question mark turns into an exclamation mark (!).</p>
+  </li>
+  <li>
+    <p>Both players need to confirm playing tennis by pressing the red button.</p>
+  </li>
+  <li>
+    <p>The Tennis for Two match starts.</p>
+  </li>
+</ol>
+
+<p>Tennis for Two can only be left by switching at least one of the TeleBalls
+off.</p>
+
+<p>During step (4): If one player confirms and the other does not yet, 
+then the exclamation mark on his screen starts to shrink to indicate
+the ~8 second timeout. After that period, TeleBall assumes
+that the other player does not want to join and reverts back to BreakOut.</p>
+
+<p>Instead of confirming playing Tennis for Two using the exclamation mark,
+the players can also turn their knob to the left side - the question mark
+is shown - and go back to BreakOut.</p>
+
+<h3 id="adjusting-the-challenge">Adjusting the Challenge</h3>
+
+<p>Adjusting the challenge means adjusting the speed of the game.
+Any player can enter the Speed Set mode to adjust the game’s speed
+for both players. The game is paused while in Speed Set mode, both
+devices are showing a synchronized Speed Set screen, but only the
+player who entered the Speed Set mode is able to adjust
+the speed - the other player is watching.</p>
+
+<h3 id="known-issues">Known Issues</h3>
+
+<ul>
+  <li>
+    <p>The radio range is currently very low: You literally need to be
+very close to your opponent - in the range of two to three meters -
+to be able to play Tennis for Two.</p>
+  </li>
+  <li>
+    <p>The quality of the radio connection is influenced by active WLAN connections.</p>
+  </li>
+  <li>
+    <p>If radio packets drop, e.g. because the two players are pretty far away from
+each other, graphic errors and stuttering playing behaviour might occur - but
+the game can be continued.</p>
+  </li>
+  <li>
+    <p>If more radio packets drop, e.g. because the distance between the players 
+is too large, the game might revert back to BreakOut.</p>
+  </li>
+  <li>
+    <p>You must not turn on more than two TeleBall devices that are in radio
+range simultaneously. The behaviour is undefined is this case.</p>
+  </li>
+</ul>
+
+<h2 id="speed-set-mode">Speed Set Mode</h2>
+
+<ul>
+  <li>
+    <p>Press the red button for about two seconds and then release it.</p>
+  </li>
+  <li>
+    <p>You are now in Speed Set mode.</p>
+  </li>
+  <li>
+    <p>Turn the knob to the left side to decrease the speed for BreakOut
+as well as for Tennis for Two and turn it to the right to increase it.</p>
+  </li>
+  <li>
+    <p>While in Speed Set mode, the speed is visualized by the amount of
+blue squares: The more blue squares, the higher the speed.</p>
+  </li>
+  <li>
+    <p>Press the red button and release it quickly to leave Speed Set mode.</p>
+  </li>
+</ul>
+
+<p>Hint: TeleBall will “forget” this speed the next time you turn it off
+and on again and instead use the default speed. To remember this speed
+and to make it the new default speed, you need to store it to TeleBall’s
+EEPROM using the Advanced Settings.</p>
+
+<h2 id="advanced-settings">Advanced Settings</h2>
+
+<p>Enter the Advanced Settings by pressing the red button for about
+five seconds while already being in Speed Set mode. It is advisable to
+set the desired speed in Speed Set mode <em>before</em> entering the Advanced
+Settings - otherwise you might save a speed in the EEPROM that does not
+suit your needs.</p>
+
+<p>While being in Advanced Settings, you cycle through the following
+configuration options by pressing the red button and releasing it quickly:</p>
+
+<ul>
+  <li>
+    <p>Brightness: Knob left/right = decrease/increase.</p>
+  </li>
+  <li>
+    <p>Leftmost Paddle: Precisely turn the knob to the position that you
+want to be the paddle’s leftmost position.</p>
+  </li>
+  <li>
+    <p>Rightmost Paddle: Precisely turn the knob to the position that you
+want to be the paddle’s rightmost position. If you are not moving
+the knob between leftmost and rightmost, then the old setting
+remains, i.e. no change is happening. The combination of the
+leftmost and rightmost position is setting the paddle’s sensitivity.</p>
+  </li>
+  <li>
+    <p>Store or Factory Default: You are now either seing a smaller square
+within a larger square or something that resembles an X, depending
+if you rotate the knob to the right (square) or to the left (X).</p>
+
+    <p>Square = save settings / remember them in future.</p>
+
+    <p>X = back to Factory Default values.</p>
+  </li>
+</ul>
+
+
+      </section>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+  </body>
+</html>
