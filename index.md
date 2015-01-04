@@ -116,4 +116,6 @@ If you have any questions or comments, we are happy to hear from you. Email us a
 * The great [DuinoKit](http://www.duinokit.com) was sy2002's original inspiration to
   create the [BreakOut Tutorial](http://duinokit.com/ShowAndTell/viewtopic.php?f=4&t=14),
   which itself turned into the origin of TeleBall.
-* The project's web page theme is based on [broccolini / dinky](https://github.com/broccolini/dinky).
+* The project's web and documentation page theme is based on
+  [broccolini / dinky](https://github.com/broccolini/dinky)
+  and uses [lightbox2](http://lokeshdhakar.com/projects/lightbox2)
