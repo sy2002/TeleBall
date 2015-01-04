@@ -47,22 +47,21 @@ How to Build Your Own TeleBall
 
 Building your own TeleBall device is a multi-discipline DIY project that can be
 done during one weekend, given that you have all the hardware parts available
-and some basic soldering equipment and skills.
+and some basic soldering equipment and skills. Depending on your choices when
+it comes to 3D printing, the PCB and the actual electronics parts, one device
+will cost you something between $100 and $150.
 
 The [TeleBall GitHub Repository](https://github.com/sy2002/TeleBall) contains
-all necessary files, schematics and source code. Depending on your choices when
-it comes to 3D printing, the PCB and the electronics parts, one device will
-cost you something between $100 and $150.
+all necessary files, schematics and source code. It also contains this documentation
+as an offline version, so just open `index.html` in the package's root folder
+to have it always handy.
 
 In a nutshell, these are the five steps to build your own TeleBall:
 
 1. [Download](https://github.com/sy2002/TeleBall/zipball/master)
    the TeleBall package from GitHub or
    [Fork it on GitHub](https://github.com/sy2002/TeleBall/fork).
-   Important hint: Double-clicking index.html in the root folder of
-   the TeleBall package will show you the offline version of this
-   project page, i.e. you'll always have a convenient documentation handy.
-
+   
 2. 3D print the case with your own 3D printer or using an online 3D printing service.
    Have a look at the [Case](doc/case.html) section to learn more.
 
@@ -88,6 +87,9 @@ Authors
 * doubleflash: additional circurit design and board layout
 * lamags: body housing/case
 
+TeleBall was designed, built and released as an Open Source / Open Hardware project
+during August 2014 and January 2015.
+
 TeleBall is a project of the [Museum of Electronic Games & Art](http://www.m-e-g-a.org).
 
 ### Acknowledgements
@@ -101,4 +103,4 @@ TeleBall is a project of the [Museum of Electronic Games & Art](http://www.m-e-g
 * The great [DuinoKit](http://www.duinokit.com) was sy2002's original inspiration to
   create the [BreakOut Tutorial](http://duinokit.com/ShowAndTell/viewtopic.php?f=4&t=14),
   which itself turned into the origin of TeleBall.
-* The project's web page theme is [broccolini / dinky](https://github.com/broccolini/dinky).
+* The project's web page theme is based on [broccolini / dinky](https://github.com/broccolini/dinky).

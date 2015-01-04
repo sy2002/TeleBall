@@ -22,7 +22,6 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-
 /* Base text styles */
 
 body {
@@ -100,15 +99,15 @@ strong {
 ul li {
   list-style-position: inside;
   list-style: disc;
-  padding-left: 25px;
-}
+  padding-left: 10px;
+  margin-left: 18px
 }
 
 ol li {
   list-style-position: outside;
   list-style: decimal;
-  padding-left: 20px;
-  margin-left: 20px;
+  padding-left: 10px;
+  margin-left: 18px;
 }
 
 blockquote {
@@ -380,8 +379,16 @@ footer {
   header ul {
     position:absolute;
     right:130px;
-    top:84px;
+    top:58px;
   }
+
+  header li {
+    margin-bottom: 6px;
+  }
+
+  header ul li.git {
+    display:none;
+  }  
 }
 
 @media print, screen and (max-width: 720px) {
@@ -410,10 +417,6 @@ footer {
 
 @media print, screen and (max-width: 480px) {
   
-  header ul li.download {
-    display:none;
-  }
-
 	footer {		
 		margin: 0 0 0 20px;
 	}
@@ -425,6 +428,10 @@ footer {
 }
 
 @media print {
+  header {
+    display: none;
+  }
+
   body {
     padding:0.4in;
     font-size:12pt;
