@@ -23,7 +23,7 @@ Abbreviations:
 * +UB: 6V battery power *after* the on/off switch
 * ARDUINO: Microcontroller - see details below
 * SWITCH: TeleBall power switch / on/off switch
-* R5, R6, R7: 8.2k&#x2126; series resistor for LEDs
+* R5, R6, R7: 8.2kΩ series resistor for LEDs
 
 Download [Detailed Schematics PDF](eagle/BreakOut-8x8-rev2-circuit.pdf).
 
