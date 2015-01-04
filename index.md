@@ -92,6 +92,14 @@ during August 2014 and January 2015.
 
 TeleBall is a project of the [Museum of Electronic Games & Art](http://www.m-e-g-a.org).
 
+### Stay in Touch
+
+If you have any questions or comments, we are happy to hear from you. Email us at
+
+* sy2002 at teleball.org
+* doubleflash at teleball.org
+* lamags at teleball.org
+
 ### Acknowledgements
 
 * TeleBall is built on the [Arduino platform](http://www.arduino.cc), i.e. the

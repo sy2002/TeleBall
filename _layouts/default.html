@@ -22,16 +22,16 @@
         <h1 class="header">TeleBall</h1>
         <p class="header">Build your own Arduino retro handheld game console</p>
         <ul>
-            <li><a class="nrm_button" href="{{ relative }}index.html">Home</a></li>            
-            <li><a class="nrm_button" href="{{ relative }}doc/play.html">Play</a></li>
-            <li><a class="nrm_button" href="{{ relative }}doc/case.html">Case</a></li>
-            <li><a class="nrm_button" href="{{ relative }}doc/electronics.html">Electronics</a></li>
-            <li><a class="nrm_button" href="{{ relative }}doc/software.html">Software</a></li>
+            <li onclick="window.location.href = '{{ relative }}index.html';"><a class="nrm_button" href="{{ relative }}index.html">Home</a></li>            
+            <li onclick="window.location.href = '{{ relative }}doc/play.html';"><a class="nrm_button" href="{{ relative }}doc/play.html">Play</a></li>
+            <li onclick="window.location.href = '{{ relative }}doc/case.html';"><a class="nrm_button" href="{{ relative }}doc/case.html">Case</a></li>
+            <li onclick="window.location.href = '{{ relative }}doc/electronics.html';"><a class="nrm_button" href="{{ relative }}doc/electronics.html">Electronics</a></li>
+            <li onclick="window.location.href = '{{ relative }}doc/software.html';"><a class="nrm_button" href="{{ relative }}doc/software.html">Software</a></li>
         </ul>
         <ul>
-          <li class="git"><a class="buttons" href="https://github.com/sy2002/TeleBall/zipball/master">Download ZIP</a></li>
-          <li class="git"><a class="buttons" href="https://github.com/sy2002/TeleBall/tarball/master">Download TAR</a></li>
-          <li class="git"><a class="buttons github" href="https://github.com/sy2002/TeleBall">View On GitHub</a></li>
+          <li onclick="window.location.href = 'https://github.com/sy2002/TeleBall/zipball/master';" class="git"><a class="buttons" href="https://github.com/sy2002/TeleBall/zipball/master">Download ZIP</a></li>
+          <li onclick="window.location.href = 'https://github.com/sy2002/TeleBall/tarball/master';" class="git"><a class="buttons" href="https://github.com/sy2002/TeleBall/tarball/master">Download TAR</a></li>
+          <li onclick="window.open('https://github.com/sy2002/TeleBall', 'newgithubwin');" class="git"><a class="buttons github" href="https://github.com/sy2002/TeleBall" target='newgithubwin'>View On GitHub</a></li>
         </ul>
         <p class="header">This project is maintained by <a class="header name" href="http://www.sy2002.de">sy2002</a></p>
       </header>
