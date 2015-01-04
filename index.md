@@ -9,9 +9,9 @@ TeleBall - Retro Handheld Game Console
 What is TeleBall?
 -----------------
 
-TeleBall is a handheld game console. You cannot buy it. You need to build it
-by yourself. It lets you play **BreakOut** in single-player mode using one
-device and **Tennis for Two** in multi-player mode using two devices
+TeleBall is an Arduino based retro handheld game console. You cannot buy it.
+You need to build it by yourself. It lets you play **BreakOut** in single-player
+mode using one device and **Tennis for Two** in multi-player mode using two devices
 communicating via radio.
 
 {% if site.github.pages_hostname != nil %}
@@ -47,9 +47,14 @@ How to Build Your Own TeleBall
 
 Building your own TeleBall device is a multi-discipline DIY project that can be
 done during one weekend, given that you have all the hardware parts available
-and some basic soldering equipment and skills. Depending on your choices when
-it comes to 3D printing, the PCB and the actual electronics parts, one device
-will cost you something between $100 and $150.
+and some basic soldering equipment and skills. Building your own TeleBall is about:
+
+* 3D Printing
+* Electronics
+* Software Development
+
+Depending on your choices when it comes to 3D printing, the PCB and the actual
+electronics parts, one device will cost you something between $100 and $150.
 
 The [TeleBall GitHub Repository](https://github.com/sy2002/TeleBall) contains
 all necessary files, schematics and source code. It also contains this documentation
