@@ -10,7 +10,7 @@ Basics
 ------
 
 ![Overview Diagram](images/play_overview.jpg)
-
+<br>
 When you start your TeleBall, you're ready to play BreakOut. The factory
 default settings feature a rather slow ball speed and a big paddle swing,
 i.e. you need to rotate the knob heavily to move the paddle.
@@ -19,7 +19,7 @@ BreakOut
 --------
 
 ![Play BreakOut](images/play_breakout.jpg)
-
+<br>
 BreakOut is an Arcade classic. Watch TeleBall in action on
 [YouTube](http://youtu.be/JpwP330C6q0)
 to see how it works.
@@ -42,7 +42,7 @@ Tennis for Two
 --------------
 
 ![Play Tennis](images/play_tennis.jpg)
-
+<br>
 As the name is suggesting, Tennis for Two is a multiplayer game, i.e.
 you need two TeleBall devices to play it. TeleBall is using radio on
 the 2.4 GHz frequency to communicate between the devices. Watch it
@@ -170,3 +170,11 @@ configuration options by pressing the red button and releasing it quickly:
   
   X = back to Factory Default values.
 
+Changing Batteries
+------------------
+
+![Changing Batteries](images/play_batteries.jpg)
+<br>
+TeleBall runs on four AA batteries. When opening the case, be careful
+not to damage the speaker, which needs to be placed back exactly into
+its defined position before closing the case again.
