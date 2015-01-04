@@ -9,7 +9,7 @@ This is Build
 Here comes a code example. kqejrklq welkqje lkqwje qwlkjelqkje lkqwj e
 qwejklqkj falkdj sdlkfj lwkqrj,sdv jlqewfn welfjweöf.
 
-{% highlight Arduino %}
+{% highlight cpp %}
 //show the remaining balls in a row of LEDs
 void manageLEDs(byte how_many_on)
 {
