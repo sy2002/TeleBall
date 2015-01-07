@@ -1,0 +1,12 @@
+- id: Case
+  img: bom_case.jpg
+  desc: TeleBall Case and Lid
+  get: "3D print it as described in [Case](case.html)"
+
+- id: MODUL1 ARDUINO
+  img: bom_arduino_nano.jpg
+  desc: Arduino Nano or compatible device
+  get: >
+    [Original Arduino Device](http://arduino.cc/de/Main/ArduinoBoardNano)
+    or search for "`arduino 3.0 nano 5v`" on eBay to find compatible
+    devices / clones

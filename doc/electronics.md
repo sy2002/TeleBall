@@ -19,7 +19,11 @@ assembly:
     text: TeleBall PCB Bottom Layer Assembly Diagram (without Arduino and radio)
   - name: pcb_bottom_with_parts2_large.jpg
     thumb: pcb_bottom_with_parts2_thumb.jpg
-    text: TeleBall PCB Bottom Layer Assembly Diagram (including Arduino and radio)    
+    text: TeleBall PCB Bottom Layer Assembly Diagram (including Arduino and radio)
+batteryclips:
+  - name: batteryclips_large.jpg
+    thumb: batteryclips_thumb.jpg
+    text: TeleBall Battery Clips
 ---
 
 {% include gallery_init.html %}
@@ -170,6 +174,9 @@ Download high-resolution versions of the assembly diagrams:
   Arduino Nano "head" pins before soldering it (they would interfere
   with the speaker if not cut).
 
+* Before you marry the PCB and the case as described in the next bullet
+  point, be sure that you added the battery clips before (see next section).  
+
 * The 8x8 LED matrix is the last part of TeleBall that you solder: Insert it
   through the case's front side (there are dedicated holes for that) while
   holding the PCB against the inside of the case. While doing so, you are
@@ -180,3 +187,22 @@ Download high-resolution versions of the assembly diagrams:
   for +, black cables for - and other colors for signal cables. Additionally,
   we recommend to strip the insulaton at the cable ends and to tin-coat them.
 
+### Battery Clips
+
+The case as well as the lid feature special places where the battery clips /
+battery springs need to be added. There is a different treatment of the
+battery clips in the case versus the battery clips in the lid:
+
+* Case: If you look at the case with the open facing side down and the
+  side which will hold the on/off switch and the USB port facing up, then
+  after inserting the battery clips, you should solder a red wire at the
+  clip. After the marriage of the PCB and the 
+
+{% include gallery_show.html images=page.batteryclips group=4 %}
+
+Bill of Materials
+-----------------
+
+{% capture bomcap %}| Image  | ID | Description | Where to get it |
+{% for bomitem in site.data.bom %}|![{{ bomitem.id }}](eagle/{{ bomitem.img }})|{{ bomitem.id }}|{{ bomitem.desc }}|{{ bomitem.get }}
+{% endfor %}{% endcapture %}{{ bomcap }}
