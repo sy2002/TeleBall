@@ -14,6 +14,12 @@ assembly:
   - name: pcb_top_with_parts_large.jpg
     thumb: pcb_top_with_parts_thumb.jpg
     text: TeleBall PCB Top Layer Assembly Diagram
+  - name: pcb_bottom_with_parts1_large.jpg
+    thumb: pcb_bottom_with_parts1_thumb.jpg
+    text: TeleBall PCB Bottom Layer Assembly Diagram (without Arduino and radio)
+  - name: pcb_bottom_with_parts2_large.jpg
+    thumb: pcb_bottom_with_parts2_thumb.jpg
+    text: TeleBall PCB Bottom Layer Assembly Diagram (including Arduino and radio)    
 ---
 
 {% include gallery_init.html %}
@@ -25,11 +31,10 @@ Schematics
 ----------
 
 ![Schematics Overview](eagle/circuit.png)
-Abbreviations:
 
 * BAT+ / BAT-: Battery+ and Battery- aka GND, directly wired via battery clips
-* +UB: 6V battery power *after* the on/off switch
-* +3V3: 3.3V regulated by IC2 VREG3, needed by the radio SV1
+* +UB: 6 V battery power (coming from BAT+) but *after* the on/off switch
+* +3V3: 3.3 V regulated by IC2 VREG3, needed by the radio SV1
 
 * MODUL1 ARDUINO: Microcontroller - see details below
 * KWM-R30881CBB: 8x8 LED Display - see details below
@@ -42,10 +47,10 @@ Abbreviations:
 * BUTTON+ / BUTTON-: *Reverse logic* button +/-, i.e. not pressed = current flowing
 * LS+ / LS-: Speaker +/-
 * POTI+, POTI-, POTI_S: 10kΩ potentiometer's +, - and signal line
-* C2: 10µF current buffer (capacitor) for MAX7221
-* C1, C3, C4: 100nF anti-oscillation capacitors
-* R2: 24.9kΩ voltage and current selector resistor for MAX7221
-* R5, R6, R7: 8.2kΩ series resistor for LEDs
+* C2: 10 µF current buffer (capacitor) for MAX7221
+* C1, C3, C4: 100 nF anti-oscillation capacitors
+* R2: 24.9 kΩ voltage and current selector resistor for MAX7221
+* R5, R6, R7: 8.2 kΩ series resistor for LEDs
 
 * MOSI, MISO, SCK, IRQ, CSN, CE: Wiring that connects the Arduino with the Radio
 * DATAIN, CLOCK, LOAD: Wiring that connects the Arduino with the LED Display Driver
@@ -136,16 +141,15 @@ Assembly Diagram
 
 Download high-resolution versions of the assembly diagrams:
 [Top Layer Photo](eagle/pcb_top_with_parts_large.jpg) and
-[Bottom Layer Photo](eagle/xxx.jpg)
+[Bottom Layer Photo](eagle/pcb_bottom_with_parts1_large.jpg)
 
 ### Some Hints for Assembling and Soldering TeleBall
 
-* You might want to print out the above-mentioned graphical assembly diagrams.
-  Additionally, the high-resolution PDFs of the board schematics might be
-  useful, too: [Top Layer Schematics](eagle/BreakOut-8x8-rev2-board2-top.pdf) and
+* You might want to print out the above-mentioned high-resolution versions of the
+  graphical assembly diagrams. Additionally, the high-resolution PDFs of the board
+  schematics might be useful, too:
+  [Top Layer Schematics](eagle/BreakOut-8x8-rev2-board2-top.pdf) and
   [Bottom Layer Schematics](eagle/BreakOut-8x8-rev2-board3-bottom.pdf)
-
-* You need to cut the legs of the ICs after you soldered them.
 
 * How to solder the SMD parts (like the capacitors Cx or the resistors Rx):
   Tin-coat one pad; while the tin-solder is still liquid, use a pair of
@@ -153,11 +157,24 @@ Download high-resolution versions of the assembly diagrams:
   starts to sit firm; now heat the second pad and let the tin-solder flow
   below the SMD part; let it cool down again; done.
 
-* The 8x8 LED matrix is the last part that you solder: Insert it through the
-  case's front side (there are dedicated holes for that) while holding the
-  PCB against the inside of the case. While doing so, you are basically
-  filtering in the 8x8 LED matrix through the case as well as through the
-  PCB and therefore, this action "glues" both elements together.
+* Solder all SMD parts (top and bottom side of the PCB) first, including the
+  voltage regulator (IC2 VREG3). Then go on with MAX7221 (IC1). Then do
+  the on/off switch (SCHALTER) and after that the LEDs and the cables for
+  the speaker (LS+ and LS-) as well as the cables for the potentiometer.
+  Only then, solder the Arduino (MODUL1 ARDUINO) and the radio breakout
+  board (SV1). The reason for this suggested soldering order is, that
+  some of the larger parts like the Arduino and the radio breakout board
+  are hiding some of the smaller parts and some of the cables.
+
+* You need to cut the legs of the ICs after you soldered them. Cut the
+  Arduino Nano "head" pins before soldering it (they would interfere
+  with the speaker if not cut).
+
+* The 8x8 LED matrix is the last part of TeleBall that you solder: Insert it
+  through the case's front side (there are dedicated holes for that) while
+  holding the PCB against the inside of the case. While doing so, you are
+  basically filtering in the 8x8 LED matrix through the case as well as
+  through the PCB and therefore, this action "glues" both elements together.
 
 * Be mindful about the length of the cables. We advise to use red cables
   for +, black cables for - and other colors for signal cables. Additionally,

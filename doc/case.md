@@ -53,6 +53,9 @@ readydevice:
   - name: photo10.jpg
     thumb: thumb10.jpg
     text: TeleBall Disassembly 5
+  - name: 16teleballs.jpg
+    thumb: 16teleballs_thumb.jpg
+    text: 16 TeleBalls
 ---
 
 {% include gallery_init.html %}
