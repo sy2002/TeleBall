@@ -55,43 +55,56 @@ scenario and therefore encapsulation is not necessary.
 
 The whole TeleBall application is written in a way, that in (nearly) no function or situation
 we have a blocking state. That means, that the main loop (Arduino's loop() function) is
-always running, like a heartbeat. This leads to fault tolerance as things can recover in
-subsequent iterations and it enables us to avoid interrupt programming as the loop() is
-cycled fast enough to easily allow polling.
+always running, i.e. called again and again, like a heartbeat. This leads to:
 
-    void loop()
-    {   
-        if (perform_reset)
-            reset();
-            
-        //check for other player/device and set the variable RadioMode,
-        //i.e. no radio connection, act as master or act as slave
-        radioScanAndDetermineMode();
-        
-        //handle various input ports and the orientation
-        handleInput();
-        handleOrientation();
-        handleBrightness();
-        
-        switch (game_mode)
-        {
-            case gmBreakOut:    playBreakOut();        break;
-            case gmTennis:      playTennis();          break;
-            
-            case gmSpeed:       adjustSpeed();         break;
-            case gmBrightness:  adjustBrightness();    break;   
-            
-            case gmPaddleLeft:     
-            case gmPaddleRight:
-                adjustPaddle();
-                break;
+* Fault tolerance as things can recover in subsequent iterations of the loop.
+* Possibility to avoid interrupt programming as the loop() is cycled fast enough
+  to easily allow polling.
+* The timeout mechanism can conveniently be implemented at one place at the end of the main loop
 
-            case gmEEPROM:      manageEEPROM();        break;            
-        }
+{% highlight cpp %}
+void loop()
+{   
+    if (perform_reset)
+        reset();
         
-        // [...] shortened the code a bit
+    //check for other player/device and set the variable RadioMode,
+    //i.e. no radio connection, act as master or act as slave
+    radioScanAndDetermineMode();
+    
+    //handle various input ports and the orientation
+    handleInput();
+    handleOrientation();
+    handleBrightness();
+    
+    switch (game_mode)
+    {
+        case gmBreakOut:    playBreakOut();        break;
+        case gmTennis:      playTennis();          break;
+        
+        case gmSpeed:       adjustSpeed();         break;
+        case gmBrightness:  adjustBrightness();    break;   
+        
+        case gmPaddleLeft:     
+        case gmPaddleRight:
+            adjustPaddle();
+            break;
+
+        case gmEEPROM:      manageEEPROM();        break;            
     }
-
+    
+    //if radio is active (aka if tennis), time out, e.g. because the other
+    //device was switched off or it was moved out of transmission range, etc.
+    if (RadioMode > rmNone && millis() > RadioTimedOut)
+    {
+        Radio.flush_tx();
+        radioEmptyReadFIFO();
+        game_mode = gmTennis;           //make sure, that tennis is reset, when calling reset() ...
+        reset();                        //... game_mode could be config modes like gmSpeed, etc.
+        tennisSwitchToBreakOut(false);  //switch to BreakOut but continue to try to find another device for tennis
+    }    
+}
+{% endhighlight %}
 
 ### FSM #1 - GameMode
 
@@ -152,6 +165,8 @@ Radio Details
 ### Unidirectional Communication
 
 ### Pairing
+
+### Timeout
 
 EEPROM Memory Layout
 --------------------
