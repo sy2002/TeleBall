@@ -197,7 +197,6 @@ boolean WonOrLostState = false;
 byte Balls;
 byte Balls_Old = 0;
 byte Level;
-const byte Levels = 3;
 
 //Tennis only: points
 char TennisPoints = 0;
@@ -275,6 +274,7 @@ const byte UniversalButton   = 8;  //D8: "Button+"
 
 //this is the level pattern of the "bricks"
 //modify to create tougher or easier levels
+const byte Levels = 3;
 const byte bricks_levelheight[Levels] = {3, 4, 4};
 const byte bricks_reset[Levels][4][8] PROGMEM =
 {
