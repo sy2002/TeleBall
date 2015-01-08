@@ -1,12 +1,84 @@
+- id: MODUL1 ARDUINO
+  img: bom_arduino_nano.jpg
+  desc: Arduino Nano or compatible device
+  get: '[Original Arduino Device](http://arduino.cc/de/Main/ArduinoBoardNano) or search for "`arduino 3.0 nano 5v`" on eBay to find compatible devices / clones'
+
+- id: KWM- R30881CBB
+  img: bom_matrix.png
+  desc: The Adafruit KWM-R30881CBB is a 30x30mm blue 8x8 LED matrix display featuring row cathodes.
+  get: "Visit the Adafruit store and find [part #1817](http://www.adafruit.com/products/1817). Seems to be Adafruit exclusive, as we did not yet find alternative vendors for this device, yet."
+
+- id: IC1
+  img: bom_max7221.jpg
+  desc: The MAX7221CNG is the display driver of the TeleBall.
+  get: Standard / Farnell `1593381`
+
+- id: SV1
+  img: bom_radio.jpg
+  desc: NRF24L01+ 2.4GHz Antenna Wireless Transceiver Module for Arduino on a breakout board
+  get: 'There are plenty of vendors on ebay selling this. Search for `NRF24L01+ Arduino` on eBay; we used [this one](http://r.ebay.com/2JUtNU).'
+
+- id: IC2 VREG3
+  img: bom_rohm.jpg
+  desc: Rohm voltage regulator part number BD33KA5FP-E2.
+  get: Standard / Farnell `2342845`
+
+- id: SCHALTER
+  img: bom_switch.jpg
+  desc: EAO 09.10201.02 switch with pins bent at right-angles
+  get: Standard / Farnell `1608081`
+
+- id: LED1, LED2, LED3
+  img: bom_led.jpg
+  desc: MULTICOMP 5mm Round LED Lamp, 20 mA. You need 3 of them per TeleBall.
+  get: Standard / Farnell `2112111`
+
+- id: BUTTON
+  img: bom_button.jpg
+  desc: "[Focan Electronic](http://focan.en.alibaba.com/) PBS-10C-2 Reverse-logic button by. If you need to find an alternative, use the [datasheet](http://www.pollin.de/shop/downloads/D420320D.PDF) to get the exact specs."
+  get: Not that easy to find. We got it from eBay.de (.de not .com); it is also available on alibaba.com; googling `PBS-10C` might also help. Amazon.com has similar buttons on stock if you search for "`pbs push button`".
+
+- id: LS
+  img: bom_speaker.jpg
+  desc: "Thin Speaker, 39.6mm diameter, 4.5mm height, 8 Ω impedance, 0.25 W"
+  get: "Sparkfun [part COM-10722](https://www.sparkfun.com/products/10722) or Adafruit [part #1891](http://www.adafruit.com/products/1891)"
+
+- id: POTI
+  img: bom_poti.jpg
+  desc: "Monacor VRB-141M10 10 kΩ linear mono potentiometer, 6mm shaft diameter, 25mm shaft length + 9,5mm body. If you need to find an alternative, use the [datasheet](http://www.monacor.co.uk/products//vnr/012620/?type=257&no_cache=1) to get the exact specs."
+  get: 'Monacor UK shop [article VRB-141M10](http://www.monacor.co.uk/products/0/vnr/012620/), click on "Find Your Retailer" on the right sidebar. Alternately google for "`Monacor VRB-141M10 10k linear mono potentiometer`".'
+
+- id: C2
+  img: bom_c10uf.jpg
+  desc: 10 µF Tantal SMD capacitor 805 package
+  get: Standard / Farnell `197270`
+
+- id: C1, C3, C4
+  img: bom_c100nf.jpg
+  desc: 100 nF SMD capacitor 805 package. You need 3 of them per TeleBall.
+  get: Standard / Farnell `644160`
+
+- id: R2
+  img: bom_r249.jpg
+  desc: 24.9 kΩ SMD resistor 805 package
+  get: Standard / Farnell `2057643`
+
+- id: R5, R6, R7
+  img: bom_r82.jpg
+  desc: 8.2 kΩ SMD resistor 805 package. You need 3 of them per TeleBall.
+  get: Standard / Farnell `1887306`
+
 - id: Case
   img: bom_case.jpg
   desc: TeleBall Case and Lid
   get: "3D print it as described in [Case](case.html)"
 
-- id: MODUL1 ARDUINO
-  img: bom_arduino_nano.jpg
-  desc: Arduino Nano or compatible device
-  get: >
-    [Original Arduino Device](http://arduino.cc/de/Main/ArduinoBoardNano)
-    or search for "`arduino 3.0 nano 5v`" on eBay to find compatible
-    devices / clones
+- id: Knob
+  img: bom_knob.jpg
+  desc: Black aluminum rotary knob, 40mm diameter for 6mm shaft
+  get: 'Not easy to find. We found [ours](http://r.ebay.com/idjUgo) on ebay.de (.de not .com). Google for `Black aluminum rotary knob, 40mm diameter for 6mm shaft`, sometimes vendors call it a "Volume Control Potentiometer Knob".'
+
+- id: Battery Clip
+  img: bom_clip.jpg
+  desc: KEYSTONE BK5201 Battery Clip, 11.2x12.0 mm, 0.8 mm height of the foot, 10.5mm height including spring. You need 4 of them per TeleBall. Get the [specs here](http://www.luedeke-elektronic.de/images/product_images/popup_images/4836_1.jpg) if you need to find an alternative.
+  get: Not easy to find. Google for `KEYSTONE BK5201` or `KEYSTONE BK5201 Battery Holder` or similar combinations.

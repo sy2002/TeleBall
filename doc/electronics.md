@@ -100,6 +100,13 @@ Some basics about how these main parts work together:
   battery current UB+, which is initially - as long as the batteries are new/full - indeed 6V
   but dropping during the lifetime of the batteries.
 
+* The wiring of the MAX7221 to the 8x8 LED matrix might look a bit weird: This is mainly
+  because of the inner workings of the LED matrix, that is internally not wired linearly.
+  For example, as described in the [Data Sheet](http://www.adafruit.com/datasheets/1047datasheet.pdf),
+  LED row #1 is mapped to pin #9 and LED column #2 to pin #3. The MAX7221 is supplying
+  current at SEG DP, SEG A .. SEG G and sinking current from the display's common
+  cathode at DIG 0 .. DIG 7. 
+
 * The radio is able to cope with 5V control lines, i.e. Arduino's digital outputs
   MOSI, MISO, SCK, IRQ, CSN, CE but it cannot be driven by 5V. This is why we use the
   Rohm voltage regulator that converts the up to 6V UB+ to a stable 3.3V. The names of the
@@ -120,6 +127,20 @@ Some basics about how these main parts work together:
   (Note, that TeleBall's firmware configures the other Ax analog pins, particularly
   A0, A1 and A2 as digital outputs.)
 
+Important Files
+---------------
+
+All files related to TeleBall's electronics are [Eagle](http://www.cadsoftusa.com/)
+files, so you find them in the `eagle` folder.
+
+    BreakOut-8x8-rev2.sch      Eagle schematics file. The above-mentioned
+                               schematics are contained here.
+    BreakOut-8x8-rev2.brd      Eagle PCB layout file. The below-mentioned
+                               board layouts are contained here.
+    libraries.zip              As the .sch and .brd files are self-contained,
+                               you only need the Eagle libraries from the ZIP,
+                               if you want to dig deeper, e.g. modify details
+                               of parts.
 
 Custom Printed Circuit Board (PCB)
 ----------------------------------
@@ -190,19 +211,51 @@ Download high-resolution versions of the assembly diagrams:
 ### Battery Clips
 
 The case as well as the lid feature special places where the battery clips /
-battery springs need to be added. There is a different treatment of the
-battery clips in the case versus the battery clips in the lid:
+battery springs need to be added. As shown in the image below, there
+are two kinds of battery clips: Flat clips and clips with springs.
+We bought just one variant - with springs -  and created the other kind by
+cutting off the spring.There is a different treatment of the battery clips
+in the case versus the battery clips in the lid:
 
-* Case: If you look at the case with the open facing side down and the
-  side which will hold the on/off switch and the USB port facing up, then
-  after inserting the battery clips, you should solder a red wire at the
-  clip. After the marriage of the PCB and the 
+* Case: If you look at the back side of the case with the open facing side
+  down and the side which will hold the on/off switch and the USB port
+  facing up, then after inserting the battery clips on the top/right and
+  top/left side, you should solder a red wire at the right clip. After the
+  marriage of the PCB and the case, you would solder the red wire to
+  the BAT+ pad on the PCB. Furtheron you should solder a black wire at
+  the left clip and later, after the marriage, solder it to the BAT- pad.
+  The top right clip is without a spring and the top left clip is with a spring.
+
+* Lid: As shown in the image below, insert two battery clips into the lid
+  and connect both with a wire. Be mindful not to have two springs at the
+  same side, i.e. if you followed the above-mentioned instructions about
+  the springs, then you should place the clip with a spring in the lid just
+  as shown in the image below.
 
 {% include gallery_show.html images=page.batteryclips group=4 %}
 
 Bill of Materials
 -----------------
 
-{% capture bomcap %}| Image  | ID | Description | Where to get it |
+| Image  | ID | Description | Where to get it |
 {% for bomitem in site.data.bom %}|![{{ bomitem.id }}](eagle/{{ bomitem.img }})|{{ bomitem.id }}|{{ bomitem.desc }}|{{ bomitem.get }}
-{% endfor %}{% endcapture %}{{ bomcap }}
+{% endfor %}
+
+Some hints about "Where to get it":
+
+* As the world of electronics is very fast paced, it might be that some of the
+  sources mentioned here will not be active any more when you visit this page.
+  Please inform us via email: sy2002 at teleball.org, if you discover that.
+
+* The term "Standard / Farnell: <number>" means: This is a pretty standard part;
+  you should get it "everywhere", i.e. enter the part name in google. Additionally
+  we supply a Farnell part <number> in this cases. Farnell is a very international
+  distributor so it is very likely, that it is available in your country, too.
+  Head to www.farnell.com and copy/paste the into Farnell's search bar.
+
+* You can also use [www.findchips.com](http://www.findchips.com) to find vendors
+  for the parts.
+
+* In general: If you cannot find a certain part at all, it might make sense 
+  to search for a similar alternative from another vendor. The drawback in this
+  case might be, that the case might need some small adjustments.
