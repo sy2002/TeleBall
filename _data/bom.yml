@@ -1,3 +1,13 @@
+- id: Case
+  img: bom_case.jpg
+  desc: TeleBall Case and Lid
+  get: "3D print it (or have it 3D printed) as described in [Case](case.html)"
+
+- id: PCB
+  img: bom_pcb.jpg
+  desc: Custom printed circuit board
+  get: Have it manufactured as described in this chapter.
+
 - id: MODUL1 ARDUINO
   img: bom_arduino_nano.jpg
   desc: Arduino Nano or compatible device
@@ -67,11 +77,6 @@
   img: bom_r82.jpg
   desc: 8.2 kΩ SMD resistor 805 package. You need 3 of them per TeleBall.
   get: Standard / Farnell `1887306`
-
-- id: Case
-  img: bom_case.jpg
-  desc: TeleBall Case and Lid
-  get: "3D print it as described in [Case](case.html)"
 
 - id: Knob
   img: bom_knob.jpg
