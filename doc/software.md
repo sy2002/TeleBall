@@ -54,13 +54,21 @@ scenario and therefore encapsulation is not necessary.
 ### Heartbeat of TeleBall
 
 The whole TeleBall application is written in a way, that in (nearly) no function or situation
-we have a blocking state. That means, that the main loop (Arduino's loop() function) is
+we have a blocking state. That means, that the main loop (Arduino's `loop()` function) is
 always running, i.e. called again and again, like a heartbeat. This leads to:
 
 * Fault tolerance as things can recover in subsequent iterations of the loop.
 * Possibility to avoid interrupt programming as the loop() is cycled fast enough
-  to easily allow polling.
+  to easily allow polling of all inputs and even of the radio
 * The timeout mechanism can conveniently be implemented at one place at the end of the main loop
+
+The main loop is essentially executing the following steps:
+
+1. Check if a reset is to be performed and execute it, if necessary
+2. Check if another player/device is there for Tennis for Two, if yes: initiate the pairing process
+3. Read and handle input from the potentiometer and the button (called `Universal Button`)
+4. Call a Game Mode handler, which itself is a small main loop on its own
+5. Check and handle timeout
 
 {% highlight cpp %}
 void loop()
@@ -103,10 +111,10 @@ void loop()
         reset();                        //... game_mode could be config modes like gmSpeed, etc.
         tennisSwitchToBreakOut(false);  //switch to BreakOut but continue to try to find another device for tennis
     }    
-}
-{% endhighlight %}
 
-### FSM #1 - GameMode
+{% endhighlight%}
+
+### Game Mode State Machine
 
 The GameMode models the macro state the device is currently in: Are we playing BreakOut
 or Tennis for Two? Are we currently in any configuration menu?
@@ -130,7 +138,20 @@ or Tennis for Two? Are we currently in any configuration menu?
     };
 
 There is a global variable called `game_mode` which reflects the current state of
-the game. There are 
+the game. GameMode is modeled as a classical state machine (FSM), whose state progressing is
+like described in the following; `b(x)` means `button pressed as long as x`:
+
+    [gmBreakOut | gmTennis] => b(1sec)    => [gmSpeed]
+    [gmSpeed]               => b(quickly) => [gmBreakOut | gmTennis]
+    [gmSpeed]               => b(4sec)    => [gmBrightness]
+    [gmBrightness]          => b(quickly) => [gmPaddleLeft]
+    [gmPaddleRight]         => b(quickly) => [gmEEPROM]
+
+    [gmBreakOut]            => successful pairing   => [gmTennis]
+    [gmBreakOut]            => unsuccessful pairing => [gmBreakOut]
+    [gmTennis]              => timeout              => [gmBreakOut]
+
+The button-press related state changes are done in the function `readUniversalButton()`
 
 ### FSM #2 - GameMode
 
@@ -159,6 +180,16 @@ the game. There are
         rmSlave_speedset_by_Slave   = 11    //Slave device in speed set mode
     } RadioMode = rmNone;
 
+BreakOut
+--------
+
+### Adding or Modyfing BreakOut Levels
+
+
+
+Tennis
+------
+
 Radio Details
 -------------
 
@@ -181,3 +212,34 @@ Bytes |Type        |Value
 10    |byte        |Display intensity
 11..12|unsigned int|Leftmost poti position (calibrate paddle user experience)
 13..14|unsigned int|Rightmost poti position (calibrate paddle user experience)
+
+Adding More Games
+-----------------
+
+TeleBall's current firmware is only using about half of the program memory of the Arduino Nano.
+That means there is plenty of room left for software extensions. If you want to add more games
+we suggest, that you do it like described here:
+
+1. Use the concept of [Multi File Sketches](http://arduino.cc/en/Hacking/BuildProcess) to stay
+   updatable: If you put the main code of your new games to separate files with no file extension,
+   e.g. you add the file `MyNewGame` (no file extension) to the folder `src/TeleBall`, then
+   you are able to use everything from this file inside the main file `TeleBall.ino`. Even
+   though you will need to touch `TeleBall.ino`, this way of working minimizes the code
+   merging in future. You might need to declare function headers (one liners) in each of
+   the files so that the compiler finds everything.
+
+2. Add a new mode to the `GameMode` enum as shown above and extend the main loop's
+   `switch`statement by a new case, something like `gmMyNewGame`. Be mindful, that
+   no function should "block", so if something takes longer, implement it asynchronously.
+   Furtheron, add a custom reset routine and add it to the `switch` statement in `reset()`.
+   Last but not least, write some routines that are able to backup and to restore your
+   game state and call them inside `backupGameState()` and `restoreGameState()`.
+
+3. Exending the behaviour of `readUniversalButton()` seems to be a good place to add
+   the entry point for your new game. Alternately or additionally, you can change
+   `game_mode_default` to let TeleBall start with your new game instead of with BreakOut.
+
+4. There is plenty of room left in the EEPROM, too, so it is safe to create new `loc...`
+   constants and to extend `eepromWriteFingerprintAndDefaults()`, `eepromReadSettings()`
+   and `eepromWriteSettings()` accordingly. We suggest you keep to the convention and
+   use the suffix `_default`for factory default `const` variables.
