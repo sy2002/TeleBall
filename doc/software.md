@@ -471,6 +471,14 @@ TeleBall's firmware code can check, if for example a new package arrived
 in the RX FIFO or if there is still something in the RX FIFO which means,
 that the recepient did not ackknowledge, yet for a multitude of reasons.
 
+The TeleBall implementation of the receive function `radioReceive(...)`
+is currently always emptying the RX FIFO which means, that messages
+from the master can get lost not only due to radio problems but also
+due to timing problems. Also, there is no TX FIFO for ACK messages
+built into `radioReceive(...)`, so also messages from the
+slave to the master can get lost. This opens room for improving the
+communication / radio performance and robustness of TeleBall.
+
 #### Unidirectional Communication
 
 As described above, our radio chip, the nRF24L01+, is not offering a real bidirectional
