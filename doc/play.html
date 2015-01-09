@@ -6,51 +6,52 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>TeleBall - Play</title>    
-    <link rel="stylesheet" href="../doc/stylesheets/styles.css">
-    <link rel="stylesheet" href="../doc/stylesheets/pygment_trac.css">
-    <script src="../doc/javascripts/scale.fix.js"></script>
+    <title>TeleBall - Play</title>
+    <link rel="stylesheet" href="../doc/css/styles.css">
+    <link rel="stylesheet" href="../doc/css/pygment_trac.css">
+    <script src="../doc/js/scale.fix.js"></script>    
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->		
-  </head>
+    <![endif]-->
 
+             
+  </head>
   <body>
     <div class="wrapper">
       <header>
         <h1 class="header">TeleBall</h1>
         <p class="header">Build your own Arduino retro handheld game console</p>
         <ul>
-            <li><a class="nrm_button" href="../index.html">Home</a></li>            
-            <li><a class="nrm_button" href="../doc/play.html">Play</a></li>
-            <li><a class="nrm_button" href="../doc/case.html">Case</a></li>
-            <li><a class="nrm_button" href="../doc/electronics.html">Electronics</a></li>
-            <li><a class="nrm_button" href="../doc/software.html">Software</a></li>
+            <li onclick="window.location.href = '../index.html';"><a class="nrm_button" href="../index.html">Home</a></li>            
+            <li onclick="window.location.href = '../doc/play.html';"><a class="nrm_button" href="../doc/play.html">Play</a></li>
+            <li onclick="window.location.href = '../doc/case.html';"><a class="nrm_button" href="../doc/case.html">Case</a></li>
+            <li onclick="window.location.href = '../doc/electronics.html';"><a class="nrm_button" href="../doc/electronics.html">Electronics</a></li>
+            <li onclick="window.location.href = '../doc/software.html';"><a class="nrm_button" href="../doc/software.html">Software</a></li>
         </ul>
         <ul>
-          <li class="git"><a class="buttons" href="https://github.com/sy2002/TeleBall/zipball/master">Download ZIP</a></li>
-          <li class="git"><a class="buttons" href="https://github.com/sy2002/TeleBall/tarball/master">Download TAR</a></li>
-          <li class="git"><a class="buttons github" href="https://github.com/sy2002/TeleBall">View On GitHub</a></li>
+          <li onclick="window.location.href = 'https://github.com/sy2002/TeleBall/zipball/master';" class="git"><a class="buttons" href="https://github.com/sy2002/TeleBall/zipball/master">Download ZIP</a></li>
+          <li onclick="window.location.href = 'https://github.com/sy2002/TeleBall/tarball/master';" class="git"><a class="buttons" href="https://github.com/sy2002/TeleBall/tarball/master">Download TAR</a></li>
+          <li onclick="window.open('https://github.com/sy2002/TeleBall', 'newgithubwin');" class="git"><a class="buttons github" href="https://github.com/sy2002/TeleBall" target="newgithubwin">View On GitHub</a></li>
         </ul>
         <p class="header">This project is maintained by <a class="header name" href="http://www.sy2002.de">sy2002</a></p>
       </header>
-      <section>
+      <section>        
         <h1 id="playing-teleball">Playing TeleBall</h1>
 
 <h2 id="basics">Basics</h2>
 
-<p><img src="images/play_overview.jpg" alt="Overview Diagram" /></p>
-
-<p>When you start your TeleBall, you’re ready to play BreakOut. The factory
+<p><img src="images/play_overview.jpg" alt="Overview Diagram" />
+<br />
+When you start your TeleBall, you’re ready to play BreakOut. The factory
 default settings feature a rather slow ball speed and a big paddle swing,
 i.e. you need to rotate the knob heavily to move the paddle.</p>
 
 <h2 id="breakout">BreakOut</h2>
 
-<p><img src="images/play_breakout.jpg" alt="Play BreakOut" /></p>
-
-<p>BreakOut is an Arcade classic. Watch TeleBall in action on
+<p><img src="images/play_breakout.jpg" alt="Play BreakOut" />
+<br />
+BreakOut is an Arcade classic. Watch TeleBall in action on
 <a href="http://youtu.be/JpwP330C6q0">YouTube</a>
 to see how it works.</p>
 
@@ -76,9 +77,9 @@ while playing Tennis for Two.</p>
 
 <h2 id="tennis-for-two">Tennis for Two</h2>
 
-<p><img src="images/play_tennis.jpg" alt="Play Tennis" /></p>
-
-<p>As the name is suggesting, Tennis for Two is a multiplayer game, i.e.
+<p><img src="images/play_tennis.jpg" alt="Play Tennis" />
+<br />
+As the name is suggesting, Tennis for Two is a multiplayer game, i.e.
 you need two TeleBall devices to play it. TeleBall is using radio on
 the 2.4 GHz frequency to communicate between the devices. Watch it
 in action on <a href="http://youtu.be/hnW40l3Gluc">YouTube</a>.</p>
@@ -241,6 +242,13 @@ if you rotate the knob to the right (square) or to the left (X).</p>
   </li>
 </ul>
 
+<h2 id="changing-batteries">Changing Batteries</h2>
+
+<p><img src="images/play_batteries.jpg" alt="Changing Batteries" />
+<br />
+TeleBall runs on four AA batteries. When opening the case, be careful
+not to damage the speaker, which needs to be placed back exactly into
+its defined position before closing the case again.</p>
 
       </section>
     </div>

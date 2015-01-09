@@ -41,7 +41,7 @@ custom PCB.
 Browse TeleBall's [project page](http://sy2002.github.io/TeleBall)
 for a much better documentation, including a how-to play and
 how-to build guide and a bill of materials (BOM). The project page
-is also available offline using `index.html`in the root folder of
+is also available offline using `index.html` in the root folder of
 this repository.
 
 ### Folder Structure
@@ -80,5 +80,5 @@ project during August 2014 and January 2015.
 TeleBall is a project of 
 [MEGA - Museum of Electronic Games & Art](http://www.m-e-g-a.org).
 
-We are looking forward to hearing from you. Email to code at sy2002.de
+We are looking forward to hearing from you. Email to sy2002 at teleball.org
 

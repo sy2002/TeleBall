@@ -1,0 +1,98 @@
+
+   
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>TeleBall - Case</title>
+    <link rel="stylesheet" href="../doc/css/styles.css">
+    <link rel="stylesheet" href="../doc/css/pygment_trac.css">
+    <script src="../doc/js/scale.fix.js"></script>    
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+             
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">TeleBall</h1>
+        <p class="header">Build your own Arduino retro handheld game console</p>
+        <ul>
+            <li onclick="window.location.href = '../index.html';"><a class="nrm_button" href="../index.html">Home</a></li>            
+            <li onclick="window.location.href = '../doc/play.html';"><a class="nrm_button" href="../doc/play.html">Play</a></li>
+            <li onclick="window.location.href = '../doc/case.html';"><a class="nrm_button" href="../doc/case.html">Case</a></li>
+            <li onclick="window.location.href = '../doc/electronics.html';"><a class="nrm_button" href="../doc/electronics.html">Electronics</a></li>
+            <li onclick="window.location.href = '../doc/software.html';"><a class="nrm_button" href="../doc/software.html">Software</a></li>
+        </ul>
+        <ul>
+          <li onclick="window.location.href = 'https://github.com/sy2002/TeleBall/zipball/master';" class="git"><a class="buttons" href="https://github.com/sy2002/TeleBall/zipball/master">Download ZIP</a></li>
+          <li onclick="window.location.href = 'https://github.com/sy2002/TeleBall/tarball/master';" class="git"><a class="buttons" href="https://github.com/sy2002/TeleBall/tarball/master">Download TAR</a></li>
+          <li onclick="window.open('https://github.com/sy2002/TeleBall', 'newgithubwin');" class="git"><a class="buttons github" href="https://github.com/sy2002/TeleBall" target="newgithubwin">View On GitHub</a></li>
+        </ul>
+        <p class="header">This project is maintained by <a class="header name" href="http://www.sy2002.de">sy2002</a></p>
+      </header>
+      <section>        
+        <script src="js/jquery-1.11.0.min.js"></script>
+
+<script src="js/lightbox.min.js"></script>
+
+<link href="css/lightbox.css" rel="stylesheet" />
+
+<h1 id="teleball-case---cad-and-3d-printing">TeleBall Case - CAD and 3D Printing</h1>
+
+<h2 id="designing-the-case-cad">Designing the Case: CAD</h2>
+
+<p><a href="http://www.freecadweb.org">FreeCad</a> is an Open Source parametric 3D CAD modeler.
+We used it to design the TeleBall Case. The following gallery is showing you the
+case and the lid 3D rendered by FreeCad.</p>
+
+<p><a href="cad/case1.png" data-lightbox="1" title="TeleBall CAD Case Front"><img src="cad/case1.png" title="TeleBall CAD Case Front" width="130px" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a><a href="cad/case2.png" data-lightbox="1" title="TeleBall CAD Case Back"><img src="cad/case2.png" title="TeleBall CAD Case Back" width="130px" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a><a href="cad/lid1.png" data-lightbox="1" title="TeleBall CAD Lid Front"><img src="cad/lid1.png" title="TeleBall CAD Lid Front" width="130px" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a><a href="cad/lid2.png" data-lightbox="1" title="TeleBall CAD Lid Back"><img src="cad/lid2.png" title="TeleBall CAD Lid Back" width="130px" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a></p>
+
+<p>The mechanism for keeping the case closed stable can be best understood when you
+have a look at the rightmost image (click to zoom): The lever shown there is
+clicking into place when being moved over the hole shown at the leftmost image
+while closing.</p>
+
+<p>Toggle <em>Thingiview</em> on <a href="http://www.thingiverse.com/thing:621294">Thingiverse</a>
+to get a realtime interactive 3D view of the case and the lid: Click the blue
+“photos”, then click on <em>Thingiview</em> and then use your mouse to zoom and rotate.</p>
+
+<h2 id="manufacturing-the-case-3d-printing">Manufacturing the Case: 3D Printing</h2>
+
+<p>The TeleBall package contains a folder called <code>cad</code>. The files stored there
+are used to 3D print the TeleBall device consisting of the case and the lid.</p>
+
+<pre><code>case_full_3dprinter.cmb.gz   
+case_body_v2.stl
+case_lid_v2.stl
+</code></pre>
+
+<p>Some online 3D printing shops are accepting convenient packaged <code>.cmb.gz</code> files,
+which are already containing the whole device. Others are accepting <code>.stl</code> files,
+where you are uploading and ordering the body (case) and the lid separately.
+Alternately, you can use FreeCad or other tools to create your own 3D Printing
+file package using the <code>.stl</code> files as sources.</p>
+
+<p>You can also download the files needed for 3D printing from
+<a href="http://www.thingiverse.com/thing:621294">Thingiverse</a>.</p>
+
+<h2 id="d-printed-case-and-lid">3D Printed Case and Lid</h2>
+
+<p>The following photos show you, what you can expect back from your 3D printing shop.</p>
+
+<p><a href="cad/photo_case1.jpg" data-lightbox="2" title="TeleBall 3D Printed Case Front"><img src="cad/thumb_case1.jpg" title="TeleBall 3D Printed Case Front" width="280px" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a><a href="cad/photo_case2.jpg" data-lightbox="2" title="TeleBall 3D Printed Case and Lid - Back"><img src="cad/thumb_case2.jpg" title="TeleBall 3D Printed Case and Lid - Back" width="280px" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a></p>
+
+<h2 id="ready-assembled-device">Ready Assembled Device</h2>
+
+<p><a href="cad/photo1.jpg" data-lightbox="3" title="TeleBall Front View"><img src="cad/thumb1.jpg" title="TeleBall Front View" height="150px" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a><a href="cad/photo2.jpg" data-lightbox="3" title="TeleBall Side View"><img src="cad/thumb2.jpg" title="TeleBall Side View" height="150px" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a><a href="cad/photo3.jpg" data-lightbox="3" title="TeleBall Top View"><img src="cad/thumb3.jpg" title="TeleBall Top View" height="150px" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a><a href="cad/photo4.jpg" data-lightbox="3" title="TeleBall Rear View"><img src="cad/thumb4.jpg" title="TeleBall Rear View" height="150px" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a><a href="cad/photo5.jpg" data-lightbox="3" title="TeleBall Bottom View"><img src="cad/thumb5.jpg" title="TeleBall Bottom View" height="150px" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a><a href="cad/photo6.jpg" data-lightbox="3" title="TeleBall Disassembly 1"><img src="cad/thumb6.jpg" title="TeleBall Disassembly 1" height="150px" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a><a href="cad/photo7.jpg" data-lightbox="3" title="TeleBall Disassembly 2"><img src="cad/thumb7.jpg" title="TeleBall Disassembly 2" height="150px" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a><a href="cad/photo8.jpg" data-lightbox="3" title="TeleBall Disassembly 3"><img src="cad/thumb8.jpg" title="TeleBall Disassembly 3" height="150px" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a><a href="cad/photo9.jpg" data-lightbox="3" title="TeleBall Disassembly 4"><img src="cad/thumb9.jpg" title="TeleBall Disassembly 4" height="150px" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a><a href="cad/photo10.jpg" data-lightbox="3" title="TeleBall Disassembly 5"><img src="cad/thumb10.jpg" title="TeleBall Disassembly 5" height="150px" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a><a href="cad/16teleballs.jpg" data-lightbox="3" title="16 TeleBalls"><img src="cad/16teleballs_thumb.jpg" title="16 TeleBalls" height="150px" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a></p>
+
+      </section>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+  </body>
+</html>

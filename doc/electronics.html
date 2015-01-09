@@ -1,0 +1,433 @@
+
+   
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>TeleBall - Electronics</title>
+    <link rel="stylesheet" href="../doc/css/styles.css">
+    <link rel="stylesheet" href="../doc/css/pygment_trac.css">
+    <script src="../doc/js/scale.fix.js"></script>    
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+             
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">TeleBall</h1>
+        <p class="header">Build your own Arduino retro handheld game console</p>
+        <ul>
+            <li onclick="window.location.href = '../index.html';"><a class="nrm_button" href="../index.html">Home</a></li>            
+            <li onclick="window.location.href = '../doc/play.html';"><a class="nrm_button" href="../doc/play.html">Play</a></li>
+            <li onclick="window.location.href = '../doc/case.html';"><a class="nrm_button" href="../doc/case.html">Case</a></li>
+            <li onclick="window.location.href = '../doc/electronics.html';"><a class="nrm_button" href="../doc/electronics.html">Electronics</a></li>
+            <li onclick="window.location.href = '../doc/software.html';"><a class="nrm_button" href="../doc/software.html">Software</a></li>
+        </ul>
+        <ul>
+          <li onclick="window.location.href = 'https://github.com/sy2002/TeleBall/zipball/master';" class="git"><a class="buttons" href="https://github.com/sy2002/TeleBall/zipball/master">Download ZIP</a></li>
+          <li onclick="window.location.href = 'https://github.com/sy2002/TeleBall/tarball/master';" class="git"><a class="buttons" href="https://github.com/sy2002/TeleBall/tarball/master">Download TAR</a></li>
+          <li onclick="window.open('https://github.com/sy2002/TeleBall', 'newgithubwin');" class="git"><a class="buttons github" href="https://github.com/sy2002/TeleBall" target="newgithubwin">View On GitHub</a></li>
+        </ul>
+        <p class="header">This project is maintained by <a class="header name" href="http://www.sy2002.de">sy2002</a></p>
+      </header>
+      <section>        
+        <script src="js/jquery-1.11.0.min.js"></script>
+
+<script src="js/lightbox.min.js"></script>
+
+<link href="css/lightbox.css" rel="stylesheet" />
+
+<h1 id="teleball-electronics">TeleBall Electronics</h1>
+
+<h2 id="schematics">Schematics</h2>
+
+<p><img src="eagle/circuit.png" alt="Schematics Overview" /></p>
+
+<ul>
+  <li>BAT+ / BAT-: Battery+ and Battery- aka GND, directly wired via battery clips</li>
+  <li>+UB: 6 V battery power (coming from BAT+) but <em>after</em> the on/off switch</li>
+  <li>
+    <p>+3V3: 3.3 V regulated by IC2 VREG3, needed by the radio SV1</p>
+  </li>
+  <li>MODUL1 ARDUINO: Microcontroller - see details below</li>
+  <li>KWM-R30881CBB: 8x8 LED Display - see details below</li>
+  <li>IC1 MAX7221CNG: LED Display Driver - see details below</li>
+  <li>SV1: nRF24L01+ Radio - see details below</li>
+  <li>
+    <p>IC2 VREG3: Voltage Regulator - see details below</p>
+  </li>
+  <li>SCHALTER: TeleBall power switch / on/off switch</li>
+  <li>LED1, LED2, LED3: ball / score indicator LEDs</li>
+  <li>BUTTON+ / BUTTON-: <em>Reverse logic</em> button +/-, i.e. not pressed = current flowing</li>
+  <li>LS+ / LS-: Speaker +/-</li>
+  <li>POTI+, POTI-, POTI_S: 10kΩ potentiometer’s +, - and signal line</li>
+  <li>C2: 10 µF current buffer (capacitor) for MAX7221</li>
+  <li>C1, C3, C4: 100 nF anti-oscillation capacitors</li>
+  <li>R2: 24.9 kΩ voltage and current selector resistor for MAX7221</li>
+  <li>
+    <p>R5, R6, R7: 8.2 kΩ series resistor for LEDs</p>
+  </li>
+  <li>MOSI, MISO, SCK, IRQ, CSN, CE: Wiring that connects the Arduino with the Radio</li>
+  <li>DATAIN, CLOCK, LOAD: Wiring that connects the Arduino with the LED Display Driver</li>
+  <li>DIGx (x = 0 .. 7), SEGy (y = A .. G, DP): Wiring that connects the LED Display
+Driver with the 8x8 LED Display.</li>
+</ul>
+
+<p>Download TeleBall’s <a href="eagle/BreakOut-8x8-rev2-circuit.pdf">detailed Schematics PDF</a>. The subfolder
+<code>eagle</code> of your TeleBall package contains all schematics including the PCB design. We
+used the Freeware version of the specialized CAD software <a href="http://www.cadsoftusa.com/">Eagle</a>
+to create the schematics and the board layout (PCB design).</p>
+
+<h3 id="the-circuit-explained">The Circuit Explained</h3>
+
+<p>The following parts are the main parts of the circuit:</p>
+
+<ul>
+  <li>Microcontroller: 5V version of Arduino Nano 3.0 or compatible device (<a href="http://arduino.cc/de/Main/ArduinoBoardNano">Data Sheet</a>)</li>
+  <li>8x8 LED Display: KWM-R30881CBB aka AdaFruit 1817 (<a href="http://www.adafruit.com/datasheets/1047datasheet.pdf">Data Sheet</a>)</li>
+  <li>LED Display Driver: MAX7221 (<a href="http://datasheets.maximintegrated.com/en/ds/MAX7219-MAX7221.pdf">Data Sheet</a>)</li>
+  <li>Radio: nRF24L01+ on an Arduino friendly breakout board (<a href="http://www.nordicsemi.com/eng/content/download/2726/34069/file/nRF24L01P_Product_Specification_1_0.pdf">Data Sheet</a>)</li>
+  <li>Voltage Regulator: Rohm BD33KA5FP-E2 (<a href="http://rohmfs.rohm.com/en/products/databook/datasheet/ic/power/linear_regulator/bdxxka5-e.pdf">Data Sheet</a>)</li>
+</ul>
+
+<p>Some basics about how these main parts work together:</p>
+
+<ul>
+  <li>
+    <p>The Arduino is the heart of TeleBall. Using its Harvard architecture, we are able to store
+the program code itself on (32kB Flash) as well as configuration data (1kB EEPROM). Additionally, it
+features SRAM (2kB). The built-in USB port in conjunction with Arduino’s bootloader
+allows us to update TeleBall’s firmware easily. The Arduino has a built-in current
+regulation, so we can directly connect it to UB+.</p>
+  </li>
+  <li>
+    <p>As each pin of the Arduino is able to supply 40mA, the Arduino can directly drive the
+three status LEDs and the speaker. Pin D9 is a PWM (Pulse-width modulation) capable pin;
+this is important to generate tones via software.</p>
+  </li>
+  <li>
+    <p>The 8x8 LED matrix has 64 LEDs but only 16 pins. That means, that you need to scan through
+the matrix (either line by line or column by column) very quickly to control it pixelwise.
+The MAX7221 is doing this automatically, so the Arduino just needs to transmit the desired
+pattern. This is done using the digital output pins D2, D3 and D4, that communicate via the
+SPI protocol with the MAX7221 display driver.</p>
+  </li>
+  <li>
+    <p>The Led Matrix Driver MAX7221 is not only controlling the 8x8 LED matrix but also
+driving it by supplying voltage and current for the actual operation of the LEDs. The MAX7221
+allows up to 6V voltage at its VCC pin. We are therefore directly connecting it to the
+battery current UB+, which is initially - as long as the batteries are new/full - indeed 6V
+but dropping during the lifetime of the batteries.</p>
+  </li>
+  <li>
+    <p>The wiring of the MAX7221 to the 8x8 LED matrix might look a bit weird: This is mainly
+because of the inner workings of the LED matrix, that is internally not wired linearly.
+For example, as described in the <a href="http://www.adafruit.com/datasheets/1047datasheet.pdf">Data Sheet</a>,
+LED row #1 is mapped to pin #9 and LED column #2 to pin #3. The MAX7221 is supplying
+current at SEG DP, SEG A .. SEG G and sinking current from the display’s common
+cathode at DIG 0 .. DIG 7. </p>
+  </li>
+  <li>
+    <p>The radio is able to cope with 5V control lines, i.e. Arduino’s digital outputs
+MOSI, MISO, SCK, IRQ, CSN, CE but it cannot be driven by 5V. This is why we use the
+Rohm voltage regulator that converts the up to 6V UB+ to a stable 3.3V. The names of the
+signal lines MOSI/MISO/etc. might be misleading a bit: The whole radio SPI control is done
+in software, we are not using any hardware SPI features and therefore we <em>could</em> have
+wired the radio differently, when it comes to digital ports at the Arduino.</p>
+  </li>
+  <li>
+    <p>We used high intensity LEDs, this is why the series resistors R5, R6, R7 are having
+such high Ohm values. If you plan to use normal / weaker LEDs, then you could use
+1kΩ resistors instead.</p>
+  </li>
+  <li>
+    <p>The software activates the internal pull-up resistor of  the digital input D8 and
+uses an inverse logic. Therefore it expects a button that also uses reverse / inverse
+logic, i.e. no current when pressed and current when not pressed.</p>
+  </li>
+  <li>
+    <p>TeleBall’s main game control, the “paddle” or “knob”, is implemented using a
+10kΩ potentiometer that connects with the Arduino’s 10bit-A/D analog input A7.
+(Note, that TeleBall’s firmware configures the other Ax analog pins, particularly
+A0, A1 and A2 as digital outputs.)</p>
+  </li>
+</ul>
+
+<h2 id="important-files">Important Files</h2>
+
+<p>All files related to TeleBall’s electronics are <a href="http://www.cadsoftusa.com/">Eagle</a>
+files, so you find them in the <code>eagle</code> folder.</p>
+
+<pre><code>BreakOut-8x8-rev2.sch      Eagle schematics file. The above-mentioned
+                           schematics are contained here.
+BreakOut-8x8-rev2.brd      Eagle PCB layout file. The below-mentioned
+                           board layouts are contained here.
+libraries.zip              As the .sch and .brd files are self-contained,
+                           you only need the Eagle libraries from the ZIP,
+                           if you want to dig deeper, e.g. modify details
+                           of parts.
+</code></pre>
+
+<h2 id="custom-printed-circuit-board-pcb">Custom Printed Circuit Board (PCB)</h2>
+
+<p>To get a custom PCB you just need to send the file <code>BreakOut-8x8-rev2.brd</code> from the
+<code>eagle</code> folder of the TeleBall package to the online PCB manufacturer of your choice.
+The <code>.brd</code> file contains the multiple layers of which your PCB is consisting of:</p>
+
+<p><a href="eagle/board_sch_large.png" data-lightbox="2" title="TeleBall PCB Schematics - left all layers, middle top layer, right bottom layer"><img src="eagle/board_sch_small.png" title="TeleBall PCB Schematics - left all layers, middle top layer, right bottom layer" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a></p>
+
+<p>And this is how the result, i.e. the custom manufactured PCB should basically look like:  </p>
+
+<p><a href="eagle/pcb_large.jpg" data-lightbox="2" title="TeleBall PCB Top (left) &amp; Bottom (right)"><img src="eagle/pcb_small.jpg" title="TeleBall PCB Top (left) &amp; Bottom (right)" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a></p>
+
+<p>The left side shows the top side of the PCB, the gap at the top right is for the
+red button, the so called Universal Button (reset, configuration, confirmation, etc).
+Download the high-resolution version of the <a href="eagle/pcb_large.jpg">PCB Photo</a>.</p>
+
+<h2 id="assembly-diagram">Assembly Diagram</h2>
+
+<p><a href="eagle/pcb_top_with_parts_large.jpg" data-lightbox="3" title="TeleBall PCB Top Layer Assembly Diagram"><img src="eagle/pcb_top_with_parts_thumb.jpg" title="TeleBall PCB Top Layer Assembly Diagram" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a><a href="eagle/pcb_bottom_with_parts1_large.jpg" data-lightbox="3" title="TeleBall PCB Bottom Layer Assembly Diagram (without Arduino and radio)"><img src="eagle/pcb_bottom_with_parts1_thumb.jpg" title="TeleBall PCB Bottom Layer Assembly Diagram (without Arduino and radio)" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a><a href="eagle/pcb_bottom_with_parts2_large.jpg" data-lightbox="3" title="TeleBall PCB Bottom Layer Assembly Diagram (including Arduino and radio)"><img src="eagle/pcb_bottom_with_parts2_thumb.jpg" title="TeleBall PCB Bottom Layer Assembly Diagram (including Arduino and radio)" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a></p>
+
+<p>Download high-resolution versions of the assembly diagrams:
+<a href="eagle/pcb_top_with_parts_large.jpg">Top Layer Photo</a> and
+<a href="eagle/pcb_bottom_with_parts1_large.jpg">Bottom Layer Photo</a></p>
+
+<h3 id="some-hints-for-assembling-and-soldering-teleball">Some Hints for Assembling and Soldering TeleBall</h3>
+
+<ul>
+  <li>
+    <p>You might want to print out the above-mentioned high-resolution versions of the
+graphical assembly diagrams. Additionally, the high-resolution PDFs of the board
+schematics might be useful, too:
+<a href="eagle/BreakOut-8x8-rev2-board2-top.pdf">Top Layer Schematics</a> and
+<a href="eagle/BreakOut-8x8-rev2-board3-bottom.pdf">Bottom Layer Schematics</a></p>
+  </li>
+  <li>
+    <p>How to solder the SMD parts (like the capacitors Cx or the resistors Rx):
+Tin-coat one pad; while the tin-solder is still liquid, use a pair of
+tweezers to place the SMD part; as the tin-solder cools down, the SMD part
+starts to sit firm; now heat the second pad and let the tin-solder flow
+below the SMD part; let it cool down again; done.</p>
+  </li>
+  <li>
+    <p>Solder all SMD parts (top and bottom side of the PCB) first, including the
+voltage regulator (IC2 VREG3). Then go on with MAX7221 (IC1). Then do
+the on/off switch (SCHALTER) and after that the LEDs and the cables for
+the speaker (LS+ and LS-) as well as the cables for the potentiometer.
+Only then, solder the Arduino (MODUL1 ARDUINO) and the radio breakout
+board (SV1). The reason for this suggested soldering order is, that
+some of the larger parts like the Arduino and the radio breakout board
+are hiding some of the smaller parts and some of the cables.</p>
+  </li>
+  <li>
+    <p>You need to cut the legs of the ICs after you soldered them. Cut the
+Arduino Nano “head” pins before soldering it (they would interfere
+with the speaker if not cut).</p>
+  </li>
+  <li>
+    <p>Before you marry the PCB and the case as described in the next bullet
+point, be sure that you added the battery clips before (see next section).  </p>
+  </li>
+  <li>
+    <p>The 8x8 LED matrix is the last part of TeleBall that you solder: Insert it
+through the case’s front side (there are dedicated holes for that) while
+holding the PCB against the inside of the case. While doing so, you are
+basically filtering in the 8x8 LED matrix through the case as well as
+through the PCB and therefore, this action “glues” both elements together.</p>
+  </li>
+  <li>
+    <p>Be mindful about the length of the cables. We advise to use red cables
+for +, black cables for - and other colors for signal cables. Additionally,
+we recommend to strip the insulaton at the cable ends and to tin-coat them.</p>
+  </li>
+</ul>
+
+<h3 id="battery-clips">Battery Clips</h3>
+
+<p>The case as well as the lid feature special places where the battery clips /
+battery springs need to be added. As shown in the image below, there
+are two kinds of battery clips: Flat clips and clips with springs.
+We bought just one variant - with springs -  and created the other kind by
+cutting off the spring.There is a different treatment of the battery clips
+in the case versus the battery clips in the lid:</p>
+
+<ul>
+  <li>
+    <p>Case: If you look at the back side of the case with the open facing side
+down and the side which will hold the on/off switch and the USB port
+facing up, then after inserting the battery clips on the top/right and
+top/left side, you should solder a red wire at the right clip. After the
+marriage of the PCB and the case, you would solder the red wire to
+the BAT+ pad on the PCB. Furtheron you should solder a black wire at
+the left clip and later, after the marriage, solder it to the BAT- pad.
+The top right clip is without a spring and the top left clip is with a spring.</p>
+  </li>
+  <li>
+    <p>Lid: As shown in the image below, insert two battery clips into the lid
+and connect both with a wire. Be mindful not to have two springs at the
+same side, i.e. if you followed the above-mentioned instructions about
+the springs, then you should place the clip with a spring in the lid just
+as shown in the image below.</p>
+  </li>
+</ul>
+
+<p><a href="eagle/batteryclips_large.jpg" data-lightbox="4" title="TeleBall Battery Clips"><img src="eagle/batteryclips_thumb.jpg" title="TeleBall Battery Clips" style="border: 0 0 0 0; margin: 10px 10px 10px 10px;" /></a></p>
+
+<h2 id="bill-of-materials">Bill of Materials</h2>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Image</td>
+      <td>ID</td>
+      <td>Description</td>
+      <td>Where to get it</td>
+    </tr>
+    <tr>
+      <td><img src="eagle/bom_case.jpg" alt="Case" /></td>
+      <td>Case</td>
+      <td>TeleBall Case and Lid</td>
+      <td>3D print it (or have it 3D printed) as described in <a href="case.html">Case</a></td>
+    </tr>
+    <tr>
+      <td><img src="eagle/bom_pcb.jpg" alt="PCB" /></td>
+      <td>PCB</td>
+      <td>Custom printed circuit board</td>
+      <td>Have it manufactured as described in this chapter.</td>
+    </tr>
+    <tr>
+      <td><img src="eagle/bom_arduino_nano.jpg" alt="MODUL1 ARDUINO" /></td>
+      <td>MODUL1 ARDUINO</td>
+      <td>Arduino Nano or compatible device</td>
+      <td><a href="http://arduino.cc/de/Main/ArduinoBoardNano">Original Arduino Device</a> or search for “<code>arduino 3.0 nano 5v</code>” on eBay to find compatible devices / clones</td>
+    </tr>
+    <tr>
+      <td><img src="eagle/bom_matrix.png" alt="KWM- R30881CBB" /></td>
+      <td>KWM- R30881CBB</td>
+      <td>The Adafruit KWM-R30881CBB is a 30x30mm blue 8x8 LED matrix display featuring row cathodes.</td>
+      <td>Visit the Adafruit store and find <a href="http://www.adafruit.com/products/1817">part #1817</a>. Seems to be Adafruit exclusive, as we did not yet find alternative vendors for this device, yet.</td>
+    </tr>
+    <tr>
+      <td><img src="eagle/bom_max7221.jpg" alt="IC1" /></td>
+      <td>IC1</td>
+      <td>The MAX7221CNG is the display driver of the TeleBall.</td>
+      <td>Standard / Farnell <code>1593381</code></td>
+    </tr>
+    <tr>
+      <td><img src="eagle/bom_radio.jpg" alt="SV1" /></td>
+      <td>SV1</td>
+      <td>NRF24L01+ 2.4GHz Antenna Wireless Transceiver Module for Arduino on a breakout board</td>
+      <td>There are plenty of vendors on ebay selling this. Search for <code>NRF24L01+ Arduino</code> on eBay; we used <a href="http://r.ebay.com/2JUtNU">this one</a>.</td>
+    </tr>
+    <tr>
+      <td><img src="eagle/bom_rohm.jpg" alt="IC2 VREG3" /></td>
+      <td>IC2 VREG3</td>
+      <td>Rohm voltage regulator part number BD33KA5FP-E2.</td>
+      <td>Standard / Farnell <code>2342845</code></td>
+    </tr>
+    <tr>
+      <td><img src="eagle/bom_switch.jpg" alt="SCHALTER" /></td>
+      <td>SCHALTER</td>
+      <td>EAO 09.10201.02 switch with pins bent at right-angles</td>
+      <td>Standard / Farnell <code>1608081</code></td>
+    </tr>
+    <tr>
+      <td><img src="eagle/bom_led.jpg" alt="LED1, LED2, LED3" /></td>
+      <td>LED1, LED2, LED3</td>
+      <td>MULTICOMP 5mm Round LED Lamp, 20 mA. You need 3 of them per TeleBall.</td>
+      <td>Standard / Farnell <code>2112111</code></td>
+    </tr>
+    <tr>
+      <td><img src="eagle/bom_button.jpg" alt="BUTTON" /></td>
+      <td>BUTTON</td>
+      <td><a href="http://focan.en.alibaba.com/">Focan Electronic</a> PBS-10C-2 Reverse-logic button by. If you need to find an alternative, use the <a href="http://www.pollin.de/shop/downloads/D420320D.PDF">datasheet</a> to get the exact specs.</td>
+      <td>Not that easy to find. We got it from eBay.de (.de not .com); it is also available on alibaba.com; googling <code>PBS-10C</code> might also help. Amazon.com has similar buttons on stock if you search for “<code>pbs push button</code>”.</td>
+    </tr>
+    <tr>
+      <td><img src="eagle/bom_speaker.jpg" alt="LS" /></td>
+      <td>LS</td>
+      <td>Thin Speaker, 39.6mm diameter, 4.5mm height, 8 Ω impedance, 0.25 W</td>
+      <td>Sparkfun <a href="https://www.sparkfun.com/products/10722">part COM-10722</a> or Adafruit <a href="http://www.adafruit.com/products/1891">part #1891</a></td>
+    </tr>
+    <tr>
+      <td><img src="eagle/bom_poti.jpg" alt="POTI" /></td>
+      <td>POTI</td>
+      <td>Monacor VRB-141M10 10 kΩ linear mono potentiometer, 6mm shaft diameter, 25mm shaft length + 9,5mm body. If you need to find an alternative, use the <a href="http://www.monacor.co.uk/products//vnr/012620/?type=257&amp;no_cache=1">datasheet</a> to get the exact specs.</td>
+      <td>Monacor UK shop <a href="http://www.monacor.co.uk/products/0/vnr/012620/">article VRB-141M10</a>, click on “Find Your Retailer” on the right sidebar. Alternately google for “<code>Monacor VRB-141M10 10k linear mono potentiometer</code>”.</td>
+    </tr>
+    <tr>
+      <td><img src="eagle/bom_c10uf.jpg" alt="C2" /></td>
+      <td>C2</td>
+      <td>10 µF Tantal SMD capacitor 805 package</td>
+      <td>Standard / Farnell <code>197270</code></td>
+    </tr>
+    <tr>
+      <td><img src="eagle/bom_c100nf.jpg" alt="C1, C3, C4" /></td>
+      <td>C1, C3, C4</td>
+      <td>100 nF SMD capacitor 805 package. You need 3 of them per TeleBall.</td>
+      <td>Standard / Farnell <code>644160</code></td>
+    </tr>
+    <tr>
+      <td><img src="eagle/bom_r249.jpg" alt="R2" /></td>
+      <td>R2</td>
+      <td>24.9 kΩ SMD resistor 805 package</td>
+      <td>Standard / Farnell <code>2057643</code></td>
+    </tr>
+    <tr>
+      <td><img src="eagle/bom_r82.jpg" alt="R5, R6, R7" /></td>
+      <td>R5, R6, R7</td>
+      <td>8.2 kΩ SMD resistor 805 package. You need 3 of them per TeleBall.</td>
+      <td>Standard / Farnell <code>1887306</code></td>
+    </tr>
+    <tr>
+      <td><img src="eagle/bom_knob.jpg" alt="Knob" /></td>
+      <td>Knob</td>
+      <td>Black aluminum rotary knob, 40mm diameter for 6mm shaft</td>
+      <td>Not easy to find. We found <a href="http://r.ebay.com/idjUgo">ours</a> on ebay.de (.de not .com). Google for <code>Black aluminum rotary knob, 40mm diameter for 6mm shaft</code>, sometimes vendors call it a “Volume Control Potentiometer Knob”.</td>
+    </tr>
+    <tr>
+      <td><img src="eagle/bom_clip.jpg" alt="Battery Clip" /></td>
+      <td>Battery Clip</td>
+      <td>KEYSTONE BK5201 Battery Clip, 11.2x12.0 mm, 0.8 mm height of the foot, 10.5mm height including spring. You need 4 of them per TeleBall. Get the <a href="http://www.luedeke-elektronic.de/images/product_images/popup_images/4836_1.jpg">specs here</a> if you need to find an alternative.</td>
+      <td>Not easy to find. Google for <code>KEYSTONE BK5201</code> or <code>KEYSTONE BK5201 Battery Holder</code> or similar combinations.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Some hints about “Where to get it”:</p>
+
+<ul>
+  <li>
+    <p>As the world of electronics is very fast paced, it might be that some of the
+sources mentioned here will not be active any more when you visit this page.
+Please inform us via email: sy2002 at teleball.org, if you discover that.</p>
+  </li>
+  <li>
+    <p>The term “Standard / Farnell: <number>" means: This is a pretty standard part;
+you should get it "everywhere", i.e. enter the part name in google. Additionally
+we supply a Farnell part <number> in this cases. Farnell is a very international
+distributor so it is very likely, that it is available in your country, too.
+Head to www.farnell.com and copy/paste the into Farnell's search bar.</number></number></p>
+  </li>
+  <li>
+    <p>You can also use <a href="http://www.findchips.com">www.findchips.com</a> to find vendors
+for the parts.</p>
+  </li>
+  <li>
+    <p>In general: If you cannot find a certain part at all, it might make sense 
+to search for a similar alternative from another vendor. The drawback in this
+case might be, that the case might need some small adjustments.</p>
+  </li>
+</ul>
+
+      </section>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+  </body>
+</html>

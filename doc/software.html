@@ -1,0 +1,794 @@
+
+   
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>TeleBall - Software</title>
+    <link rel="stylesheet" href="../doc/css/styles.css">
+    <link rel="stylesheet" href="../doc/css/pygment_trac.css">
+    <script src="../doc/js/scale.fix.js"></script>    
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+             
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">TeleBall</h1>
+        <p class="header">Build your own Arduino retro handheld game console</p>
+        <ul>
+            <li onclick="window.location.href = '../index.html';"><a class="nrm_button" href="../index.html">Home</a></li>            
+            <li onclick="window.location.href = '../doc/play.html';"><a class="nrm_button" href="../doc/play.html">Play</a></li>
+            <li onclick="window.location.href = '../doc/case.html';"><a class="nrm_button" href="../doc/case.html">Case</a></li>
+            <li onclick="window.location.href = '../doc/electronics.html';"><a class="nrm_button" href="../doc/electronics.html">Electronics</a></li>
+            <li onclick="window.location.href = '../doc/software.html';"><a class="nrm_button" href="../doc/software.html">Software</a></li>
+        </ul>
+        <ul>
+          <li onclick="window.location.href = 'https://github.com/sy2002/TeleBall/zipball/master';" class="git"><a class="buttons" href="https://github.com/sy2002/TeleBall/zipball/master">Download ZIP</a></li>
+          <li onclick="window.location.href = 'https://github.com/sy2002/TeleBall/tarball/master';" class="git"><a class="buttons" href="https://github.com/sy2002/TeleBall/tarball/master">Download TAR</a></li>
+          <li onclick="window.open('https://github.com/sy2002/TeleBall', 'newgithubwin');" class="git"><a class="buttons github" href="https://github.com/sy2002/TeleBall" target="newgithubwin">View On GitHub</a></li>
+        </ul>
+        <p class="header">This project is maintained by <a class="header name" href="http://www.sy2002.de">sy2002</a></p>
+      </header>
+      <section>        
+        <h1 id="teleball---software">TeleBall - Software</h1>
+
+<h2 id="basics">Basics</h2>
+
+<p>The newsest stable release version is
+<a href="https://github.com/sy2002/TeleBall/releases/tag/V1.2">TeleBall Version 1.2</a>,
+you will also find the releasenotes here.</p>
+
+<p>TeleBall is implemented in a C / C++ mixture (more C than C++) as this is
+rather typical for Arduino projects. You need the
+<a href="http://arduino.cc/de/Main/Software">Arduino IDE</a> to get started.</p>
+
+<h3 id="folder-structure">Folder Structure</h3>
+
+<p>All sources are located below the <code>src</code> folder, which contains the following
+file and folder structure:</p>
+
+<pre><code>archive         Historic TeleBall software releases
+TeleBall        As per Arduino convention, the "Sketch" that contains
+                the source code is located inside an own folder that
+                has the same name as the Sketch itself: TeleBall.
+                Compile TeleBall.ino and upload it to create TeleBall's
+                firmware.
+libraries.zip   This ZIP contains the 3rd party libraries that
+                TeleBall.ino needs to compile in a proven-to-work
+                versions.
+</code></pre>
+
+<h3 id="libraries">Libraries</h3>
+
+<p>TeleBall is using two 3rd party libraries. As mentioned above, the GIT repository
+contains the versions of these libraries that are known to work with TeleBall. If
+you prefer to use newer versions, you can find them here:</p>
+
+<ul>
+  <li>MAX7221 driver: <a href="https://github.com/wayoda/LedControl">wayoda / LedControl</a></li>
+  <li>nRF24L01+ driver: <a href="http://tmrh20.github.io/RF24/">TMRh20 / RF24</a></li>
+</ul>
+
+<p>Instructions for how-to install these libraries are <a href="http://arduino.cc/en/Guide/Libraries">here</a>.</p>
+
+<h3 id="flashing-the-firmware">Flashing the Firmware</h3>
+
+<ol>
+  <li>Install the Arduino IDE and the libraries (as described above)</li>
+  <li>Connect TeleBall via USB</li>
+  <li>Double-click <code>TeleBall.ino</code> or open it manually in the Arduino IDE</li>
+  <li>Select the right Serial Port in the IDE, this can be
+<a href="http://arduino.cc/en/pmwiki.php?n=Guide/Troubleshooting#toc15">a bit tricky</a>
+also depending on the actual board you are using (original or clone): You need
+to find and install the right USB-to-serial driver.</li>
+  <li>Choose <code>File/Upload</code> or press the “=&gt;” icon: The upload should start</li>
+  <li>After a successful upload, TeleBall starts in BreakOut mode.</li>
+</ol>
+
+<p>Hint: USB is not strong enough to power TeleBall. Particularly the analog inputs
+are not calibrated correctly when running on USB. That means: USB power is good
+enough to check, if flashing the firmware (uploading the firmware) worked, but
+not for much more.</p>
+
+<h2 id="main-ideas">Main Ideas</h2>
+
+<p>The software implementation of TeleBall relies on three main ideas:</p>
+
+<ul>
+  <li>Heartbeat of TeleBall: Arduino’s loop() concept</li>
+  <li>Game Mode FSM: A state machine modelling the current macro state of the device</li>
+  <li>Master/slave concept in Tennis: One device completely renders the whole game</li>
+</ul>
+
+<p>TeleBall works a lot with global variables and constants as we are in a single instance
+scenario and therefore encapsulation is not necessary.</p>
+
+<h3 id="heartbeat-of-teleball">Heartbeat of TeleBall</h3>
+
+<p>The whole TeleBall application is written in a way, that in (nearly) no function or situation
+we have a blocking state. That means, that the main loop (Arduino’s <code>loop()</code> function) is
+always running, i.e. called again and again, like a heartbeat. This leads to:</p>
+
+<ul>
+  <li>Fault tolerance as things can recover in subsequent iterations of the loop.</li>
+  <li>Possibility to avoid interrupt programming as the loop() is cycled fast enough
+to easily allow polling of all inputs and even of the radio</li>
+  <li>The timeout mechanism can conveniently be implemented at one place at the end of the main loop</li>
+</ul>
+
+<p>The main loop is essentially executing the following steps:</p>
+
+<ol>
+  <li>Check if a reset is to be performed and execute it, if necessary</li>
+  <li>Check if another player/device is there for Tennis for Two, if yes: initiate the pairing process</li>
+  <li>Read and handle input from the potentiometer and the button (called <code>Universal Button</code>)</li>
+  <li>Call a Game Mode handler, which itself is a small main loop on its own</li>
+  <li>Check and handle timeout</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span>
+<span class="p">{</span>   
+    <span class="k">if</span> <span class="p">(</span><span class="n">perform_reset</span><span class="p">)</span>
+        <span class="n">reset</span><span class="p">();</span>
+        
+    <span class="c1">//check for other player/device and set the variable RadioMode,</span>
+    <span class="c1">//i.e. no radio connection, act as master or act as slave</span>
+    <span class="n">radioScanAndDetermineMode</span><span class="p">();</span>
+    
+    <span class="c1">//handle various input ports and the orientation</span>
+    <span class="n">handleInput</span><span class="p">();</span>
+    <span class="n">handleOrientation</span><span class="p">();</span>
+    <span class="n">handleBrightness</span><span class="p">();</span>
+    
+    <span class="k">switch</span> <span class="p">(</span><span class="n">game_mode</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">case</span> <span class="nl">gmBreakOut</span><span class="p">:</span>    <span class="n">playBreakOut</span><span class="p">();</span>        <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="nl">gmTennis</span><span class="p">:</span>      <span class="n">playTennis</span><span class="p">();</span>          <span class="k">break</span><span class="p">;</span>
+        
+        <span class="k">case</span> <span class="nl">gmSpeed</span><span class="p">:</span>       <span class="n">adjustSpeed</span><span class="p">();</span>         <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="nl">gmBrightness</span><span class="p">:</span>  <span class="n">adjustBrightness</span><span class="p">();</span>    <span class="k">break</span><span class="p">;</span>   
+        
+        <span class="k">case</span> <span class="nl">gmPaddleLeft</span><span class="p">:</span>     
+        <span class="k">case</span> <span class="nl">gmPaddleRight</span><span class="p">:</span>
+            <span class="n">adjustPaddle</span><span class="p">();</span>
+            <span class="k">break</span><span class="p">;</span>
+
+        <span class="k">case</span> <span class="nl">gmEEPROM</span><span class="p">:</span>      <span class="n">manageEEPROM</span><span class="p">();</span>        <span class="k">break</span><span class="p">;</span>            
+    <span class="p">}</span>
+    
+    <span class="c1">//if radio is active (aka if tennis), time out, e.g. because the other</span>
+    <span class="c1">//device was switched off or it was moved out of transmission range, etc.</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">RadioMode</span> <span class="o">&gt;</span> <span class="n">rmNone</span> <span class="o">&amp;&amp;</span> <span class="n">millis</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">RadioTimedOut</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Radio</span><span class="p">.</span><span class="n">flush_tx</span><span class="p">();</span>
+        <span class="n">radioEmptyReadFIFO</span><span class="p">();</span>
+        <span class="n">game_mode</span> <span class="o">=</span> <span class="n">gmTennis</span><span class="p">;</span>           <span class="c1">//make sure, that tennis is reset, when calling reset() ...</span>
+        <span class="n">reset</span><span class="p">();</span>                        <span class="c1">//... game_mode could be config modes like gmSpeed, etc.</span>
+        <span class="n">tennisSwitchToBreakOut</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>  <span class="c1">//switch to BreakOut but continue to try to find another device for tennis</span>
+    <span class="p">}</span></code></pre></div>
+
+<h3 id="game-mode-state-machine">Game Mode State Machine</h3>
+
+<p>The GameMode models the macro state the device is currently in: Are we playing BreakOut
+or Tennis for Two? Are we currently in any configuration menu?</p>
+
+<pre><code>enum GameMode
+{
+    //games
+    gmBreakOut,
+    gmTennis,
+    
+    //standard configuration menu
+    gmSpeed,
+    gmBrightness,
+    
+    //advanced configuration menu
+    gmPaddleLeft,
+    gmPaddleRight,
+    
+    //EEPROM: store current settings or reset to default
+    gmEEPROM
+};
+</code></pre>
+
+<p>There is a global variable called <code>game_mode</code> which reflects the current state of
+the game. GameMode is modeled as a classical state machine (FSM), whose state progressing is
+like described in the following; <code>b(x)</code> means <code>button pressed as long as x</code>:</p>
+
+<pre><code>[gmBreakOut | gmTennis] =&gt; b(1sec)    =&gt; [gmSpeed]
+[gmSpeed]               =&gt; b(quickly) =&gt; [gmBreakOut | gmTennis]
+[gmSpeed]               =&gt; b(4sec)    =&gt; [gmBrightness]
+[gmBrightness]          =&gt; b(quickly) =&gt; [gmPaddleLeft]
+[gmPaddleRight]         =&gt; b(quickly) =&gt; [gmEEPROM]
+[gmEEPROM]              =&gt; b(quickly) =&gt; [gmBreakOut | gmTennis]
+
+[gmBreakOut]            =&gt; successful pairing   =&gt; [gmTennis]
+[gmBreakOut]            =&gt; unsuccessful pairing =&gt; [gmBreakOut]
+[gmTennis]              =&gt; timeout              =&gt; [gmBreakOut]
+</code></pre>
+
+<p>The button-press related state changes are done in the function <code>readUniversalButton()</code>.
+All other state changes are scattered all over the code, because changing the Game Mode is
+an essential thing to do that can be necessary in a lot of situations.</p>
+
+<h3 id="masterslave-concept-in-tennis-for-two">Master/Slave Concept in Tennis for Two</h3>
+
+<p>Tennis for Two is implemented using a Master/slave concept. That means, that
+as soon as the Pairing finished successfully (see below), one device will become
+the master and one the slave:</p>
+
+<ul>
+  <li>
+    <p>Master: The master is rendering the whole game mechanics including the ball
+position, “ball physics” and ball impacts like hitting the wall or the paddle.
+Furtheron the master is also counting the score and telling the slave when
+to play which sound.</p>
+  </li>
+  <li>
+    <p>Slave: The slave is basically just a display device showing the ball and
+the paddles exactly at the positions that the master defines and playing
+sounds that the master defines. It is additionally transmitting its own
+paddle position and the status of the button.</p>
+  </li>
+</ul>
+
+<p>This approach has the big advantage that no additional device synchronization
+is necessary - it is implicitly achieved due to the fact that the slave is doing
+nothing without the master. The master/slave approach also fits best to the
+radio chip’s architecture: The nRF24L01+ can not act as a real bi-directional
+transceiver, instead the recipient of a data package (slave) is able to send
+payload inside the acknowledge package to the sender (master).</p>
+
+<h2 id="common-mechanisms">Common Mechanisms</h2>
+
+<h3 id="ball-physics">“Ball Physics”</h3>
+
+<p>As we only have 8x8 pixels, implementing real ball physics is near to impossible.
+This is why TeleBall is doing it according to the following rules:</p>
+
+<ul>
+  <li>Only 45 degree angles.</li>
+  <li>If the ball hits the paddle from [left | right], then the ball is reflected
+to the [right | left], i.e. the emergent angle equals the angle of incidence.</li>
+  <li>The same is true, if the ball hits the wall (top, left, right).</li>
+  <li>If the ball hits exactly the corner of the paddle then it is reflected to
+the direction it was coming from.</li>
+  <li>If the ball hits a brick, it is randomly deflected either to the left or
+to the right, the incoming angle plays no role here.</li>
+  <li>Twisting/spinning the ball: If the user moves the paddle quickly while
+the ball is hitting it, the ball’s trajectory can be influenced by
+moving it one pixel to the left or to the right before reflecting it.
+Only with this feature it is possible to win a round of BreakOut at all,
+because otherwise, just like a bishop in chess, the ball would stay on
+well defined diagonal lines forever, never hitting bricks that are on
+“the other” diagonal lines.</li>
+</ul>
+
+<p>The current state of the ball is comprised of the X and Y position stored in
+<code>BallX</code> and <code>BallY</code> as well as the relative ball speed in both directions, stored
+in <code>BalLDX</code> and <code>BallDY</code>. All of the he above mentioned mechanics are implemeted
+by the following two functions, that are used within BreakOut as well as within
+Tennis for Two.</p>
+
+<ul>
+  <li>
+    <p><code>calculateBallMovement(...)</code>: Move the ball according to <code>BallDX</code> and <code>BallDY</code>
+speeds and respect playfield boundaries, i.e. reflect at walls.</p>
+  </li>
+  <li>
+    <p><code>calculatePaddleImpact(...)</code>: Implement the above-mentioned rules when the ball
+hits the paddle. This is mapped to rather straightforward code. There is one
+exception, though: Due to the fact, that for a smooth gaming experience, the paddle
+movement is completely decoupled from the ball movement, a very special case can
+occur, where the paddle is moved “under” the ball after according to the current
+calculation iteration, the ball was already lost. But loosing the ball now would
+feel very unnatural to the player as he has the feeling, that he just in time
+moved the paddle under the ball, so this special case is handled correctly
+and the code for that is not that straightforward as it undos the last
+movement iteration.</p>
+  </li>
+</ul>
+
+<h3 id="waiting">Waiting</h3>
+
+<p>There are multiple situations in BreakOut as well as in Tennis for Two, where the
+ball is stopped for a while and “waiting”, before the game continues. Some examples
+are: at the beginning of the game; when loosing a ball before the new game begins;
+after switching to Tennis; after switching back from a configuration menu to the
+game; etc.</p>
+
+<p>The waiting is implemented by setting the velocity vector <code>(BallDX | BallDY)</code> to zero.
+Obviously <code>calculateBallMovement(...)</code> is then only adding zeros to the ball’s
+position and the ball is waiting / standing still.</p>
+
+<p>At each <code>playBreakOut()</code> and <code>playTennis()</code> game loop iteration, the function
+<code>respawn_management()</code> is called. It checks, if a certain timeout period set in
+the variable <code>respawn_timer</code> is over and if yes, it sets the velocity vector
+<code>(BallDX | BallDY) to (BallDX_tbs | BallDY_tbs)</code>; the suffix <code>_tbs</code> stands
+for “to-be-set”. This “respawn management” mechanism is not only used at actual
+respawns (i.e. a ball was lost), but also to pause the game, as shown in <code>pauseGame(...)</code>.</p>
+
+<h3 id="mirrored-x-axis">Mirrored X-Axis</h3>
+
+<p>Due to the way how we wired the MAX7221 to the KWM-R30881CBB, where the rows are the
+cathodes, we need to mirror the x-axis. This is why <code>putPixel(...)</code> is doing the
+following: `Matrix.setLed(0, 7 - x, y, on)</p>
+
+<h3 id="saving-sram">Saving SRAM</h3>
+
+<p>The Arduino Nano only has about 2kB of SRAM, so it makes sense to use the program
+memory for storing constant values. This is done by the <code>PROGMEM</code> keyword. Data
+retrieval is done by specialized functions having the <code>_from_PROGMEM</code> suffix.</p>
+
+<p>Hint: Declaring a global variable <code>const</code> is not enough to move it to the program
+memory because the ATmega328 CPU needs special machine commands to read data from
+there.</p>
+
+<h3 id="eeprom-memory-layout">EEPROM Memory Layout</h3>
+
+<p>Upon each device start, the TeleBall device fingerprint is checked. If it is there,
+then TeleBall assumes valid data for the other variables. Otherwise it assumes a
+factory new device and initializes the EEPROM memory with factory default values.</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Bytes</td>
+      <td>Type</td>
+      <td>Value</td>
+    </tr>
+    <tr>
+      <td>00..07</td>
+      <td>chars</td>
+      <td>TeleBall device fingerprint: {‘T’, ‘e’, ‘l’, ‘e’, ‘B’, ‘a’, ‘l’, ‘l’};</td>
+    </tr>
+    <tr>
+      <td>08..09</td>
+      <td>unsigned int</td>
+      <td>Ball speed</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>byte</td>
+      <td>Display intensity</td>
+    </tr>
+    <tr>
+      <td>11..12</td>
+      <td>unsigned int</td>
+      <td>Leftmost poti position (calibrate paddle user experience)</td>
+    </tr>
+    <tr>
+      <td>13..14</td>
+      <td>unsigned int</td>
+      <td>Rightmost poti position (calibrate paddle user experience)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="breakout">BreakOut</h2>
+
+<h3 id="game-loop">Game Loop</h3>
+
+<p>BreakOut’s game loop is part of the main <code>loop()</code> as it is called from the inside the
+<code>switch</code>statement there. <code>playBreakOut()</code> must not disturb the “heartbeat”, therefore
+also no function there shall be blocking. An excpetion is the case, when a player
+wins or looses the game. Here, the game loop comes to a halt and the programm is looping
+in a tight while loop.</p>
+
+<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="nf">playBreakOut</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">//draw all playfield elements</span>
+    <span class="n">drawPattern</span><span class="p">(</span><span class="n">bricks</span><span class="p">,</span> <span class="n">bricks_levelheight</span><span class="p">[</span><span class="n">Level</span><span class="p">]);</span>
+    <span class="n">drawBall</span><span class="p">();</span>
+    <span class="n">handlePaddle</span><span class="p">(</span><span class="n">Paddle</span><span class="p">,</span> <span class="n">Paddle_Old</span><span class="p">);</span>
+
+    <span class="n">checkCollisionAndWon</span><span class="p">();</span>    
+
+    <span class="c1">//calculate ball movement</span>
+    <span class="c1">//the ball movement is de-coupled from the paddle movement, i.e. a lower ball speed</span>
+    <span class="c1">//does NOT lower the paddle movement speed    </span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">Timer</span><span class="p">)</span>
+        <span class="n">Timer</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">millis</span><span class="p">()</span> <span class="o">-</span> <span class="n">Timer</span> <span class="o">&gt;=</span> <span class="n">Speed</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Timer</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">calculateBallMovement</span><span class="p">(</span><span class="n">gmBreakOut</span><span class="p">);</span>
+        <span class="n">calculatePaddleImpact</span><span class="p">(</span><span class="n">Paddle</span><span class="p">,</span> <span class="n">LastPaddlePos</span><span class="p">,</span> <span class="n">PaddleHit_Bottom</span><span class="p">);</span>    
+    <span class="p">}</span>
+        
+    <span class="n">checkLost</span><span class="p">();</span>
+    <span class="n">respawnManagement</span><span class="p">();</span>
+   
+    <span class="k">if</span> <span class="p">(</span><span class="n">Balls</span> <span class="o">!=</span> <span class="n">Balls_Old</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Balls_Old</span> <span class="o">=</span> <span class="n">Balls</span><span class="p">;</span>
+        <span class="n">manageLEDs</span><span class="p">(</span><span class="n">Balls</span><span class="p">);</span>
+    <span class="p">}</span>        
+<span class="p">}</span></code></pre></div>
+
+<p>It is worth mentioning, that the movement of the paddle is asynchronously
+decoupled from the movement of the ball: <code>handlePaddle(...)</code> is called with the
+maximum speed that the Arduino can run through the game loop. On the other hand,
+<code>calculateBallMovement(...)</code> and <code>calculatePaddleImpact(...)</code> is only called, when
+an amount of milliseconds specified by the variable <code>Speed</code> has passed since the
+last ball movement. This mechanism ensures, that the paddle movements feel natural
+to the user, independent from the game’s current speed.</p>
+
+<h3 id="adding-or-modifing-breakout-levels">Adding or Modifing BreakOut Levels</h3>
+
+<ol>
+  <li>Adjust the <code>const byte Levels</code> to the actual amount of levels that you have.</li>
+  <li>For each level, add a structure with <code>1</code> and <code>0</code> as shown below. Each <code>1</code> represents
+a brick and each <code>0</code> is an empty space.</li>
+  <li>For each level, adjust the <code>bricks_levelheight</code> array to reflect the amount of
+lines / rows that the actual level is having.</li>
+  <li>Currently, <code>4 is the hardcoded maximum height of a level. If your level has a smaller
+amount of rows, then fill it with </code>0<code> as shown in the below-mentioned code snippet's
+first level. We do not reccomend to have a larger amount of rows than </code>4`.</li>
+</ol>
+
+<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">const</span> <span class="n">byte</span> <span class="n">Levels</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="k">const</span> <span class="n">byte</span> <span class="n">bricks_levelheight</span><span class="p">[</span><span class="n">Levels</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">};</span>
+<span class="k">const</span> <span class="n">byte</span> <span class="n">bricks_reset</span><span class="p">[</span><span class="n">Levels</span><span class="p">][</span><span class="mi">4</span><span class="p">][</span><span class="mi">8</span><span class="p">]</span> <span class="n">PROGMEM</span> <span class="o">=</span>
+<span class="p">{</span>
+    <span class="p">{</span>
+        <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span>
+        <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span>
+        <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span>
+        <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">}</span>
+    <span class="p">},</span>
+    
+    <span class="p">{</span>
+        <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span>
+        <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span>
+        <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">},</span>
+        <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">}</span>
+    <span class="p">},</span>
+    
+    <span class="p">{</span>
+        <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span>
+        <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span>
+        <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span>
+        <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span></code></pre></div>
+
+<h2 id="tennis-for-two">Tennis for Two</h2>
+
+<h3 id="device-pairing">Device Pairing</h3>
+
+<p>In the first two minutes after turning the device on - or to be more precise: until the
+milliseconds counter of the Arduino reaches the value specified by the global constant
+<code>RadioPowerSaveTime</code>, TeleBall is scanning for another device / another player, that
+could be a potential partner for Tennis for Two. After that time period, for saving
+battery power, the radio device is put into a low-power mode (switched-off).</p>
+
+<p>The scanning itself has two functions: Find another device and determine, who is
+master and who is slave. It works like this:</p>
+
+<ol>
+  <li>
+    <p>Wait a random amount of time as specified by <code>RadioWait_Min</code> and <code>RadioWait_Max</code>;
+currently this is between 500 and 850 milliseconds.</p>
+  </li>
+  <li>
+    <p>Check if in the meantime - between the last check and the random wait time -  a
+package with the Master Token arrived. If yes, then there is another device: We
+acknowledge (ACK) the Master Token with the Slave Token,  which means that we
+are now the slave and the other device is the master and we continue with step (4). </p>
+  </li>
+  <li>
+    <p>If no Master Token was recieved, the radio chip is switched into sending mode
+and we are sending a Master Token. If we receive a Slave Token as ACK then
+we are now the master and the other device is the slave and we can continue
+with step (4). Otherwise we switch back the radio chip into receive mode and
+go back to step (1).</p>
+  </li>
+  <li>
+    <p>Switch the global <code>game_mode</code> to <code>gmTennis</code>, which means that from now on
+the Tennis game loop will run and that the master / slave state machine will
+run.</p>
+  </li>
+  <li>
+    <p>Ask each user, if he wants to play Tennis for Two, by showing a “?” and let
+the user answer the question by turning the paddle. Right means yes and shows
+a “!” and left means no and shows a “?”. If no: Stop scanning for other
+TeleBall devices by setting RadioMode to <code>rmIgnore</code> and go back to BreakOut.
+This functionality is performed in <code>tennisHandleMultiplayerQuestion()</code>. </p>
+  </li>
+  <li>
+    <p>As soon as a player answers “!”, i.e. yes, the state machine takes care,
+that the loop executes <code>tennisWaitForOtherPartyToJoin()</code>, which
+does what the name suggests. Additionally, it implements a timeout, so that
+after ~9 seconds of no answer, the device goes back to BreakOut mode and
+also stops scanning via <code>rmIgnore</code>.</p>
+  </li>
+  <li>
+    <p>If both players accept, the Tennis for Two game is started.</p>
+  </li>
+</ol>
+
+<p>The above mentioned master and slave tokens are technically 32bit numbers
+that are unique within the TeleBall radio protocol.</p>
+
+<p>Note, that this whole Device Pairing process happens kind of asynchronously,
+i.e. the whole operation is not blocking but part of the main <code>loop()</code> via
+the <code>radioScanAndDetermineMode()</code> function and part of the <code>playTennis()</code>
+game loop via “Radio Modes” (see below).</p>
+
+<p>This algorithm, as well as the way the current whole TeleBall firmware talks
+with the radio device is not capable of handling more then two TeleBall devices
+in radio range; the behaviour would be undefined.</p>
+
+<h3 id="radio-specifics">Radio Specifics</h3>
+
+<h4 id="radio-configuration">Radio Configuration</h4>
+
+<p>TeleBall is currently hard coded to “channel 76”. The nRF24L01+ has a channel
+width of 1MHz on the 2.4GHz band, i.e. we are sending on 2.476GHz. Due to the
+fact, that the 2.4 GHz band is pretty congested (WLAN, BlueTooth, microwave
+ovens, etc.), we should implement some smarter behaviour and also in general
+there is definitly room for improvement, when it comes to the current
+shortcomings of TeleBall’s radio range as described in <a href="play.html">Play</a>:
+We could reduce the transmission speed, increase retries on failed sends,
+use a better CRC mode and so on. Future versions of TeleBall will/should
+implement this.</p>
+
+<p>For establishing links between two radios, nRF24L01+ works with so called “pipes”.
+Pipes have addresses and only, if two pipes are having the same address, the sender
+and the recipient can communicate with each other. Also this property is hardcoded;
+in TeleBall’s current firmware, everybody is sending into and listening to a pipe
+called <code>TELEB</code>, i.e. having the 5-byte address that corresponds to the ASCII code
+of <code>TELEB</code>.</p>
+
+<p>The payload size as well as the ACK payload size (see below) is set to 4 bytes
+length. In the code, we map this to <code>unsigned long int</code> values that we send
+and receive.</p>
+
+<h4 id="fifo-buffers">FIFO Buffers</h4>
+
+<p>The radio hardware is working fully asynchronously from the Arduino by using
+a send FIFO buffer (TX FIFO) and a recieve FIFO buffer (RX FIFO). When the
+connection is established, the FIFOs will be filled in the background and
+TeleBall’s firmware code can check, if for example a new package arrived
+in the RX FIFO or if there is still something in the RX FIFO which means,
+that the recepient did not ackknowledge, yet for a multitude of reasons.</p>
+
+<p>The TeleBall implementation of the receive function <code>radioReceive(...)</code>
+is currently always emptying the RX FIFO which means, that messages
+from the master can get lost not only due to radio problems but also
+due to timing problems. Also, there is no TX FIFO for ACK messages
+built into <code>radioReceive(...)</code>, so also messages from the
+slave to the master can get lost. This opens room for improving the
+communication / radio performance and robustness of TeleBall.</p>
+
+<h4 id="unidirectional-communication">Unidirectional Communication</h4>
+
+<p>As described above, our radio chip, the nRF24L01+, is not offering a real bidirectional
+communication mode. But it offers an advanced unidirectional communication called
+Enhanced Shockburst. The most important feature of it for our purposes is the fact, that
+the sender gets not only an acknowledge (ACK) from the recipient, that his package was well
+received, but he also can get payload within the ACK packet.</p>
+
+<p>In our master / slave model, the master is always the sender and the slave always the
+recipient. In other words: The slave can never directly send something to the master,
+he can only wait for receiving something and then use the ACK payload to send to
+the master. So the master always needs to poll for the slave’s data and the slave
+always needs to be listening if a new package from the master arrives.</p>
+
+<p>In normal game operation, we are using two global <code>32bit (4 byte) unsigned long int</code>
+values to implement this: <code>RadioGameDataFromMaster</code> is sent from the master to the
+slave and <code>RadioGameDataFromSlave</code> is the ACK payload package that is sent from the
+slave to the master. Both variables are implemented as <em>bitfields</em>, so that we
+can conveniently treat these 32bits / 4 bytes like a struct.</p>
+
+<p>In other operation modes, e.g. during Pairing or during configuration, the nature
+of the 4 byte packages changes to “Tokens” (as described above) or to simple
+<code>unsigned ints</code> like in Speed Set mode.</p>
+
+<h4 id="timeout">Timeout</h4>
+
+<p>The two main functions for implementing our pseudo-bidirectional communication
+aka sender pools and recipient answers via ACK payload are: <code>radioSend(...)</code> and
+<code>radioReceive(...)</code>.</p>
+
+<p>Both functions are resetting the timeout counter on success, that means that
+they need to be called very regularly, otherwise the timeout function of the
+main loop will be activated. Therefore, even when “nothing is happening”, master
+and slave need to communicate with each other. This is why for example in
+Tennis for Two even the “won or lost smileys” are not leaving the main game
+loop: Communication is kept alive and therefore the timeout will not happen.</p>
+
+<h3 id="implementing-the-master--slave-concept">Implementing the Master / Slave Concept</h3>
+
+<h4 id="radio-mode-state-machine">Radio Mode State Machine</h4>
+
+<p>The master / slave mechanism is implemented using a second state machine on
+top of the Game Mode state machine: Radio Mode. The basic Radio Mode states
+are handled in the main game loop of tennis called <code>playTennis()</code>. Other
+Radio Modes are handled at <code>adjustSpeed()</code> and at places scattered all
+over the code, similarly to the Game Mode.</p>
+
+<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">enum</span>
+<span class="p">{</span>
+    <span class="c1">//some checks are done via &quot;&gt; rmNone&quot;, i.e. it is important that the modes are in order</span>
+    <span class="n">rmIgnore</span>                    <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span>   <span class="c1">//do not scan any more, but ignore other TeleBall devices</span>
+    <span class="n">rmNone</span>                      <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>   <span class="c1">//no other TeleBall device found</span>
+    
+    <span class="c1">//initial find devices and ask the question</span>
+    <span class="n">rmMaster_init</span>               <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>    <span class="c1">//about to enter Master mode</span>
+    <span class="n">rmSlave_init</span>                <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>    <span class="c1">//about to enter Slave mode</span>
+    <span class="n">rmMaster_wait</span>               <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>    <span class="c1">//waiting for Slave to start the game</span>
+    <span class="n">rmSlave_wait</span>                <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>    <span class="c1">//waiting for Master to start the game</span>
+    
+    <span class="c1">//standard run mode</span>
+    <span class="n">rmMaster_run</span>                <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>    <span class="c1">//running in Master mode    </span>
+    <span class="n">rmSlave_run</span>                 <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>    <span class="c1">//running in Slave mode</span>
+    
+    <span class="c1">//special modes for reset and speed adjustments</span>
+    <span class="n">rmMaster_reset</span>              <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>    <span class="c1">//Master device resetting</span>
+    <span class="n">rmSlave_reset</span>               <span class="o">=</span> <span class="mi">7</span><span class="p">,</span>    <span class="c1">//Slave device resetting</span>
+    <span class="n">rmMaster_speedset_by_Master</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>    <span class="c1">//Master device in speed set mode</span>
+    <span class="n">rmMaster_speedset_by_Slave</span>  <span class="o">=</span> <span class="mi">9</span><span class="p">,</span>    <span class="c1">//Master device listening to Slave&#39;s speed set</span>
+    <span class="n">rmSlave_speedset_by_Master</span>  <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>   <span class="c1">//Slave device listening to Master&#39;s speed set</span>
+    <span class="n">rmSlave_speedset_by_Slave</span>   <span class="o">=</span> <span class="mi">11</span>    <span class="c1">//Slave device in speed set mode</span>
+<span class="p">}</span> <span class="n">RadioMode</span> <span class="o">=</span> <span class="n">rmNone</span><span class="p">;</span></code></pre></div>
+
+<p>The following state changes are for the sake of simplicity shown by only using the master
+as an example. They work the analogical at the slave’s side:</p>
+
+<pre><code>[rmNone]         =&gt;  found slave     =&gt; [rmMaster_init]
+[rmMaster_init]  =&gt;  answered: yes   =&gt; [rmMaster_wait]
+[rmMaster_init]  =&gt;  answered: no    =&gt; [rmIgnore] &amp; game_mode = gmBreakOut
+[rmMaster_wait]  =&gt;  other joins     =&gt; [rmMaster_run]
+[rmMaster_wait]  =&gt;  timeout: user   =&gt; [rmIgnore] &amp; game_mode = gmBreakOut
+[rmMaster_run]   =&gt;  b(quickly)      =&gt; [rmMaster_reset]
+[rmMaster_run]   =&gt;  b(1sec)         =&gt; [rmMaster_speedset_by_Master]
+[rmMaster_run]   =&gt;  slave: SpeedSet =&gt; [rmMaster_speedset_by_Slave]
+[rmMaster_reset] =&gt;  master: reset   =&gt; [rmMaster_run]
+[&lt;any state&gt;]    =&gt;  timeout: radio  =&gt; [rmNone] &amp; game_mode = gmBreakOut
+
+[rmMaster_speedset_by_Master] =&gt; b(quickly) =&gt; [rmMaster_run]
+
+[rmMaster_speedset_by_Master] =&gt; b(4sec)
+                              =&gt; [rmMaster_speedset_by_Master] &amp; 
+                                 game_mode cycles through:
+                [gmBrightness]          =&gt; b(quickly) =&gt; [gmPaddleLeft]
+                [gmPaddleRight]         =&gt; b(quickly) =&gt; [gmEEPROM]
+                [gmEEPROM]              =&gt; b(quickly) =&gt; [gmTennis]
+
+[rmMaster_speedset_by_Slave] =&gt; slave: Flag_Leave =&gt; [rmMaster_run]
+</code></pre>
+
+<p>Explanation of state changes:</p>
+
+<ul>
+  <li>“<code>found slave</code>” indicates a successful step (3) as described above in Device Pairing</li>
+  <li>The “<code>answered</code>” condition is related to the “?” / “!” choice.</li>
+  <li>“<code>other joins</code>” means, that while being in the the <code>tennisWaitForOtherPartyToJoin()</code> function,
+the master received a <code>RadioSlaveWaitA</code> token when querying (polling) for it using
+the <code>RadioMasterWaitQ</code> token, i.e. that the slave joined the Tennis for Two match.</li>
+  <li>“<code>timeout: user</code>”” means, that the master answered “!” and started waiting
+and the slave did not answer at all even after the timeout of ~9 secs, or answered “?”.</li>
+  <li>“<code>b(x)</code>” means the red button on the master device was pressed as long as x.</li>
+  <li>“<code>slave: SpeedSet</code>” means slave sendet a speed set request via ACK and the
+master acknowledged it [!sic] by setting the flag <code>RadioGameDataFromMaster.SpeedSet_Ack</code>.</li>
+  <li>“<code>master: reset</code>”: master has performed a reset and sends a reset command to slave</li>
+  <li>
+    <p>“<code>timeout:radio</code>” means, that the radio connection between the devices broke
+down; this is why the new state of the state machine is [rmNone], i.e. the devices
+try to connect again, instead of [rmIgnore].</p>
+  </li>
+  <li>While cycling through the advanced configuration options (brightness, paddle, EEPROM),
+the Radio Mode stays rmMaster_speedset_by_Master to ensure, that the communication
+between master and slave continues and no <code>timeout: radio</code> happens.</li>
+</ul>
+
+<h4 id="different-game-loops-for-master-and-slave">Different Game Loops for Master and Slave</h4>
+
+<p>The master / slave concept implies that both devices are functioning completely differently,
+as already described above. In short: The master “does / calculates everything” and the slave
+is just a “dumb display device”. This is reflected in different game loops for master
+and slave.</p>
+
+<h5 id="pseudocode-for-master-game-loop-tennisplaymaster">Pseudocode for Master Game Loop <code>tennisPlayMaster()</code>:</h5>
+
+<ol>
+  <li>Transform own coordinates into the coordinate space of the slave</li>
+  <li>Transmit control structure, including mirrored coordinates, current score of slave, 
+flags (won or lost? reset? speed set?), sound commands (wall, paddle, lost)</li>
+  <li>Send <code>RadioGameDataFromMaster</code> and recieve <code>RadioGameDataFromSlave</code></li>
+  <li>Handle won or lost state</li>
+  <li>Draw: ball, local paddle, remote paddle</li>
+  <li>Handle special requests from the slave: reset, speed set mode</li>
+  <li>Calculate the ball movement</li>
+  <li>Calculate the paddle impact: for the master and for the slave paddle</li>
+  <li>Check for lost ball</li>
+  <li>Issue sound commands during (7), (8) and (9)</li>
+  <li>Handle ball respawn</li>
+</ol>
+
+<h5 id="pseudocode-for-slave-game-loop-tennisplayslave">Pseudocode for Slave Game Loop <code>tennisPlaySlave()</code>:</h5>
+
+<ol>
+  <li>Draw own paddle</li>
+  <li>Transform paddle coordinates into the coordinate space of the master and fill the
+ACK data structure that is used to transmit these coordinates during receiving</li>
+  <li>Receive <code>RadioGameDataFromMaster</code> and send <code>RadioGameDataFromSlave</code> via ACK</li>
+  <li>Copy the ball’s coordinates and movement vector plus other data into local variables</li>
+  <li>Handle won or lost state</li>
+  <li>Draw the ball and the remote paddle and play sounds</li>
+  <li>Handle special requests from the master: reset, speed set mode</li>
+</ol>
+
+<h4 id="identifying-the-master-and-the-slave-device">Identifying the Master and the Slave Device</h4>
+
+<p>The current version 1.2 of the TeleBall firmware shows during the first two seconds of the
+“question mode” (in Device Pairing), while the “?” displayed statically, if a device is
+a master or a slave device:</p>
+
+<ul>
+  <li>Master: Leftmost pixel at the bottom line of the 8x8 display is lit.</li>
+  <li>Slave: The second-leftmost pixel at the bottom line is lit.</li>
+</ul>
+
+<h2 id="adding-more-games">Adding More Games</h2>
+
+<p>TeleBall’s current firmware is only using about half of the program memory of the Arduino Nano.
+That means there is plenty of room left for software extensions. As an inspiration for you,
+here are simple games, whose gameplay can be kind of adapted to the 8x8 LED display:</p>
+
+<ul>
+  <li>Tennis for Four (four TeleBall devices)</li>
+  <li>Tetris</li>
+  <li>Space Invaders</li>
+  <li>Side scrollers: Jump’n’Run or shooters</li>
+  <li>Pac Man</li>
+  <li>Snake</li>
+</ul>
+
+<p>If you want to add more games we suggest, that you do it like described here:</p>
+
+<ol>
+  <li>
+    <p>Use the concept of <a href="http://arduino.cc/en/Hacking/BuildProcess">Multi File Sketches</a> to stay
+updatable: If you put the main code of your new games to separate files with no file extension,
+e.g. you add the file <code>MyNewGame</code> (no file extension) to the folder <code>src/TeleBall</code>, then
+you are able to use everything from this file inside the main file <code>TeleBall.ino</code>. Even
+though you will need to touch <code>TeleBall.ino</code>, this way of working minimizes the code
+merging in future. You might need to declare function headers (one liners) in each of
+the files so that the compiler finds everything.</p>
+  </li>
+  <li>
+    <p>Add a new mode to the <code>GameMode</code> enum as shown above and extend the main loop’s
+<code>switch</code>statement by a new case, something like <code>gmMyNewGame</code>. Be mindful, that
+no function should “block”, so if something takes longer, implement it asynchronously.
+Furtheron, add a custom reset routine and add it to the <code>switch</code> statement in <code>reset()</code>.
+Last but not least, write some routines that are able to backup and to restore your
+game state and call them inside <code>backupGameState()</code> and <code>restoreGameState()</code>.</p>
+  </li>
+  <li>
+    <p>Exending the behaviour of <code>readUniversalButton()</code> seems to be a good place to add
+the entry point for your new game. Alternately or additionally, you can change
+<code>game_mode_default</code> to let TeleBall start with your new game instead of with BreakOut.</p>
+  </li>
+  <li>
+    <p>There is plenty of room left in the EEPROM, too, so it is safe to create new <code>loc...</code>
+constants and to extend <code>eepromWriteFingerprintAndDefaults()</code>, <code>eepromReadSettings()</code>
+and <code>eepromWriteSettings()</code> accordingly. We suggest you keep to the convention and
+use the suffix <code>_default</code>for factory default <code>const</code> variables.</p>
+  </li>
+</ol>
+
+      </section>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+  </body>
+</html>

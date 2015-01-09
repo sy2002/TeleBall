@@ -7,7 +7,7 @@
     
     * idea, code and original circurit design by sy2002
     * additional circurit design and board layout by doubleflash
-    * body housing/case by Miro
+    * body housing/case by lamags
     
     License: You are free to share and adapt for any purpose,
     even commercially as long as you attribute to sy2002 and
