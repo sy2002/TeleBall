@@ -11,7 +11,7 @@ Basics
 
 The newsest stable release version is
 [TeleBall Version 1.2](https://github.com/sy2002/TeleBall/releases/tag/V1.2),
-you will also find the releasenotes here.
+you will also find the release notes here.
 
 TeleBall is implemented in a C / C++ mixture (more C than C++) as this is
 rather typical for Arduino projects. You need the
