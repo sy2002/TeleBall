@@ -3,8 +3,6 @@ title: TeleBall - Arduino Retro Handheld Game Console
 layout: default
 ---
 
-(runs on github.io)
-
 TeleBall - Retro Handheld Game Console
 ======================================
 
@@ -16,11 +14,15 @@ You need to build it by yourself. It lets you play **BreakOut** in single-player
 mode using one device and **Tennis for Two** in multi-player mode using two devices
 communicating via radio.
 
+<!---
 {% if site.github.pages_hostname != nil %}
 <iframe width="640" height="360" src="http://www.youtube.com/embed/JpwP330C6q0" frameborder="0" allowfullscreen></iframe>
 {% else %}
 ![BreakOut on TeleBall](doc/images/intro_breakout.jpg)
 {% endif %}
+-->
+
+<iframe width="640" height="360" src="http://www.youtube.com/embed/JpwP330C6q0" frameborder="0" allowfullscreen></iframe>
 
 TeleBall is pretty retro and very minimalistic: It features an
 8x8 pixel LED matrix display, a paddle as game controller and one button.
@@ -28,11 +30,15 @@ Therefore, the range of possible games is limited but you will be surprised
 how much fun and even zenlike meditation this kind of gameplay can bring you,
 particularly when you play Tennis for Two with a friend.
 
+<!---
 {% if site.github.pages_hostname != nil %}
 <iframe width="640" height="360" src="http://www.youtube.com/embed/hnW40l3Gluc" frameborder="0" allowfullscreen></iframe>
 {% else %}
 ![Tennis on TeleBall](doc/images/intro_tennis.jpg)
 {% endif %}
+-->
+
+<iframe width="640" height="360" src="http://www.youtube.com/embed/hnW40l3Gluc" frameborder="0" allowfullscreen></iframe>
 
 The videos shown here are both using the beginner-friendly slower game modes.
 When playing Tennis for Two, you might want to switch TeleBall to much
