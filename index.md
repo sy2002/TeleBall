@@ -3,7 +3,11 @@ title: TeleBall - Arduino Retro Handheld Game Console
 layout: default
 ---
 
+<<<<<<< HEAD
 (##github.io##)
+=======
+(runs on github.io)
+>>>>>>> ff02c4eceea9e7c965c2abf071c5ddd6def1773d
 
 TeleBall - Retro Handheld Game Console
 ======================================
