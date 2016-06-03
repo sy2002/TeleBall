@@ -20,13 +20,13 @@
 
 - id: IC1
   img: bom_max7221.jpg
-  desc: The MAX7221CNG is the display driver of the TeleBall.
-  get: Standard / Farnell `1593381`
+  desc: The MAX7221CNG+ is the display driver of the TeleBall.
+  get: Standard / Farnell `2516083`
 
 - id: SV1
   img: bom_radio.jpg
   desc: NRF24L01+ 2.4GHz Antenna Wireless Transceiver Module for Arduino on a breakout board
-  get: 'There are plenty of vendors on ebay selling this. Search for `NRF24L01+ Arduino` on eBay; we used [this one](http://r.ebay.com/2JUtNU).'
+  get: 'There are plenty of vendors on ebay selling this. Search for `NRF24L01+ Arduino`.'
 
 - id: IC2 VREG3
   img: bom_rohm.jpg
@@ -45,8 +45,8 @@
 
 - id: BUTTON
   img: bom_button.jpg
-  desc: "[Focan Electronic](http://focan.en.alibaba.com/) PBS-10C-2 Reverse-logic button by. If you need to find an alternative, use the [datasheet](http://www.pollin.de/shop/downloads/D420320D.PDF) to get the exact specs."
-  get: Not that easy to find. We got it from eBay.de (.de not .com); it is also available on alibaba.com; googling `PBS-10C` might also help. Amazon.com has similar buttons on stock if you search for "`pbs push button`".
+  desc: "[Focan Electronic](http://focan.en.alibaba.com/) PBS-10C-2 reverse-logic button. If you need to find an alternative, use the [datasheet](http://www.pollin.de/shop/downloads/D420320D.PDF) to get the exact specs."
+  get: 'Not that easy to find. Try Amazon, eBay, Alibaba; googling `PBS-10C` might also help. There might be similar buttons available, if you search for "`pbs push button`". IMPORTANT: The PBS-10C-2 is a reverse-logic button, that closes the circuit when not being pressed and opens it when being pressed. If you use another button type, you might need to adjust [this line of code](https://github.com/sy2002/TeleBall/blob/master/src/TeleBall/TeleBall.ino#L1128).'
 
 - id: LS
   img: bom_speaker.jpg
@@ -55,8 +55,8 @@
 
 - id: POTI
   img: bom_poti.jpg
-  desc: "Monacor VRB-141M10 10 kΩ linear mono potentiometer, 6mm shaft diameter, 25mm shaft length + 9,5mm body. If you need to find an alternative, use the [datasheet](http://www.monacor.co.uk/products//vnr/012620/?type=257&no_cache=1) to get the exact specs."
-  get: 'Monacor UK shop [article VRB-141M10](http://www.monacor.co.uk/products/0/vnr/012620/), click on "Find Your Retailer" on the right sidebar. Alternately google for "`Monacor VRB-141M10 10k linear mono potentiometer`".'
+  desc: "Monacor VRB-141M10 10 kΩ linear mono potentiometer, 6mm shaft diameter, 25mm shaft length + 9,5mm body. If you need to find an alternative, use the [datasheet](http://www.monacor.co.uk/categories/potentiometers/vnr/012620/) to get the exact specs."
+  get: 'Monacor UK shop [article VRB-141M10](http://www.monacor.co.uk/categories/potentiometers/vnr/012620/), click on "Find Your Retailer" on the right sidebar. Alternately google for "`Monacor VRB-141M10 10k linear mono potentiometer`".'
 
 - id: C2
   img: bom_c10uf.jpg
@@ -81,9 +81,9 @@
 - id: Knob
   img: bom_knob.jpg
   desc: Black aluminum rotary knob, 40mm diameter for 6mm shaft
-  get: 'Not easy to find. We found [ours](http://r.ebay.com/idjUgo) on ebay.de (.de not .com). Google for `Black aluminum rotary knob, 40mm diameter for 6mm shaft`, sometimes vendors call it a "Volume Control Potentiometer Knob".'
+  get: Not easy to find. Try eBay's [Audi Knobs Section](http://www.ebay.com/bhp/audio-knobs) or google for `Black aluminum rotary knob, 40mm diameter for 6mm shaft`, sometimes vendors call it a "Volume Control Potentiometer Knob".'
 
 - id: Battery Clip
   img: bom_clip.jpg
   desc: KEYSTONE BK5201 Battery Clip, 11.2x12.0 mm, 0.8 mm height of the foot, 10.5mm height including spring. You need 4 of them per TeleBall. Get the [specs here](http://www.luedeke-elektronic.de/images/product_images/popup_images/4836_1.jpg) if you need to find an alternative.
-  get: Not easy to find. Google for `KEYSTONE BK5201` or `KEYSTONE BK5201 Battery Holder` or similar combinations.
+  get: Not easy to find. Amazon or eBay sometimes have it. Google for `KEYSTONE BK5201` or `KEYSTONE BK5201 Battery Holder` or similar combinations.

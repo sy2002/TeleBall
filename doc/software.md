@@ -10,7 +10,7 @@ Basics
 ------
 
 The newsest stable release version is
-[TeleBall Version 1.2](https://github.com/sy2002/TeleBall/releases/tag/V1.2),
+[TeleBall Version 1.3](https://github.com/sy2002/TeleBall/releases/tag/V1.3),
 you will also find the release notes here.
 
 TeleBall is implemented in a C / C++ mixture (more C than C++) as this is
@@ -35,8 +35,9 @@ file and folder structure:
 ### Libraries
 
 TeleBall is using two 3rd party libraries. As mentioned above, the GIT repository
-contains the versions of these libraries that are known to work with TeleBall. If
-you prefer to use newer versions, you can find them here:
+contains a ZIP with versions of these libraries that are known to work with TeleBall.
+We strongly recommend that you use these versions. If you prefer to
+use newer versions, you can find them here:
 
 * MAX7221 driver: [wayoda / LedControl](https://github.com/wayoda/LedControl)
 * nRF24L01+ driver: [TMRh20 / RF24](http://tmrh20.github.io/RF24/)
@@ -638,7 +639,7 @@ and slave.
 
 #### Identifying the Master and the Slave Device
 
-The current version 1.2 of the TeleBall firmware shows during the first two seconds of the
+The current version 1.3 of the TeleBall firmware shows during the first two seconds of the
 "question mode" (in Device Pairing), while the "?" displayed statically, if a device is
 a master or a slave device:
 
