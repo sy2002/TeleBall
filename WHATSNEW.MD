@@ -1,3 +1,11 @@
+TeleBall - Version 1.3 - 06/03/16
+---------------------------------
+
+Improved documentation: Updated the Bill of Material (BOM) in the
+"Electronics" section (some links and some part numbers where outdated).
+
+From a technical perspective, Version 1.3 is identical to Version 1.2.
+
 TeleBall - Version 1.2 - 01/01/15
 ---------------------------------
 
