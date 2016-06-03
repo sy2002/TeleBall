@@ -81,7 +81,7 @@
 - id: Knob
   img: bom_knob.jpg
   desc: Black aluminum rotary knob, 40mm diameter for 6mm shaft
-  get: Not easy to find. Try eBay's [Audi Knobs Section](http://www.ebay.com/bhp/audio-knobs) or google for `Black aluminum rotary knob, 40mm diameter for 6mm shaft`, sometimes vendors call it a "Volume Control Potentiometer Knob".'
+  get: Not easy to find. Try eBay's [Audio Knobs Section](http://www.ebay.com/bhp/audio-knobs) or google for `Black aluminum rotary knob, 40mm diameter for 6mm shaft`, sometimes vendors call it a "Volume Control Potentiometer Knob".'
 
 - id: Battery Clip
   img: bom_clip.jpg
