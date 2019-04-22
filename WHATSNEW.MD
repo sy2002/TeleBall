@@ -1,3 +1,9 @@
+TeleBall - Version 1.4 - 04/22/19
+---------------------------------
+
+Improved documentation and website: Updated outdated links and increased
+the font size to fit better to 2019 website styles.
+
 TeleBall - Version 1.3 - 06/03/16
 ---------------------------------
 
