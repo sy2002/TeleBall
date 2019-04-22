@@ -35,7 +35,7 @@ device:
 * Arduino source code to flash the firmware
 
 TeleBall is made using the
-[Arduino Nano platform](http://arduino.cc/en/Main/ArduinoBoardNano) on a
+[Arduino Nano platform](https://store.arduino.cc/arduino-nano) on a
 custom PCB.
 
 Browse TeleBall's [project page](http://sy2002.github.io/TeleBall)
@@ -78,7 +78,7 @@ TeleBall was designed, built and released as an Open Source / Open Hardware
 project during August 2014 and January 2015.
 
 TeleBall is a project of 
-[MEGA - Museum of Electronic Games & Art](http://www.m-e-g-a.org).
+[MEGA - Museum of Electronic Games & Art](http://www.m-e-g-a.org/diy-teleball/).
 
 We are looking forward to hearing from you. Email to sy2002 at teleball.org
 
