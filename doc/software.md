@@ -10,12 +10,12 @@ Basics
 ------
 
 The newsest stable release version is
-[TeleBall Version 1.3](https://github.com/sy2002/TeleBall/releases/tag/V1.3),
+[TeleBall Version 1.4](https://github.com/sy2002/TeleBall/releases/tag/V1.4),
 you will also find the release notes here.
 
 TeleBall is implemented in a C / C++ mixture (more C than C++) as this is
 rather typical for Arduino projects. You need the
-[Arduino IDE](http://arduino.cc/de/Main/Software) to get started.
+[Arduino IDE](https://www.arduino.cc/en/Main/Software) to get started.
 
 ### Folder Structure
 
@@ -42,7 +42,7 @@ use newer versions, you can find them here:
 * MAX7221 driver: [wayoda / LedControl](https://github.com/wayoda/LedControl)
 * nRF24L01+ driver: [TMRh20 / RF24](http://tmrh20.github.io/RF24/)
 
-Instructions for how-to install these libraries are [here](http://arduino.cc/en/Guide/Libraries).
+Instructions for how-to install these libraries are [here](https://www.arduino.cc/en/Guide/Libraries).
 
 ### Flashing the Firmware
 
@@ -50,7 +50,7 @@ Instructions for how-to install these libraries are [here](http://arduino.cc/en/
 2. Connect TeleBall via USB
 3. Double-click `TeleBall.ino` or open it manually in the Arduino IDE
 4. Select the right Serial Port in the IDE, this can be
-   [a bit tricky](http://arduino.cc/en/pmwiki.php?n=Guide/Troubleshooting#toc15)
+   [a bit tricky](https://www.arduino.cc/en/pmwiki.php?n=Guide/Troubleshooting#toc16)
    also depending on the actual board you are using (original or clone): You need
    to find and install the right USB-to-serial driver.
 5. Choose `File/Upload` or press the "=>" icon: The upload should start
@@ -287,11 +287,11 @@ then TeleBall assumes valid data for the other variables. Otherwise it assumes a
 factory new device and initializes the EEPROM memory with factory default values.
 
 Bytes |Type        |Value
-00..07|chars       |TeleBall device fingerprint: {'T', 'e', 'l', 'e', 'B', 'a', 'l', 'l'};
+00..07|chars       |TeleBall device fingerprint: <br>{'T', 'e', 'l', 'e', 'B', 'a', 'l', 'l'};
 08..09|unsigned int|Ball speed
 10    |byte        |Display intensity
-11..12|unsigned int|Leftmost poti position (calibrate paddle user experience)
-13..14|unsigned int|Rightmost poti position (calibrate paddle user experience)
+11..12|unsigned int|Leftmost poti position <br>(calibrate paddle user experience)
+13..14|unsigned int|Rightmost poti position <br>(calibrate paddle user experience)
 
 BreakOut
 --------

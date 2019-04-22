@@ -16,7 +16,6 @@ communicating via radio.
 
 {% if site.github.pages_hostname != nil %}
 <iframe width="640" height="360" src="http://www.youtube.com/embed/JpwP330C6q0" frameborder="0" allowfullscreen></iframe>
-<br>
 {% else %}
 ![BreakOut on TeleBall](doc/images/intro_breakout.jpg)
 {% endif %}
@@ -29,7 +28,6 @@ particularly when you play Tennis for Two with a friend.
 
 {% if site.github.pages_hostname != nil %}
 <iframe width="640" height="360" src="http://www.youtube.com/embed/hnW40l3Gluc" frameborder="0" allowfullscreen></iframe>
-<br>
 {% else %}
 ![Tennis on TeleBall](doc/images/intro_tennis.jpg)
 {% endif %}

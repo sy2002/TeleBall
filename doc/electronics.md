@@ -63,7 +63,7 @@ Schematics
 
 Download TeleBall's [detailed Schematics PDF](eagle/BreakOut-8x8-rev2-circuit.pdf). The subfolder
 `eagle` of your TeleBall package contains all schematics including the PCB design. We
-used the Freeware version of the specialized CAD software [Eagle](http://www.cadsoftusa.com/)
+used the Freeware version of the specialized CAD software [Eagle](https://www.autodesk.com/products/eagle/free-download)
 to create the schematics and the board layout (PCB design).
 
 ### The Circuit Explained
@@ -130,7 +130,7 @@ Some basics about how these main parts work together:
 Important Files
 ---------------
 
-All files related to TeleBall's electronics are [Eagle](http://www.cadsoftusa.com/)
+All files related to TeleBall's electronics are [Eagle](https://www.autodesk.com/products/eagle/free-download)
 files, so you find them in the `eagle` folder.
 
     BreakOut-8x8-rev2.sch      Eagle schematics file. The above-mentioned
