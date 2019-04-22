@@ -16,6 +16,7 @@ communicating via radio.
 
 {% if site.github.pages_hostname != nil %}
 <iframe width="640" height="360" src="http://www.youtube.com/embed/JpwP330C6q0" frameborder="0" allowfullscreen></iframe>
+<br>
 {% else %}
 ![BreakOut on TeleBall](doc/images/intro_breakout.jpg)
 {% endif %}
@@ -28,6 +29,7 @@ particularly when you play Tennis for Two with a friend.
 
 {% if site.github.pages_hostname != nil %}
 <iframe width="640" height="360" src="http://www.youtube.com/embed/hnW40l3Gluc" frameborder="0" allowfullscreen></iframe>
+<br>
 {% else %}
 ![Tennis on TeleBall](doc/images/intro_tennis.jpg)
 {% endif %}
@@ -99,7 +101,7 @@ TeleBall is a project of the [Museum of Electronic Games & Art](http://www.m-e-g
 
 ### Stay in Touch
 
-If you have any questions or comments, we are happy to hear from you. Email us at
+If you have any questions or comments, we are happy to hear from you:
 
 * sy2002 at teleball.org
 * doubleflash at teleball.org
@@ -110,12 +112,12 @@ If you have any questions or comments, we are happy to hear from you. Email us a
 * TeleBall is built on the [Arduino platform](http://www.arduino.cc), i.e. the
   microcontroller core as well as the software are Arduino based.
 * The case is designed using [FreeCad](http://www.freecadweb.org).
-* The PCB is designed using the free version of [Eagle](http://www.cadsoftusa.com/).
+* The PCB is designed using the free version of [Eagle](https://www.autodesk.com/products/eagle/free-download).
 * The firmware uses [wayoda / LedControl](https://github.com/wayoda/LedControl) as a
-  MAX7221 driver and [TMRh20 / RF24](http://tmrh20.github.io/RF24/) as a nRF24L01+ driver.
+  MAX7221 driver <br>and [TMRh20 / RF24](http://tmrh20.github.io/RF24/) as a nRF24L01+ driver.
 * The great [DuinoKit](http://www.duinokit.com) was sy2002's original inspiration to
-  create the [BreakOut Tutorial](http://duinokit.com/store/showandtell/topic/83-play-breakout-on-duinokit-essentials.html),
+  create <br>the [BreakOut Tutorial](http://duinokit.com/store/showandtell/topic/83-play-breakout-on-duinokit-essentials.html),
   which itself turned into the origin of TeleBall.
-* The project's web and documentation page theme is based on
-  [broccolini / dinky](https://github.com/broccolini/dinky)
+* The project's web and documentation page theme is based<br>
+  on [broccolini / dinky](https://github.com/broccolini/dinky)
   and uses [lightbox2](http://lokeshdhakar.com/projects/lightbox2)
