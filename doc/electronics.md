@@ -70,7 +70,7 @@ to create the schematics and the board layout (PCB design).
 
 The following parts are the main parts of the circuit:
 
-* Microcontroller: 5V version of Arduino Nano 3.0 or compatible device ([Data Sheet](http://arduino.cc/de/Main/ArduinoBoardNano))
+* Microcontroller: 5V version of Arduino Nano 3.0 or compatible device ([Data Sheet](https://store.arduino.cc/arduino-nano))
 * 8x8 LED Display: KWM-R30881CBB aka AdaFruit 1817 ([Data Sheet](http://www.adafruit.com/datasheets/1047datasheet.pdf))
 * LED Display Driver: MAX7221 ([Data Sheet](http://datasheets.maximintegrated.com/en/ds/MAX7219-MAX7221.pdf))
 * Radio: nRF24L01+ on an Arduino friendly breakout board ([Data Sheet](http://www.nordicsemi.com/eng/content/download/2726/34069/file/nRF24L01P_Product_Specification_1_0.pdf))

@@ -11,7 +11,7 @@
 - id: MODUL1 ARDUINO
   img: bom_arduino_nano.jpg
   desc: Arduino Nano or compatible device
-  get: '[Original Arduino Device](http://arduino.cc/de/Main/ArduinoBoardNano) or search for "`arduino 3.0 nano 5v`" on eBay to find compatible devices / clones'
+  get: '[Original Arduino Device](https://store.arduino.cc/arduino-nano) or search for "`arduino 3.0 nano 5v`" on eBay to find compatible devices / clones'
 
 - id: KWM- R30881CBB
   img: bom_matrix.png

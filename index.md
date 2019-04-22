@@ -95,7 +95,7 @@ Authors
 TeleBall was designed, built and released as an Open Source / Open Hardware project
 during August 2014 and January 2015.
 
-TeleBall is a project of the [Museum of Electronic Games & Art](http://www.m-e-g-a.org).
+TeleBall is a project of the [Museum of Electronic Games & Art](http://www.m-e-g-a.org/diy-teleball/).
 
 ### Stay in Touch
 
@@ -114,7 +114,7 @@ If you have any questions or comments, we are happy to hear from you. Email us a
 * The firmware uses [wayoda / LedControl](https://github.com/wayoda/LedControl) as a
   MAX7221 driver and [TMRh20 / RF24](http://tmrh20.github.io/RF24/) as a nRF24L01+ driver.
 * The great [DuinoKit](http://www.duinokit.com) was sy2002's original inspiration to
-  create the [BreakOut Tutorial](http://duinokit.com/ShowAndTell/viewtopic.php?f=4&t=14),
+  create the [BreakOut Tutorial](http://duinokit.com/store/showandtell/topic/83-play-breakout-on-duinokit-essentials.html),
   which itself turned into the origin of TeleBall.
 * The project's web and documentation page theme is based on
   [broccolini / dinky](https://github.com/broccolini/dinky)
