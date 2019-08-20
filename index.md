@@ -15,7 +15,7 @@ mode using one device and **Tennis for Two** in multi-player mode using two devi
 communicating via radio.
 
 {% if site.github.pages_hostname != nil %}
-<iframe width="640" height="360" src="http://www.youtube.com/embed/JpwP330C6q0" frameborder="0" allowfullscreen></iframe>
+<iframe width="640" height="360" src="https://www.youtube.com/embed/JpwP330C6q0" frameborder="0" allowfullscreen></iframe>
 {% else %}
 ![BreakOut on TeleBall](doc/images/intro_breakout.jpg)
 {% endif %}
@@ -27,7 +27,7 @@ how much fun and even zenlike meditation this kind of gameplay can bring you,
 particularly when you play Tennis for Two with a friend.
 
 {% if site.github.pages_hostname != nil %}
-<iframe width="640" height="360" src="http://www.youtube.com/embed/hnW40l3Gluc" frameborder="0" allowfullscreen></iframe>
+<iframe width="640" height="360" src="https://www.youtube.com/embed/hnW40l3Gluc" frameborder="0" allowfullscreen></iframe>
 {% else %}
 ![Tennis on TeleBall](doc/images/intro_tennis.jpg)
 {% endif %}
