@@ -49,7 +49,7 @@ this repository.
     cad:    CAD data for 3D printing the TeleBall case
             Use ".stl" to modify the design or to create a custom output file.
             Most online 3D print shops can use the ".cmb.gz" for production.
-            Made with FreeCad: http://www.freecadweb.org
+            Made with FreeCad: https://FreeCAD.Org
 
     doc:    HTML documentation; use `index.html` in root folder to browse
 
