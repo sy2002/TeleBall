@@ -66,7 +66,7 @@ TeleBall Case - CAD and 3D Printing
 Designing the Case: CAD
 ---
 
-[FreeCad](http://www.freecadweb.org) is an Open Source parametric 3D CAD modeler.
+[FreeCad](https://FreeCAD.Org) is an Open Source parametric 3D CAD modeler.
 We used it to design the TeleBall Case. The following gallery is showing you the
 case and the lid 3D rendered by FreeCad.
 
