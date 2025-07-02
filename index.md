@@ -109,7 +109,7 @@ If you have any questions or comments, we are happy to hear from you:
 
 * TeleBall is built on the [Arduino platform](http://www.arduino.cc), i.e. the
   microcontroller core as well as the software are Arduino based.
-* The case is designed using [FreeCad](http://www.freecadweb.org).
+* The case is designed using [FreeCad](https://FreeCAD.Org).
 * The PCB is designed using the free version of [Eagle](https://www.autodesk.com/products/eagle/free-download).
 * The firmware uses [wayoda / LedControl](https://github.com/wayoda/LedControl) as a
   MAX7221 driver <br>and [TMRh20 / RF24](http://tmrh20.github.io/RF24/) as a nRF24L01+ driver.
